@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/Apps/">
+    <Project Path="Lidemia.Admin/Lidemia.Admin.csproj" />
+    <Project Path="Lidemia.Processor/Lidemia.Processor.csproj" Id="c14003da-d53b-42b4-8d65-038bd8721e09" />
+    <Project Path="Lidemia.Scheduler/Lidemia.Scheduler.csproj" Id="d0a25e6d-15f5-4df2-88d7-f7eaa02686a7" />
+    <Project Path="Lidemia.Storage/Lidemia.Storage.csproj" />
+  </Folder>
+  <Folder Name="/Modules/">
+    <Project Path="Lidemia.Common.BusinessLogic/Lidemia.Common.BusinessLogic.csproj" Id="d4fcd440-ec47-4b66-a48a-f0fb39354bdd" />
+    <Project Path="Lidemia.Common/Lidemia.Common.csproj" Id="3942aaa8-034a-424f-b915-584b4b464bd6" />
+    <Project Path="Lidemia.Core/Lidemia.Core.csproj" Id="496fac42-0190-4443-b024-607d92dcf6af" />
+    <Project Path="Lidemia.DataAccess/Lidemia.DataAccess.csproj" Id="8385e1c8-c344-48f7-9d99-12db73ce23f3" />
+    <Project Path="Lidemia.EmailNotifications/Lidemia.EmailNotifications.csproj" Id="b9d91623-4aac-4fba-8646-0adcd5949af6" />
+    <Project Path="Lidemia.Resources/Lidemia.Resources.csproj" Id="312dc624-eace-4528-9b30-1ff5db729cc7" />
+    <Project Path="Lidemia.Search/Lidemia.Search.csproj" Id="f6627dda-1b86-42a6-9b7d-025e71de7000" />
+  </Folder>
+  <Project Path="Lidemia.AppHost/Lidemia.AppHost.csproj" />
+  <Project Path="Lidemia.ServiceDefaults/Lidemia.ServiceDefaults.csproj" />
+  <Project Path="Lidemia/Lidemia.csproj" />
+</Solution>

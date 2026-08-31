@@ -1,0 +1,18 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.5.3">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AspireUseCliBundle>true</AspireUseCliBundle>
+		<UserSecretsId>3d5bf716-92e3-47f7-b64e-2f660e0ce87c</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Lidemia.Admin\Lidemia.Admin.csproj" />
+		<ProjectReference Include="..\Lidemia.Storage\Lidemia.Storage.csproj" />
+		<ProjectReference Include="..\Lidemia\Lidemia.csproj" />
+	</ItemGroup>
+
+</Project>
