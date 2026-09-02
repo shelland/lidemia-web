@@ -28,6 +28,12 @@ public partial class LidemiaDbContext : DbContext
 
     public DbSet<OrderEntity> Orders => Set<OrderEntity>();
 
+    public DbSet<WishListEntity> WishLists => Set<WishListEntity>();
+
+    public DbSet<ShoppingCartEntity> ShoppingCarts => Set<ShoppingCartEntity>();
+
+    public DbSet<ProductFeedbackEntity> ProductFeedbacks => Set<ProductFeedbackEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

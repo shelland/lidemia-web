@@ -1,5 +1,6 @@
 ﻿// Created on 01/09/2026 13:29 by Laserson
 
+using Lidemia.Core.Enums;
 using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
@@ -7,6 +8,52 @@ namespace Lidemia.DataAccess.Entities;
 public class ProductEntity : IHasId<long>, IDbEntity
 {
     public long Id { get; set; }
+
+    public long? CategoryId { get; set; }
+
+    public long SupplierId { get; set; }
+
+    public string? Title { get; set; }
+
+    public string? ShortDescription { get; set; }
+
+    public string? Description { get; set; }
+
+    public decimal Price { get; set; }
+
+    public long? PrimaryPhotoId { get; set; }
+
+    public PhotoEntity? PrimaryPhoto { get; set; }
+
+    public bool IsDiscount { get; set; }
+
+    public bool HasCurrentDiscount { get; set; }
+
+    public DateTime? DiscountEndDate { get; set; }
+
+    public DateTime? DiscountStartDate { get; set; }
+
+    public decimal? DiscountPrice { get; set; }
+
+    public int? MinQuantity { get; set; }
+
+    public int? MaxQuantity { get; set; }
+
+    public bool? IsVisible { get; set; }
+
+    public string? Slug { get; set; }
+
+    public double? AverageRatingRecent { get; set; }
+
+    public double? AverageRatingOverall { get; set; }
+
+    public int TotalRates { get; set; }
+
+    public DateTime? FirstSeenDate { get; set; }
+
+    public ProductPriceUnit? PriceUnit { get; set; }
+
+    public ProductAvailabilityType? AvailabilityType { get; set; }
 
     public int RowVersion { get; set; }
 

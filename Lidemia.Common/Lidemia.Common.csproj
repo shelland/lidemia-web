@@ -25,6 +25,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Lidemia.Core\Lidemia.Core.csproj" />
+	  <ProjectReference Include="..\Lidemia.DataAccess\Lidemia.DataAccess.csproj" />
 	</ItemGroup>
 
 </Project>

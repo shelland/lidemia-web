@@ -15,8 +15,7 @@ public partial class LidemiaDbContext
         Logger = LoggerFactory.Create(x =>
         {
             x.ClearProviders();
-            // x.AddConsole();
-            // x.AddDebug();
+            x.AddDebug();
         });
     }
 

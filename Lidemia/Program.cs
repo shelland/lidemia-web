@@ -11,7 +11,6 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using System.Text;
 
 namespace Lidemia;
 
@@ -67,6 +66,7 @@ public class Program
 
 
         builder.Services.AddProfiler();
+        builder.Services.RegisterModules(builder.Configuration);
 
         var app = builder.Build();
 

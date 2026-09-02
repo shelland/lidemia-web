@@ -16,6 +16,6 @@ public static class RequestExtensions
             return null;
         }
 
-        return Guid.Parse(id);
+        return Guid.Parse(id.ToString());
     }
 }
