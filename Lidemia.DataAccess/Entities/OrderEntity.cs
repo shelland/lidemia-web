@@ -1,9 +1,9 @@
 ﻿// Created on 20/11/2021 12:43 by Andrey Laserson
 
 using Lidemia.Core.Enums;
+using Lidemia.Core.Models.Base;
 using Lidemia.DataAccess.Abstract;
 using Lidemia.DataAccess.Entities.Meta;
-using Lidemia.DataAccess.Entities.Misc;
 
 namespace Lidemia.DataAccess.Entities;
 
@@ -22,8 +22,6 @@ public class OrderEntity : IDbEntity, IHasId<long>, IHasMetadata<OrderMetadata>
     public CustomerEntity Customer { get; set; } = null!;
 
     public OrderStatus Status { get; set; }
-
-    public IReadOnlyCollection<OrderItemDbModel> Items { get; set; } = [];
 
     public string? Comment { get; set; }
 

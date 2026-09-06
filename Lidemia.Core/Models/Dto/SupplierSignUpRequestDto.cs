@@ -4,5 +4,8 @@ namespace Lidemia.Core.Models.Dto;
 
 public record SupplierSignUpRequestDto
 (
-    
+    string Email,
+    string Name,
+    string FullName,
+    string Password
 );

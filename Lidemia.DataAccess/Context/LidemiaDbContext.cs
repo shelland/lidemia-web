@@ -34,6 +34,8 @@ public partial class LidemiaDbContext : DbContext
 
     public DbSet<ProductFeedbackEntity> ProductFeedbacks => Set<ProductFeedbackEntity>();
 
+    public DbSet<AuthTokenEntity> AuthTokens => Set<AuthTokenEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

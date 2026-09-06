@@ -1,5 +1,6 @@
 ﻿// Created on 27/10/2022 22:33 by shell
 
+using Lidemia.Core.Models.Base;
 using Lidemia.DataAccess.Abstract;
 using Microsoft.EntityFrameworkCore;
 

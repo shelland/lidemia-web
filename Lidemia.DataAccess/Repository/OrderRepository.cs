@@ -3,9 +3,12 @@
 using Lidemia.DataAccess.Context;
 using Lidemia.DataAccess.Entities;
 using Lidemia.DataAccess.Repository.Abstract;
+using Microsoft.Extensions.DependencyInjection;
+using Scrutor;
 
 namespace Lidemia.DataAccess.Repository;
 
+[ServiceDescriptor<IOrderRepository>(ServiceLifetime.Scoped)]
 public class OrderRepository : IOrderRepository
 {
     private readonly LidemiaDbContext context;

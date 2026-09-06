@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lidemia.Controllers;
 
-public class SignUpController : Controller
+public class SignUpController : BaseController
 {
     // GET
     public IActionResult Index()

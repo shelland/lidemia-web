@@ -1,3 +1,5 @@
+using FluentValidation;
+using Lidemia.Common;
 using Lidemia.Common.Logic.Logging;
 using Lidemia.Core;
 using Lidemia.Core.Extensions;
@@ -24,6 +26,7 @@ public class Program
         builder.Configuration.AddEnvironmentVariables();
 
         builder.Services.Configure<AppIdSettings>(builder.Configuration.GetSection("AppId"));
+        builder.Services.Configure<RecaptchaSettingsModel>(builder.Configuration.GetSection("Integrations:Recaptcha"));
 
         builder.Services
             .AddDataProtection()
@@ -67,6 +70,8 @@ public class Program
 
         builder.Services.AddProfiler();
         builder.Services.RegisterModules(builder.Configuration);
+
+        builder.Services.AddValidatorsFromAssembly(typeof(ICommonModule).Assembly);
 
         var app = builder.Build();
 

@@ -10,6 +10,6 @@ public class PromoCodeEntityConfiguration : IEntityTypeConfiguration<PromoCodeEn
 {
     public void Configure(EntityTypeBuilder<PromoCodeEntity> builder)
     {
-        throw new NotImplementedException();
+        builder.ToTable("promo_codes");
     }
 }

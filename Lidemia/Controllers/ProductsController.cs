@@ -1,12 +1,56 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
+using Lidemia.Core.Models.Dto;
+using Lidemia.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Lidemia.Controllers
+namespace Lidemia.Controllers;
+
+[Route("[controller]")]
+public class ProductsController : BaseController
 {
-    public class ProductsController : Controller
+    private readonly IProductService productService;
+    private readonly IPhotoService photoService;
+
+    public ProductsController(IProductService productService, IPhotoService photoService)
     {
-        public IActionResult Index()
+        this.productService = productService;
+        this.photoService = photoService;
+    }
+
+    public async Task<IActionResult> Index([FromQuery] ProductsListFilterModel? filter, CancellationToken cancellationToken)
+    {
+        filter ??= new ProductsListFilterModel();
+        var products = await this.productService.GetPublicList(filter, cancellationToken);
+        
+        var viewModel = new ProductsListViewModel
         {
-            return View();
+            CurrentPage = filter.Page,
+            Filter = filter,
+            Items = products.Items,
+            TotalCount = products.TotalCount,
+            TotalPages = products.TotalPages
+        };
+
+        return View(viewModel);
+    }
+
+    [HttpGet("Details/{id:long}")]
+    public async Task<IActionResult> Details([FromRoute] long id, CancellationToken cancellationToken)
+    {
+        var product = await this.productService.GetById(id, cancellationToken);
+
+        if (product == null)
+        {
+            return NotFoundView();
         }
+
+        var photos = await this.photoService.GetProductPhotos(id, cancellationToken);
+
+        var viewModel = new ProductDetailsViewModel(
+            Product: product,
+            Photos: photos
+        );
+
+        return View(viewModel);
     }
 }

@@ -7,6 +7,6 @@ namespace Lidemia.Controllers.Supplier;
 
 [SupplierAuthorize]
 [Route("Supplier/Dashboard")]
-public class SupplierDashboardController : Controller
+public class SupplierDashboardController : BaseController
 {
 }

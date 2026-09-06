@@ -2,6 +2,8 @@
 
 using Lidemia.Common.BusinessLogic;
 using Lidemia.DataAccess;
+using Lidemia.Search;
+using Lidemia.Web.BusinessLogic;
 
 namespace Lidemia.Logic.Extensions;
 
@@ -11,5 +13,7 @@ public static class ModulesExtensions
     {
         services.AddDataAccessModule(configuration);
         services.AddCommonBusinessLogicModule();
+        services.AddWebBusinessLogicModule();
+        services.AddSearchModule(configuration);
     }
 }

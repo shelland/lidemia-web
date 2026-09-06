@@ -9,6 +9,12 @@
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 		<PackageReference Include="Scrutor" Version="7.0.0" />
+		<PackageReference Include="Flurl.Http" Version="4.0.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Lidemia.Common\Lidemia.Common.csproj" />
+		<ProjectReference Include="..\Lidemia.DataAccess\Lidemia.DataAccess.csproj" />
 	</ItemGroup>
 
 </Project>

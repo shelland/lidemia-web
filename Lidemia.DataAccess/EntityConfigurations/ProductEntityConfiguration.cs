@@ -11,6 +11,8 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<ProductEntity
 {
     public void Configure(EntityTypeBuilder<ProductEntity> builder)
     {
+        builder.HasIndex(x => x.IsVisible);
+
         builder.AddBaseColumns();
     }
 }

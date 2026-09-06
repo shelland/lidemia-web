@@ -10,6 +10,9 @@ public class PasswordResetEntityConfiguration : IEntityTypeConfiguration<Passwor
 {
     public void Configure(EntityTypeBuilder<PasswordResetEntity> builder)
     {
-        throw new NotImplementedException();
+        builder.ToTable("password_reset");
+
+        builder.Property(x => x.Code).HasMaxLength(64);
+        builder.HasIndex(x => x.Code).IsUnique();
     }
 }

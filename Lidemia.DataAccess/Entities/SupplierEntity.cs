@@ -1,5 +1,7 @@
 ﻿// Created on 20/11/2021 12:43 by Andrey Laserson
 
+using Lidemia.Core.Enums;
+using Lidemia.Core.Models.Base;
 using Lidemia.DataAccess.Abstract;
 using Lidemia.DataAccess.Entities.Meta;
 
@@ -27,7 +29,7 @@ public class SupplierEntity : IDbEntity, IHasId<long>, IHasMetadata<SupplierEnti
 
     public string? Tin { get; set; }
 
-    public bool IsVerified { get; set; }
+    public SupplierStatus Status { get; set; }
 
     public string? LegalAddress { get; set; }
 

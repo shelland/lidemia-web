@@ -8,8 +8,11 @@ namespace Lidemia.Core.Extensions;
 
 public static class PagedListExtensions
 {
-    public static Task<IPagedList<T>> ToPagedListEx<T>(this IQueryable<T> queryable, PagingInfoModel pagingInfo, CancellationToken cancellationToken = default)
+    public static Task<IPagedList<T>> ToPagedListEx<T>(this IQueryable<T> queryable, PagingInfoModel? pagingInfo, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+        
+        pagingInfo ??= new PagingInfoModel();
         return Task.FromResult(queryable.ToPagedList(pagingInfo.Page, pagingInfo.PageSize));
     }
 }

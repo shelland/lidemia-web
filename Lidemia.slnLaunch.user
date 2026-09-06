@@ -1,0 +1,27 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Lidemia\\Lidemia.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Lidemia.Admin\\Lidemia.Admin.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Lidemia.Processor\\Lidemia.Processor.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Lidemia.Scheduler\\Lidemia.Scheduler.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Lidemia.Storage\\Lidemia.Storage.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

@@ -1,5 +1,6 @@
 ﻿// Created on 02/09/2026 20:16 by Laserson
 
+using Lidemia.Core.Models.Base;
 using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;

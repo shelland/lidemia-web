@@ -13,6 +13,10 @@
     <Project Path="Lidemia.EmailNotifications/Lidemia.EmailNotifications.csproj" Id="b9d91623-4aac-4fba-8646-0adcd5949af6" />
     <Project Path="Lidemia.Resources/Lidemia.Resources.csproj" Id="312dc624-eace-4528-9b30-1ff5db729cc7" />
     <Project Path="Lidemia.Search/Lidemia.Search.csproj" Id="f6627dda-1b86-42a6-9b7d-025e71de7000" />
+    <Project Path="Lidemia.Web.BusinessLogic/Lidemia.Web.BusinessLogic.csproj" Id="cc41e168-6177-4d14-9e14-1be5d038fa8a" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
   </Folder>
   <Project Path="Lidemia.AppHost/Lidemia.AppHost.csproj" />
   <Project Path="Lidemia.ServiceDefaults/Lidemia.ServiceDefaults.csproj" />

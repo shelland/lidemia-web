@@ -1,6 +1,7 @@
 ﻿// Created on 01/09/2026 13:29 by Laserson
 
 using Lidemia.Core.Enums;
+using Lidemia.Core.Models.Base;
 using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
@@ -11,7 +12,11 @@ public class ProductEntity : IHasId<long>, IDbEntity
 
     public long? CategoryId { get; set; }
 
+    public ProductCategoryEntity? Category { get; set; }
+
     public long SupplierId { get; set; }
+
+    public SupplierEntity Supplier { get; set; } = null!;
 
     public string? Title { get; set; }
 
@@ -39,7 +44,7 @@ public class ProductEntity : IHasId<long>, IDbEntity
 
     public int? MaxQuantity { get; set; }
 
-    public bool? IsVisible { get; set; }
+    public bool IsVisible { get; set; }
 
     public string? Slug { get; set; }
 
@@ -54,6 +59,8 @@ public class ProductEntity : IHasId<long>, IDbEntity
     public ProductPriceUnit? PriceUnit { get; set; }
 
     public ProductAvailabilityType? AvailabilityType { get; set; }
+
+    public int? OrderRank { get; set; }
 
     public int RowVersion { get; set; }
 

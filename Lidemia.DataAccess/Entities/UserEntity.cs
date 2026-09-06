@@ -1,6 +1,7 @@
 ﻿// Created on 18/11/2021 22:54 by Andrey Laserson
 
 using Lidemia.Core.Enums;
+using Lidemia.Core.Models.Base;
 using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;

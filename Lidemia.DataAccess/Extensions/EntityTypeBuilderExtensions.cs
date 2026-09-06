@@ -1,5 +1,6 @@
 ﻿// Created on 11/10/2021 23:24 by Andrey Laserson
 
+using Lidemia.Core.Models.Base;
 using Lidemia.DataAccess.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
