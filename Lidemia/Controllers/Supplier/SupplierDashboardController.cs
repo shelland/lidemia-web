@@ -9,4 +9,9 @@ namespace Lidemia.Controllers.Supplier;
 [Route("Supplier/Dashboard")]
 public class SupplierDashboardController : BaseController
 {
+    [HttpGet]
+    public IActionResult Index()
+    {
+        return View();
+    }
 }

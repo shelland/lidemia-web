@@ -8,6 +8,9 @@ public static class CommonBusinessLogicModule
 {
     public static IServiceCollection AddCommonBusinessLogicModule(this IServiceCollection service)
     {
+        service.Scan(x => x.FromAssemblyOf<ICommonBusinessLogicModule>().AddClasses().UsingAttributes());
         return service;
     }
 }
+
+public interface ICommonBusinessLogicModule;

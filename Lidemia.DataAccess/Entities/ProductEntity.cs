@@ -18,6 +18,10 @@ public class ProductEntity : IHasId<long>, IDbEntity
 
     public SupplierEntity Supplier { get; set; } = null!;
 
+    public long? ParentId { get; set; }
+
+    public ProductEntity? Parent { get; set; }
+
     public string? Title { get; set; }
 
     public string? ShortDescription { get; set; }
@@ -40,9 +44,9 @@ public class ProductEntity : IHasId<long>, IDbEntity
 
     public decimal? DiscountPrice { get; set; }
 
-    public int? MinQuantity { get; set; }
+    public double? MinQuantity { get; set; }
 
-    public int? MaxQuantity { get; set; }
+    public double? MaxQuantity { get; set; }
 
     public bool IsVisible { get; set; }
 
@@ -61,6 +65,8 @@ public class ProductEntity : IHasId<long>, IDbEntity
     public ProductAvailabilityType? AvailabilityType { get; set; }
 
     public int? OrderRank { get; set; }
+
+    public string? Sku { get; set; }
 
     public int RowVersion { get; set; }
 

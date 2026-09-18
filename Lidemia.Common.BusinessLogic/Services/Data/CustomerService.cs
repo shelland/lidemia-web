@@ -1,11 +1,13 @@
 ﻿// Created on 03/09/2026 18:47 by Laserson
 
+using FluentResults;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.Mapping;
 using Lidemia.Core.Enums;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Domain;
 using Lidemia.Core.Models.Dto;
+using Lidemia.Core.Models.Service;
 using Lidemia.DataAccess.Repository.Abstract;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
@@ -22,6 +24,11 @@ public class CustomerService : ICustomerService
     {
         this.customerRepository = customerRepository;
         this.userService = userService;
+    }
+
+    public Task<Result<long>> Create(CreateCustomerModel model, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<SignInResult<CustomerModel?>> SignIn(CustomerSignInRequestDto request, CancellationToken cancellationToken)

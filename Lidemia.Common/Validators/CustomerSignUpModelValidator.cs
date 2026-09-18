@@ -9,5 +9,6 @@ public class CustomerSignUpModelValidator : AbstractValidator<CustomerSignInRequ
 {
     public CustomerSignUpModelValidator()
     {
+        RuleFor(x => x.Email).NotEmpty().WithErrorCode("errors.customer.signup.emailEmpty");
     }
 }

@@ -11,7 +11,6 @@ public class ShoppingCartEntityConfiguration : IEntityTypeConfiguration<Shopping
 {
     public void Configure(EntityTypeBuilder<ShoppingCartEntity> builder)
     {
-        builder.HasKey(x => x.Id);
         builder.Property(x => x.Items).AsJsonb();
 
         builder.HasIndex(x => new { x.UserId, x.IsActive });

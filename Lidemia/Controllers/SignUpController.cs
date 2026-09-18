@@ -6,7 +6,7 @@ namespace Lidemia.Controllers;
 
 public class SignUpController : BaseController
 {
-    // GET
+    [HttpGet]
     public IActionResult Index()
     {
         return View();

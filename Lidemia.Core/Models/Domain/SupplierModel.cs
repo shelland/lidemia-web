@@ -6,9 +6,7 @@ namespace Lidemia.Core.Models.Domain;
 
 public class SupplierModel : AbstractEntity<long>
 {
-    public string FullName { get; set; } = string.Empty;
-
-    public string ShortName { get; set; } = string.Empty;
-
+    public string Name { get; set; } = string.Empty;
+    
     public UserModel User { get; set; } = null!;
 }

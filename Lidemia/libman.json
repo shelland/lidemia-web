@@ -1,0 +1,26 @@
+{
+    "version": "3.0",
+    "defaultProvider": "cdnjs",
+    "libraries": [
+        {
+            "library": "bootstrap@5.3.8",
+            "destination": "wwwroot/lib/bootstrap/",
+            "files": [
+                "js/bootstrap.bundle.js",
+                "css/bootstrap.css"
+            ]
+        },
+        {
+            "library": "microsoft-signalr@10.0.11",
+            "destination": "wwwroot/lib/microsoft-signalr/",
+            "files": [
+                "signalr.js"
+            ]
+        },
+        {
+            "provider": "cdnjs",
+            "library": "Trumbowyg@2.31.0",
+            "destination": "wwwroot/lib/Trumbowyg/"
+        }
+    ]
+}

@@ -4,5 +4,5 @@ namespace Lidemia.Common.BusinessLogic.Services.App.Abstract;
 
 public interface IOrderNumberGenerator
 {
-    Task<string> Generate();
+    string Generate();
 }

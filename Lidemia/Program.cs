@@ -1,5 +1,6 @@
 using FluentValidation;
 using Lidemia.Common;
+using Lidemia.Common.Logic.Bus;
 using Lidemia.Common.Logic.Logging;
 using Lidemia.Core;
 using Lidemia.Core.Extensions;
@@ -7,9 +8,9 @@ using Lidemia.Core.Models.Configuration;
 using Lidemia.Logic;
 using Lidemia.Logic.Extensions;
 using Lidemia.ServiceDefaults;
+using MassTransit;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc.Razor;
-using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -51,19 +52,20 @@ public class Program
                 .SetResourceBuilder(
                     ResourceBuilder.CreateDefault()
                         .AddService("lidemia-web-ui"))
-                .AddConsoleExporter();
+                /*.AddConsoleExporter()*/;
         });
 
         builder.Services.AddOpenTelemetry()
             .ConfigureResource(resource => resource.AddService("lidemia-web-ui"))
             .WithTracing(tracing => tracing
-                .AddAspNetCoreInstrumentation()
-                .AddConsoleExporter())
+                    .AddAspNetCoreInstrumentation()
+                /*.AddConsoleExporter()*/)
             .WithMetrics(metrics =>
             {
                 metrics
                     .AddAspNetCoreInstrumentation()
-                    .AddConsoleExporter().AddPrometheusExporter().AddMeter("Microsoft.AspNetCore.Hosting",
+                    // .AddConsoleExporter()
+                    .AddPrometheusExporter().AddMeter("Microsoft.AspNetCore.Hosting",
                         "Microsoft.AspNetCore.Server.Kestrel");
             });
 
@@ -72,22 +74,23 @@ public class Program
         builder.Services.RegisterModules(builder.Configuration);
 
         builder.Services.AddValidatorsFromAssembly(typeof(ICommonModule).Assembly);
+        builder.Services.RegisterBus(builder.Configuration);
+
 
         var app = builder.Build();
-
-        app.MapDefaultEndpoints();
-
-        app.UseWhen(x => !x.Request.Path.StartsWithSegments("/metrics"), x => x.UseMiddleware<CorrelationIdMiddleware>());
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
-            app.UseExceptionHandler("/Home/Error");
+            // app.UseExceptionHandler("/Home/Error");
         }
 
+        app.MapDefaultEndpoints();
         app.UseStaticFiles();
-        app.UseRouting();
+        app.UseWhen(x => !x.Request.Path.StartsWithSegments("/metrics"), x => x.UseMiddleware<CorrelationIdMiddleware>());
 
+        app.MapControllers();
+        app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseRequestLocalization();

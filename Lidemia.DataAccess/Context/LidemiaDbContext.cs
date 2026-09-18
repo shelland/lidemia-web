@@ -8,7 +8,7 @@ namespace Lidemia.DataAccess.Context;
 
 public partial class LidemiaDbContext : DbContext
 {
-    public LidemiaDbContext(DbContextOptions options) : base(options)
+    public LidemiaDbContext(DbContextOptions<LidemiaDbContext> options) : base(options)
     {
     }
 
@@ -28,13 +28,29 @@ public partial class LidemiaDbContext : DbContext
 
     public DbSet<OrderEntity> Orders => Set<OrderEntity>();
 
+    public DbSet<OrderItemEntity> OrderItems => Set<OrderItemEntity>();
+
     public DbSet<WishListEntity> WishLists => Set<WishListEntity>();
+
+    public DbSet<WishListItemEntity> WishListItems => Set<WishListItemEntity>();
 
     public DbSet<ShoppingCartEntity> ShoppingCarts => Set<ShoppingCartEntity>();
 
     public DbSet<ProductFeedbackEntity> ProductFeedbacks => Set<ProductFeedbackEntity>();
 
     public DbSet<AuthTokenEntity> AuthTokens => Set<AuthTokenEntity>();
+
+    public DbSet<ProductCategoryEntity> ProductCategories => Set<ProductCategoryEntity>();
+
+    public DbSet<SupplierStatsEntity> SuppliersStats => Set<SupplierStatsEntity>();
+
+    public DbSet<AddressEntity> Addresses => Set<AddressEntity>();
+
+    public DbSet<CustomerAddressEntity> CustomerAddresses => Set<CustomerAddressEntity>();
+
+    public DbSet<SupplierAddressEntity> SuppliersAddresses => Set<SupplierAddressEntity>();
+
+    public DbSet<PasswordResetEntity> PasswordResets => Set<PasswordResetEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

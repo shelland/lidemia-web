@@ -1,5 +1,84 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Lidemia.Core.Enums
+@using Lidemia.Core.Extensions
+@using Lidemia.Logic.Extensions
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
 @{
+    ViewData.SetBigTitle("SIGN UP");
+}
+
+@inject IStringLocalizer<AppResources> localizer
+
+<form id="mainForm">
+    <div class="mb-3">
+        <label for="name" class="form-label">
+            @localizer["SupplierSignUpName"]
+        </label>
+        <input type="text" class="form-control" id="name" minlength="5" maxlength="250" required>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">
+            @localizer["SupplierSignUpEmail"]
+        </label>
+        <input type="email" class="form-control" id="email" minlength="5" maxlength="250" required>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">
+            @localizer["SupplierSignUpPassword"]
+        </label>
+        <input type="password" class="form-control" id="password" required>
+    </div>
+    <div class="mb-3">
+        <label for="phone" class="form-label">
+            @localizer["SupplierSignUpPhone"]
+        </label>
+        <input type="tel" class="form-control" id="phone" required>
+    </div>
+    <div class="mb-3">
+        <label for="inn" class="form-label">
+            @localizer["SupplierSignUpInn"]
+        </label>
+        <input type="text" class="form-control" id="inn" required>
+    </div>
+    <div class="mb-3">
+        <label for="ogrn" class="form-label">
+            @localizer["SupplierSignUpOgrn"]
+        </label>
+        <input type="text" class="form-control" id="ogrn" required>
+    </div>
+    <div class="mb-3">
+        <label for="orgType" class="form-label">
+            @localizer["SupplierSignUpOrgType"]
+        </label>
+        @Html.DropDownList("orgType", EnumExtensions.GetValues<OrganizationType>(), new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <a class="btn btn-primary" href="javascript:;" id="saveBtn">@localizer["SupplierSignUpSaveBtn"]</a>
+    </div>
+
+
+    @*  <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">@localizer["SupplierSignUpOrgType"]</label>
+        <input type="text" class="form-control" id="exampleFormControlInput1">
+    </div> *@
+</form> 
+
+@section Scripts
+{
+    <script src="~/Pages/Scripts/SupplierSignUp.js"></script>
+
+    <script>
+
+        window.addEventListener("load", function() {
+            SupplierSignUp.init({
+                urls: {
+                    saveUrl: "@Url.Action("Post")",
+                    welcomeUrl: "@Url.Action("Index", "SupplierDashboard", new {welcome=1})"
+                }
+            })
+        });
+
+    </script>
 }

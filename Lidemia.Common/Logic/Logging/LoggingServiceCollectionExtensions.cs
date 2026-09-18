@@ -14,8 +14,8 @@ public static class LoggingServiceCollectionExtensions
 {
     public static void RegisterLogging(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        var seqUrl = configuration.GetValue<string>("LocalServices:Seq:Url");
-        var seqApiKey = configuration.GetValue<string>("LocalServices:Seq:ApiKey");
+        var seqUrl = configuration.GetValue<string>("Integrations:Seq:Url");
+        var seqApiKey = configuration.GetValue<string>("Integrations:Seq:ApiKey");
 
         const string outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}][{SourceContext}] {Message:lj}{NewLine}{Exception}";
 

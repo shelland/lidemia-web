@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lidemia.Controllers;
 
-[Route("[controller]")]
 public class BaseController : Controller
 {
     protected long? EntityId => this.HttpContext.User.GetEntityId();
@@ -15,5 +14,5 @@ public class BaseController : Controller
 
     protected EntityType EntityType => this.HttpContext.User.GetEntityRole();
 
-    public IActionResult NotFoundView() => View("NotFound");
+    public IActionResult NotFoundView => View("NotFound");
 }

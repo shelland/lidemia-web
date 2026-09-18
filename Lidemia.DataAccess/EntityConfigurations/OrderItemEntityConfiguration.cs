@@ -10,9 +10,22 @@ public class OrderItemEntityConfiguration : IEntityTypeConfiguration<OrderItemEn
 {
     public void Configure(EntityTypeBuilder<OrderItemEntity> builder)
     {
-        builder.ToTable("order_items");
+        builder.HasKey(x => new
+        {
+            x.OrderId,
+            x.ProductId,
+        });
 
-        builder.HasIndex(x => new { x.OrderId, x.IsActive });
-        builder.HasIndex(x => new { x.ProductId, x.IsActive });
+        builder.HasIndex(x => new
+        {
+            x.OrderId,
+            x.IsActive
+        });
+
+        builder.HasIndex(x => new
+        {
+            x.ProductId,
+            x.IsActive
+        });
     }
 }

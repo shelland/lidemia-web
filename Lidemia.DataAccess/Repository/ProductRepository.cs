@@ -1,9 +1,11 @@
 ﻿// Created on 01/09/2026 15:46 by Laserson
 
+using FluentResults;
 using Lidemia.Core.Enums;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Misc;
+using Lidemia.Core.Models.Service;
 using Lidemia.DataAccess.Context;
 using Lidemia.DataAccess.Entities;
 using Lidemia.DataAccess.Extensions;
@@ -37,6 +39,37 @@ public class ProductRepository : IProductRepository
         return this.context.Products.AsActive().FirstOrDefaultAsync(
             x => x.Id == key && x.IsVisible && x.Supplier.IsActive && x.Supplier.Status == SupplierStatus.Active,
             cancellationToken: cancellation);
+    }
+
+    public async Task<Result<long>> Save(long supplierId, SaveProductModel model, CancellationToken cancellationToken)
+    {
+        long productId;
+
+        if (model.Id.HasValue)
+        {
+            var product = await this.context.Products.AsActive()
+                .FirstOrDefaultAsync(x => x.Id == model.Id && x.SupplierId == supplierId, cancellationToken: cancellationToken);
+            
+            await this.context.Products.Where(x => x.Id == model.Id && x.SupplierId == supplierId)
+                .ExecuteUpdateAsync(x => x.SetProperty(e => e.Title, model.Title), cancellationToken: cancellationToken);
+
+            productId = model.Id.Value;
+        }
+        else
+        {
+            var product = new ProductEntity
+            {
+                SupplierId = supplierId,
+                Title = model.Title
+            };
+
+            this.context.Products.Add(product);
+            await this.context.SaveChangesAsync(cancellationToken);
+
+            productId = product.Id;
+        }
+
+        return Result.Ok(productId);
     }
 
     public Task Delete(long key, CancellationToken cancellationToken)

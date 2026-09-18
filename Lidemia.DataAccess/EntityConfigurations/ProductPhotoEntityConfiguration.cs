@@ -10,6 +10,6 @@ public class ProductPhotoEntityConfiguration : IEntityTypeConfiguration<ProductP
 {
     public void Configure(EntityTypeBuilder<ProductPhotoEntity> builder)
     {
-        throw new NotImplementedException();
+        builder.HasNoKey();
     }
 }

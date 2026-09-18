@@ -20,6 +20,6 @@ public class SupplierSignInService : ISupplierSignInService
 
     public Task<SignInResult<SupplierModel?>> SignIn(SupplierSignInRequestDto request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return this.supplierService.SignIn(request, cancellationToken);
     }
 }

@@ -9,11 +9,13 @@ public class WishListEntity : IHasId<Guid>, IDbEntity
 {
     public Guid Id { get; set; }
 
-    public UserEntity User { get; set; } = null!;
+    public CustomerEntity Customer { get; set; } = null!;
 
-    public long UserId { get; set; }
+    public long CustomerId { get; set; }
 
-    public IEnumerable<long> Items { get; set; } = [];
+    public string? Name { get; set; }
+
+    public int ItemsCount { get; set; }
 
     public int RowVersion { get; set; }
 

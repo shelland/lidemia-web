@@ -6,9 +6,12 @@ using Lidemia.DataAccess.Entities;
 using Lidemia.DataAccess.Extensions;
 using Lidemia.DataAccess.Repository.Abstract;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Scrutor;
 
 namespace Lidemia.DataAccess.Repository;
 
+[ServiceDescriptor<IUserRepository>(ServiceLifetime.Scoped)]
 public class UserRepository : IUserRepository
 {
     private readonly LidemiaDbContext context;

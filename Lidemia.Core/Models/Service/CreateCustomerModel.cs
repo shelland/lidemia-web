@@ -1,6 +1,6 @@
 ﻿// Created on 06/09/2026 14:06 by Laserson
 
-namespace Lidemia.DataAccess.Models;
+namespace Lidemia.Core.Models.Service;
 
 public record CreateCustomerModel
 (

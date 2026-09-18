@@ -24,17 +24,32 @@ public class ProductService : IProductService
     public async Task<ProductModel?> GetById(long id, CancellationToken cancellationToken)
     {
         var product = await this.productRepository.GetById(id, cancellationToken);
-
-        if (product == null)
-        {
-            return null;
-        }
-
-        return product.ToModel();
+        return product?.ToModel();
     }
 
-    public Task<BasePagedListModel<ProductModel>> GetPublicList(ProductsListFilterModel filter, CancellationToken cancellationToken)
+    public async Task<BasePagedListModel<ProductModel>> GetPublicList(ProductsListFilterModel filter, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var products = await this.productRepository.GetPublicList(filter, cancellationToken);
+
+        return new BasePagedListModel<ProductModel>
+        {
+            CurrentPage = filter.Page,
+            TotalCount = products.TotalItemCount,
+            Items = products.Select(x => x.ToModel()),
+            TotalPages = products.PageCount
+        };
+    }
+
+    public async Task<BasePagedListModel<ProductModel>> GetSupplierProducts(long id, PagingInfoModel pagingInfo, CancellationToken cancellationToken)
+    {
+        var products = await this.productRepository.GetSupplierProducts(id, pagingInfo, cancellationToken);
+
+        return new BasePagedListModel<ProductModel>
+        {
+            CurrentPage = pagingInfo.Page,
+            Items = products.Select(x => x.ToModel()),
+            TotalCount = products.TotalItemCount,
+            TotalPages = products.TotalItemCount
+        };
     }
 }

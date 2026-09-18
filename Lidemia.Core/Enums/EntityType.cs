@@ -4,7 +4,7 @@ namespace Lidemia.Core.Enums;
 
 public enum EntityType
 {
-    Admin = 0,
-    Supplier = 1,
-    Customer = 2
+    Admin = 1,
+    Supplier = 2,
+    Customer = 3
 }

@@ -1,0 +1,13 @@
+﻿@using Lidemia.Web.BusinessLogic.Services.Abstract
+
+@inject IAppLocalizationService appLocalizationService
+
+<environment include="Development,Local">
+
+</environment>
+
+<environment include="Production">
+
+</environment>
+
+<script src="~/js/ClientResources.@(appLocalizationService.CurrentCulture.Culture).js"></script>

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lidemia.Controllers.Customer;
 
+[Route("Customer/SignUp")]
 public class CustomerSignUpController : BaseController
 {
     private readonly ICustomerSignUpService signUpService;

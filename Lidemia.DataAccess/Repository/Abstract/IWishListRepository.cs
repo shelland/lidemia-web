@@ -7,4 +7,7 @@ namespace Lidemia.DataAccess.Repository.Abstract;
 
 public interface IWishListRepository : IRepository<WishListEntity, Guid>
 {
+    Task<int> CountUserLists(long customerId, CancellationToken cancellationToken);
+
+    Task AddItem(long customerId, long productId, Guid? wishListId, CancellationToken cancellationToken);
 }

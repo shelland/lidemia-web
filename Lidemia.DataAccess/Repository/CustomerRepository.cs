@@ -1,10 +1,10 @@
 ﻿// Created on 01/09/2026 15:46 by Laserson
 
 using FluentResults;
+using Lidemia.Core.Models.Service;
 using Lidemia.DataAccess.Context;
 using Lidemia.DataAccess.Entities;
 using Lidemia.DataAccess.Extensions;
-using Lidemia.DataAccess.Models;
 using Lidemia.DataAccess.Repository.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

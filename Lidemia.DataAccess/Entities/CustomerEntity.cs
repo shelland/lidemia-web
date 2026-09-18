@@ -6,7 +6,7 @@ using Lidemia.DataAccess.Entities.Meta;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class CustomerEntity : IDbEntity, IHasId<long>, IHasMetadata<CustomerEntityMetadata>
+public class CustomerEntity : IDbEntity, IHasId<long>, IHasMetadata<CustomerMetadata>
 {
     public long Id { get; set; }
 
@@ -20,7 +20,7 @@ public class CustomerEntity : IDbEntity, IHasId<long>, IHasMetadata<CustomerEnti
 
     public string Tin { get; set; } = null!;
 
-    public CustomerEntityMetadata Metadata { get; set; } = null!;
+    public CustomerMetadata Metadata { get; set; } = null!;
 
     //public WishListEntity? WishList { get; set; }
 

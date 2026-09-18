@@ -22,6 +22,8 @@ public class UserEntity : IDbEntity, IHasId<long>
 
     public EntityType Role { get; set; }
 
+    public string? Phone { get; set; }
+
     public int RowVersion { get; set; }
 
     public bool IsActive { get; set; }

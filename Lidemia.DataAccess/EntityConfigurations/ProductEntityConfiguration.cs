@@ -12,7 +12,11 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<ProductEntity
     public void Configure(EntityTypeBuilder<ProductEntity> builder)
     {
         builder.HasIndex(x => x.IsVisible);
+        builder.AddBaseColumns<ProductEntity, long>();
 
-        builder.AddBaseColumns();
+        builder.Property(x => x.Sku).HasMaxLength(50);
+        builder.Property(x => x.Title).HasMaxLength(250);
+        
+        builder.HasOne(x => x.Parent);
     }
 }

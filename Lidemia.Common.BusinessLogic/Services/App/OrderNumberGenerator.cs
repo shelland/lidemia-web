@@ -11,12 +11,12 @@ namespace Lidemia.Common.BusinessLogic.Services.App;
 [ServiceDescriptor<IOrderNumberGenerator>(ServiceLifetime.Singleton)]
 public class OrderNumberGenerator : IOrderNumberGenerator
 {
-    public async Task<string> Generate()
+    public string Generate()
     {
         var orderPrefix = RandomNumberGenerator.GetString(SecurityHelper.CapitalChars, 1);
         var orderNumericValue = RandomNumberGenerator.GetInt32(100_000_000, 999_999_999);
 
         var number = $"{orderPrefix}{orderNumericValue}";
-        return await Task.FromResult(number);
+        return number;
     }
 }

@@ -78,8 +78,7 @@ public class WebAuthService : IWebAuthService
         var claims = new List<Claim>
         {
             new(Core.Constants.Claims.EmailClaimName, supplier.User.Email),
-            new(Core.Constants.Claims.FullNameClaimName, supplier.FullName),
-            new(Core.Constants.Claims.UserNameClaimName, supplier.ShortName),
+            new(Core.Constants.Claims.FullNameClaimName, supplier.Name),
             new(Core.Constants.Claims.EntityIdClaimName, supplier.Id.ToString()),
             new(Core.Constants.Claims.UserIdClaimName, supplier.User.Id.ToString()),
             new(Core.Constants.Claims.SessionAccessTokenClaimName, sessionToken),

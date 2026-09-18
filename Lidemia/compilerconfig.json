@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "wwwroot/Pages/Styles/Main.css",
+    "inputFile": "wwwroot/Pages/Styles/Main.less"
+  },
+  {
+    "outputFile": "wwwroot/Pages/Styles/Overrides.css",
+    "inputFile": "wwwroot/Pages/Styles/Overrides.less"
+  }
+]

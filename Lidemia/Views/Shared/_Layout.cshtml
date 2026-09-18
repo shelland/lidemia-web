@@ -1,15 +1,61 @@
-﻿<!DOCTYPE html>
+﻿@using Lidemia.Logic.Extensions
+
+@{
+    var bigTitle = ViewData.GetBigTitle();
+    var subTitle = ViewData.GetSubTitle();
+}
+
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>@ViewData["Title"] - Lidemia</title>
+        <title>Lidemia | @ViewData.GetTitle()</title>
         <script type="importmap"></script>
 
+        <partial name="StaticIncludesHead"/>
 
         <script src="https://www.google.com/recaptcha/enterprise.js?render=KEY_ID"></script>
     </head>
     <body>
+
+        <div class="content-wrapper">
+            <partial name="Header"/>
+
+            <section class="wrapper">
+
+                @if (bigTitle != null)
+                {
+                    <section class="wrapper bg-gray mb-4">
+                        <div class="container py-12 py-md-16 text-center">
+                            <div class="row">
+                                <div class="col-lg-10 col-xxl-8 mx-auto">
+                                    <h1 class="display-1 mb-3">@bigTitle</h1>
+
+                                    @if (subTitle != null)
+                                    {
+                                        <p class="lead mb-1">@subTitle</p>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                }
+
+                @await RenderSectionAsync("FullWidth", false)
+
+                <div class="container">
+                    @RenderBody()
+                </div>
+            </section>
+
+            <partial name="Footer"/>
+        </div>
+
+        <partial name="StaticIncludesBody"/>
+
+        @await RenderSectionAsync("Scripts", false)
 
     </body>
 </html>

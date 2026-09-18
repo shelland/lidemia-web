@@ -34,7 +34,7 @@ public static class EntityTypeBuilderExtensions
         }
         else
         {
-            builder.Property(e => e.Id).HasDefaultValueSql("service.next_id()");
+            builder.Property(e => e.Id).AsServiceId();
         }
 
         builder.AddInitialColumns();

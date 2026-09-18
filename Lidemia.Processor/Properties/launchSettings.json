@@ -1,0 +1,10 @@
+{
+    "profiles": {
+        "Lidemia.Processor": {
+            "commandName": "Project",
+            "environmentVariables": {
+                "DOTNET_ENVIRONMENT": "Local"
+            }
+        }
+    }
+}

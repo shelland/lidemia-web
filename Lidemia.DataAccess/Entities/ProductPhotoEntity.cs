@@ -1,11 +1,14 @@
 ﻿// Created on 09/12/2021 23:43 by Andrey Laserson
 
+using Lidemia.Core.Models.Base;
 using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class ProductPhotoEntity : IDbEntity
+public class ProductPhotoEntity : IDbEntity, IHasId<Guid>
 {
+    public Guid Id { get; set; }
+
     public long PhotoId { get; set; }
 
     public PhotoEntity Photo { get; set; } = null!;

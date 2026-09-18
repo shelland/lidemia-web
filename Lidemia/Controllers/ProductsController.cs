@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lidemia.Controllers;
 
-[Route("[controller]")]
 public class ProductsController : BaseController
 {
     private readonly IProductService productService;
@@ -17,6 +16,7 @@ public class ProductsController : BaseController
         this.photoService = photoService;
     }
 
+    [HttpGet]
     public async Task<IActionResult> Index([FromQuery] ProductsListFilterModel? filter, CancellationToken cancellationToken)
     {
         filter ??= new ProductsListFilterModel();
@@ -41,7 +41,7 @@ public class ProductsController : BaseController
 
         if (product == null)
         {
-            return NotFoundView();
+            return NotFoundView;
         }
 
         var photos = await this.photoService.GetProductPhotos(id, cancellationToken);

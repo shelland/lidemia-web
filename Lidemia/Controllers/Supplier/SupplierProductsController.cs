@@ -2,6 +2,7 @@
 
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Core.Attributes;
+using Lidemia.Core.Models.Misc;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lidemia.Controllers.Supplier;
@@ -17,9 +18,10 @@ public class SupplierProductsController : BaseController
         this.productService = productService;
     }
 
-    // GET
-    public IActionResult Index()
+    [HttpGet]
+    public async Task<IActionResult> Index([FromQuery] PagingInfoModel pagingInfo, CancellationToken cancellationToken)
     {
-        return View();
+        var products = await this.productService.GetSupplierProducts(RequireEntityId, pagingInfo, cancellationToken);
+        return View(products);
     }
 }

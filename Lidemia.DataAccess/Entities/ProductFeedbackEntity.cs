@@ -1,5 +1,6 @@
 ﻿// Created on 02/09/2026 20:16 by Laserson
 
+using Lidemia.Core.Enums;
 using Lidemia.Core.Models.Base;
 using Lidemia.DataAccess.Abstract;
 
@@ -20,6 +21,8 @@ public class ProductFeedbackEntity : IDbEntity, IHasId<Guid>
     public string? Comment { get; set; }
 
     public byte Rate { get; set; }
+
+    public ProductFeedbackState State { get; set; }
 
     public int RowVersion { get; set; }
 

@@ -11,4 +11,6 @@ public interface IProductService
     Task<ProductModel?> GetById(long id, CancellationToken cancellationToken);
 
     Task<BasePagedListModel<ProductModel>> GetPublicList(ProductsListFilterModel filter, CancellationToken cancellationToken);
+
+    Task<BasePagedListModel<ProductModel>> GetSupplierProducts(long id, PagingInfoModel pagingInfo, CancellationToken cancellationToken);
 }

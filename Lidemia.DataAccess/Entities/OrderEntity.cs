@@ -13,10 +13,6 @@ public class OrderEntity : IDbEntity, IHasId<long>, IHasMetadata<OrderMetadata>
 
     public string Number { get; set; } = string.Empty;
 
-    public long SupplierId { get; set; }
-
-    public SupplierEntity Supplier { get; set; } = null!;
-
     public long CustomerId { get; set; }
 
     public CustomerEntity Customer { get; set; } = null!;
@@ -34,6 +30,8 @@ public class OrderEntity : IDbEntity, IHasId<long>, IHasMetadata<OrderMetadata>
     public long? PromoCodeId { get; set; }
 
     public PromoCodeEntity? PromoCode { get; set; }
+
+    public IEnumerable<OrderItemEntity> Items { get; set; } = null!;
 
     public int RowVersion { get; set; }
 

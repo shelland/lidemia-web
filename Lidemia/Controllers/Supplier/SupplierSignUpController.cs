@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lidemia.Controllers.Supplier;
 
+[Route("Supplier/SignUp")]
 public class SupplierSignUpController : BaseController
 {
     private readonly ISupplierSignUpService signUpService;
@@ -20,7 +21,7 @@ public class SupplierSignUpController : BaseController
         this.validator = validator;
     }
 
-    // GET
+    [HttpGet]
     public IActionResult Index()
     {
         return View();
@@ -36,6 +37,7 @@ public class SupplierSignUpController : BaseController
             return new ErrorResultInfo(validationResult.GetErrors());
         }
 
-        throw new NotImplementedException();
+        await this.signUpService.SignUp(request, cancellationToken);
+        return ResultInfo.Ok;
     }
 }

@@ -6,9 +6,12 @@ using Lidemia.Common.Mapping;
 using Lidemia.Core.Enums;
 using Lidemia.Core.Models.Domain;
 using Lidemia.DataAccess.Repository.Abstract;
+using Microsoft.Extensions.DependencyInjection;
+using Scrutor;
 
 namespace Lidemia.Common.BusinessLogic.Services.Data;
 
+[ServiceDescriptor<IUserService>(ServiceLifetime.Scoped)]
 public class UserService : IUserService
 {
     private readonly IUserRepository userRepository;

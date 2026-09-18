@@ -4,6 +4,8 @@ root = true
 # C# files
 [*.cs]
 
+dotnet_diagnostic.CA1873.severity = none
+
 # Disable the Roslyn suggestion
 csharp_style_prefer_primary_constructors = false:none
 

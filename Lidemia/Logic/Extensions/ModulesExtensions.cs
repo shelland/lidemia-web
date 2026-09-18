@@ -1,7 +1,9 @@
 ﻿// Created on 01/09/2026 16:37 by Laserson
 
+using Lidemia.Common;
 using Lidemia.Common.BusinessLogic;
 using Lidemia.DataAccess;
+using Lidemia.EmailNotifications;
 using Lidemia.Search;
 using Lidemia.Web.BusinessLogic;
 
@@ -15,5 +17,8 @@ public static class ModulesExtensions
         services.AddCommonBusinessLogicModule();
         services.AddWebBusinessLogicModule();
         services.AddSearchModule(configuration);
+        services.AddEmailNotificationsModule(configuration);
+        services.AddCommonModule();
+        services.AddWebModule();
     }
 }

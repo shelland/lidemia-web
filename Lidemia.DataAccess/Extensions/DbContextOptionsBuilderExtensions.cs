@@ -19,8 +19,6 @@ public static class DbContextOptionsBuilderExtensions
         dataBuilder.EnableParameterLogging();
         var dataSource = dataBuilder.Build();
 
-        // builder.AddInterceptors(new DbConnectionDiagInterceptor());
-
         builder.UseNpgsql(dataSource, db =>
             {
                 db.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);

@@ -12,8 +12,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Lidemia.Common\Lidemia.Common.csproj" />
-	  <ProjectReference Include="..\Lidemia.DataAccess\Lidemia.DataAccess.csproj" />
+		<ProjectReference Include="..\Lidemia.Common\Lidemia.Common.csproj" />
+		<ProjectReference Include="..\Lidemia.DataAccess\Lidemia.DataAccess.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="appsettings.Development.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="appsettings.Local.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>
