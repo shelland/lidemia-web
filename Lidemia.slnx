@@ -11,6 +11,7 @@
     <Project Path="Lidemia.Core/Lidemia.Core.csproj" Id="496fac42-0190-4443-b024-607d92dcf6af" />
     <Project Path="Lidemia.DataAccess/Lidemia.DataAccess.csproj" Id="8385e1c8-c344-48f7-9d99-12db73ce23f3" />
     <Project Path="Lidemia.EmailNotifications/Lidemia.EmailNotifications.csproj" Id="b9d91623-4aac-4fba-8646-0adcd5949af6" />
+    <Project Path="Lidemia.ExternalServices/Lidemia.ExternalServices.csproj" Id="91d1b349-0604-4613-984e-a7cab1a68368" />
     <Project Path="Lidemia.Resources/Lidemia.Resources.csproj" Id="312dc624-eace-4528-9b30-1ff5db729cc7" />
     <Project Path="Lidemia.Search/Lidemia.Search.csproj" Id="f6627dda-1b86-42a6-9b7d-025e71de7000" />
     <Project Path="Lidemia.Web.BusinessLogic/Lidemia.Web.BusinessLogic.csproj" Id="cc41e168-6177-4d14-9e14-1be5d038fa8a" />

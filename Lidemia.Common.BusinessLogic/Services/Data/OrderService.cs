@@ -5,6 +5,7 @@ using Lidemia.Common.BusinessLogic.Services.App.Abstract;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.Mapping;
 using Lidemia.Common.Metrics;
+using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Domain;
 using Lidemia.Core.Models.Misc;
 using Lidemia.Core.Models.Service;
@@ -12,6 +13,7 @@ using Lidemia.DataAccess.Repository.Abstract;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Scrutor;
+using System.Diagnostics;
 
 namespace Lidemia.Common.BusinessLogic.Services.Data;
 
@@ -23,6 +25,8 @@ public class OrderService : IOrderService
     private readonly OrderMetrics metrics;
     private readonly ILogger<OrderService> logger;
 
+    private static readonly ActivitySource Source = new("Lidemia.Orders");
+
     public OrderService(IOrderRepository orderRepository, IOrderNumberGenerator orderNumberGenerator, OrderMetrics metrics, ILogger<OrderService> logger)
     {
         this.orderRepository = orderRepository;
@@ -33,11 +37,16 @@ public class OrderService : IOrderService
 
     public async Task<Result<long>> Create(CreateOrderModel model, CancellationToken cancellationToken)
     {
+        using var activity = Source.StartActivity().NotNull();
         var number = this.orderNumberGenerator.Generate();
+        activity.SetTag("order.id", number);
+        
         var result = await this.orderRepository.Create(number, model, cancellationToken);
 
         this.metrics.OnNewOrder();
         this.logger.LogInformation("A new order {Number} was created by {CustomerId}", number, model.CustomerId);
+
+        activity.AddEvent(new ActivityEvent("OrderProcessed"));
 
         return result;
     }

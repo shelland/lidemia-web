@@ -34,7 +34,14 @@ public static class EntityTypeBuilderExtensions
         }
         else
         {
-            builder.Property(e => e.Id).AsServiceId();
+            if (typeof(TKey) == typeof(Guid))
+            {
+                builder.Property(e => e.Id).AsGuidV7();
+            }
+            else
+            {
+                builder.Property(e => e.Id).AsServiceId();
+            }
         }
 
         builder.AddInitialColumns();

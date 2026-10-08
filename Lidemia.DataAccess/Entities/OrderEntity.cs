@@ -33,6 +33,16 @@ public class OrderEntity : IDbEntity, IHasId<long>, IHasMetadata<OrderMetadata>
 
     public IEnumerable<OrderItemEntity> Items { get; set; } = null!;
 
+    public OrderDeliveryType DeliveryType { get; set; }
+
+    public SupplierAddressEntity? SupplierAddress { get; set; }
+
+    public Guid? SupplierAddressId { get; set; }
+
+    public CustomerAddressEntity? CustomerAddress { get; set; }
+
+    public Guid? CustomerAddressId { get; set; }
+
     public int RowVersion { get; set; }
 
     public bool IsActive { get; set; }

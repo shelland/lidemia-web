@@ -1,8 +1,10 @@
-﻿// Created on 06/09/2026 15:21 by Laserson
+// Created on 06/09/2026 15:21 by Laserson
 
+using Lidemia.Core.Models.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SolrNet;
+using OpenSearch.Client;
+using OpenSearch.Net;
 
 namespace Lidemia.Search;
 
@@ -10,21 +12,40 @@ public static class SearchModule
 {
     public static IServiceCollection AddSearchModule(this IServiceCollection services, IConfiguration configuration)
     {
-        var section = configuration.GetSection("Integrations:Solr");
+        var section = configuration.GetSection("LocalServices:OpenSearch");
 
-        var credentials = System.Text.Encoding.ASCII.GetBytes($"{section.GetValue<string>("Name")}:{section.GetValue<string>("Password")}");
-        var credentialsBase64 = Convert.ToBase64String(credentials);
+        services.Configure<OpenSearchSettings>(section);
 
-        var coreName = section.GetValue<string>("CoreName");
+        var settings = section.Get<OpenSearchSettings>() ?? new OpenSearchSettings();
 
-        services.AddSolrNet($"{section.GetValue<string>("Url")}/solr/{coreName}", options =>
+        var connectionSettings = new ConnectionSettings(new Uri(settings.Url))
+            .DefaultIndex(settings.IndexName)
+            .DefaultFieldNameInferrer(InferFieldName);
+
+        if (!string.IsNullOrWhiteSpace(settings.Name) && !string.IsNullOrWhiteSpace(settings.Password))
         {
-            options.HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", credentialsBase64);
-        });
+            connectionSettings = connectionSettings.BasicAuthentication(settings.Name, settings.Password);
+        }
 
+        if (settings.AllowInvalidCertificates)
+        {
+            connectionSettings = connectionSettings.ServerCertificateValidationCallback(CertificateValidations.AllowAll);
+        }
+
+        services.AddSingleton<IOpenSearchClient>(new OpenSearchClient(connectionSettings));
         services.Scan(x => x.FromAssemblyOf<ISearchModule>().AddClasses().UsingAttributes());
 
         return services;
+    }
+
+    private static string InferFieldName(string propertyName)
+    {
+        if (string.IsNullOrEmpty(propertyName))
+        {
+            return propertyName;
+        }
+
+        return char.ToLowerInvariant(propertyName[0]) + propertyName[1..];
     }
 }
 

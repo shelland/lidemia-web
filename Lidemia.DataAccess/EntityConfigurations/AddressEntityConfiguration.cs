@@ -11,13 +11,9 @@ public class AddressEntityConfiguration : IEntityTypeConfiguration<AddressEntity
 {
     public void Configure(EntityTypeBuilder<AddressEntity> builder)
     {
-        builder.Property(x => x.Id).AsGuidV7();
-
         builder.Property(x => x.PostalIndex).HasMaxLength(6);
         builder.Property(x => x.AddressLine1).HasMaxLength(250);
         builder.Property(x => x.AddressLine2).HasMaxLength(250);
-        builder.Property(x => x.City).HasMaxLength(250);
-        builder.Property(x => x.Region).HasMaxLength(250);
 
         builder.HasIndex(x => new
         {
@@ -31,5 +27,7 @@ public class AddressEntityConfiguration : IEntityTypeConfiguration<AddressEntity
             x.IsDefault,
             x.IsActive
         });
+
+        builder.AddBaseColumns<AddressEntity, Guid>();
     }
 }

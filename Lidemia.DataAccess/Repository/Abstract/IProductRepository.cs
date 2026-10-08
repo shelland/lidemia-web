@@ -19,4 +19,8 @@ public interface IProductRepository : IRepository<ProductEntity, long>
     Task<ProductEntity?> GetByIdPublic(long key, CancellationToken cancellation);
 
     Task<Result<long>> Save(long supplierId, SaveProductModel model, CancellationToken cancellationToken);
+
+    Task<Result<(int Enabled, int Disabled)>> EnablePendingDiscounts(DateTimeOffset now, CancellationToken cancellationToken);
+
+    Task SetProductVisibility(long productId, bool isVisible, CancellationToken cancellationToken);
 }

@@ -2,10 +2,12 @@
 
 using FluentValidation;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
+using Lidemia.Core;
 using Lidemia.Core.Enums;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Service;
+using Lidemia.Web.BusinessLogic.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lidemia.Controllers.Supplier;
@@ -15,21 +17,20 @@ public class SupplierSignInController : BaseController
 {
     private readonly ISupplierSignInService signInService;
     private readonly IValidator<SupplierSignInRequestDto> validator;
+    private readonly IWebAuthService webAuthService;
 
-    public SupplierSignInController(ISupplierSignInService signInService, IValidator<SupplierSignInRequestDto> validator)
+    public SupplierSignInController(ISupplierSignInService signInService, IValidator<SupplierSignInRequestDto> validator, IWebAuthService webAuthService)
     {
         this.signInService = signInService;
         this.validator = validator;
+        this.webAuthService = webAuthService;
     }
 
     [HttpGet]
-    public IActionResult Index()
-    {
-        return View();
-    }
+    public IActionResult Index() => View();
 
     [HttpPost]
-    public async Task<ResultInfo> Post(SupplierSignInRequestDto request, CancellationToken cancellationToken)
+    public async Task<ResultInfo> Post([FromBody] SupplierSignInRequestDto request, CancellationToken cancellationToken)
     {
         var validationResult = await this.validator.ValidateAsync(request, cancellationToken);
 
@@ -40,6 +41,11 @@ public class SupplierSignInController : BaseController
 
         var signInResult = await this.signInService.SignIn(request, cancellationToken);
 
-        return signInResult.Status != LoginResultStatus.Success ? new ErrorResultInfo(["invalid_credentials"]) : ResultInfo.Ok;
+        if (signInResult.Status == LoginResultStatus.Success)
+        {
+            await this.webAuthService.AuthSupplier(signInResult!, cancellationToken);
+        }
+        
+        return signInResult.Status != LoginResultStatus.Success ? Errors.InvalidCredentials : ResultInfo.Ok;
     }
 }

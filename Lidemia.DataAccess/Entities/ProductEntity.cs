@@ -38,9 +38,9 @@ public class ProductEntity : IHasId<long>, IDbEntity
 
     public bool HasCurrentDiscount { get; set; }
 
-    public DateTime? DiscountEndDate { get; set; }
+    public DateTimeOffset? DiscountEndDate { get; set; }
 
-    public DateTime? DiscountStartDate { get; set; }
+    public DateTimeOffset? DiscountStartDate { get; set; }
 
     public decimal? DiscountPrice { get; set; }
 
@@ -58,15 +58,19 @@ public class ProductEntity : IHasId<long>, IDbEntity
 
     public int TotalRates { get; set; }
 
-    public DateTime? FirstSeenDate { get; set; }
+    public DateTimeOffset? FirstSeenDate { get; set; }
 
     public ProductPriceUnit? PriceUnit { get; set; }
 
     public ProductAvailabilityType? AvailabilityType { get; set; }
 
+    public double? AvailableUnits { get; set; }
+
     public int? OrderRank { get; set; }
 
     public string? Sku { get; set; }
+
+    public string[] Tags { get; set; } = [];
 
     public int RowVersion { get; set; }
 

@@ -3,11 +3,12 @@
 @inject IAppLocalizationService appLocalizationService
 
 <environment include="Development,Local">
-
+    <script src="~/js/AppFetch.js"></script>
+    <script src="~/js/Shared.js"></script>
 </environment>
 
 <environment include="Production">
-
+    <script src="main-js-bundle"></script>
 </environment>
 
 <script src="~/js/ClientResources.@(appLocalizationService.CurrentCulture.Culture).js"></script>

@@ -19,6 +19,7 @@
 		<ProjectReference Include="..\Lidemia.Common\Lidemia.Common.csproj" />
 		<ProjectReference Include="..\Lidemia.DataAccess\Lidemia.DataAccess.csproj" />
 		<ProjectReference Include="..\Lidemia.EmailNotifications\Lidemia.EmailNotifications.csproj" />
+		<ProjectReference Include="..\Lidemia.ExternalServices\Lidemia.ExternalServices.csproj" />
 		<ProjectReference Include="..\Lidemia.Search\Lidemia.Search.csproj" />
 		<ProjectReference Include="..\Lidemia.ServiceDefaults\Lidemia.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\Lidemia.Web.BusinessLogic\Lidemia.Web.BusinessLogic.csproj" />
@@ -31,11 +32,15 @@
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
 		<PackageReference Include="MassTransit" Version="8.5.8" />
 		<PackageReference Include="MassTransit.RabbitMQ" Version="8.5.8" />
+		<PackageReference Include="Smidge" Version="5.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Content Update="appsettings.Local.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Update="smidge.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 

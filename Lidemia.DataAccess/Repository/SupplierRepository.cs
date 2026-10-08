@@ -26,7 +26,10 @@ public class SupplierRepository : ISupplierRepository
 
     public Task<SupplierEntity?> GetById(long key, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return this.context.Suppliers
+            .Include(x => x.User)
+            .AsActive()
+            .FirstOrDefaultAsync(x => x.Id == key, cancellationToken);
     }
 
     public Task Delete(long key, CancellationToken cancellationToken)

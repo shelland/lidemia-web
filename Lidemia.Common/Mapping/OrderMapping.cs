@@ -9,6 +9,12 @@ public static class OrderMapping
 {
     public static OrderModel ToModel(this OrderEntity entity)
     {
-        return new OrderModel();
+        return new OrderModel
+        {
+            Id = entity.Id,
+            Date = entity.CreateDate,
+            DeliveryType = entity.DeliveryType,
+            Number = entity.Number
+        };
     }
 }

@@ -17,13 +17,23 @@ public class AddressEntity : IHasId<Guid>, IDbEntity
 
     public string PostalIndex { get; set; } = string.Empty;
 
-    public string Region { get; set; } = string.Empty;
+    public CountryEntity Country { get; set; } = null!;
 
-    public string City { get; set; } = string.Empty;
+    public Guid CountryId { get; set; }
+
+    public RegionEntity Region { get; set; } = null!;
+
+    public Guid RegionId { get; set; }
+
+    public CityEntity City { get; set; } = null!;
+
+    public Guid CityId { get; set; }
 
     public string AddressLine1 { get; set; } = string.Empty;
 
     public string? AddressLine2 { get; set; }
+
+    public string? Comment { get; set; }
 
     public int RowVersion { get; set; }
 

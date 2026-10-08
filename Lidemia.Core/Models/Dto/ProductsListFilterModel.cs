@@ -13,4 +13,8 @@ public class ProductsListFilterModel : PagingInfoModel
     public decimal? PriceFrom { get; set; }
 
     public decimal? PriceTo { get; set; }
+
+    public string? Title { get; set; }
+
+    public string[]? Tags { get; set; }
 }

@@ -52,6 +52,12 @@ public partial class LidemiaDbContext : DbContext
 
     public DbSet<PasswordResetEntity> PasswordResets => Set<PasswordResetEntity>();
 
+    public DbSet<CountryEntity> Countries => Set<CountryEntity>();
+
+    public DbSet<RegionEntity> Regions => Set<RegionEntity>();
+
+    public DbSet<CityEntity> Cities => Set<CityEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

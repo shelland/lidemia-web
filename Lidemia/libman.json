@@ -18,9 +18,148 @@
             ]
         },
         {
-            "provider": "cdnjs",
             "library": "Trumbowyg@2.31.0",
             "destination": "wwwroot/lib/Trumbowyg/"
+        },
+        {
+            "library": "tagify@4.39.0",
+            "destination": "wwwroot/lib/tagify/"
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/editorjs@2.31.7",
+            "destination": "wwwroot/lib/editorjs/editorjs/",
+            "files": [
+                "dist/editorjs.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/header@2.8.9",
+            "destination": "wwwroot/lib/editorjs/header/",
+            "files": [
+                "dist/header.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/link@2.6.2",
+            "destination": "wwwroot/lib/editorjs/link/",
+            "files": [
+                "dist/link.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/warning@1.4.1",
+            "destination": "wwwroot/lib/editorjs/warning/",
+            "files": [
+                "dist/warning.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/image@2.10.3",
+            "destination": "wwwroot/lib/editorjs/image/",
+            "files": [
+                "dist/image.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/list@2.0.9",
+            "destination": "wwwroot/lib/editorjs/list/",
+            "files": [
+                "dist/editorjs-list.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/inline-code@1.5.2",
+            "destination": "wwwroot/lib/editorjs/inline-code",
+            "files": [
+                "dist/inline-code.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/quote@2.7.6",
+            "destination": "wwwroot/lib/editorjs/quote",
+            "files": [
+                "dist/quote.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/table@2.4.6",
+            "destination": "wwwroot/lib/editorjs/table",
+            "files": [
+                "dist/table.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/underline@1.2.1",
+            "destination": "wwwroot/lib/editorjs/underline",
+            "files": [
+                "dist/underline.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/checklist@1.6.0",
+            "destination": "wwwroot/lib/editorjs/checklist",
+            "files": [
+                "dist/checklist.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/delimiter@1.4.2",
+            "destination": "wwwroot/lib/editorjs/delimiter",
+            "files": [
+                "dist/delimiter.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/embed@2.8.0",
+            "destination": "wwwroot/lib/editorjs/embed",
+            "files": [
+                "dist/embed.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/raw@2.5.1",
+            "destination": "wwwroot/lib/editorjs/raw",
+            "files": [
+                "dist/raw.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/marker@1.4.0",
+            "destination": "wwwroot/lib/editorjs/marker",
+            "files": [
+                "dist/marker.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/nested-list@1.4.3",
+            "destination": "wwwroot/lib/editorjs/nested-list",
+            "files": [
+                "dist/nested-list.umd.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@editorjs/code@2.9.4",
+            "destination": "wwwroot/lib/editorjs/code",
+            "files": [
+                "dist/code.umd.js"
+            ]
         }
     ]
 }

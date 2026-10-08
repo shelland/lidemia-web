@@ -1,1 +1,40 @@
-﻿@model Lidemia.Core.Models.Misc.BasePagedListModel<Lidemia.Core.Models.Domain.ProductModel>
+﻿@using Lidemia.Logic.Extensions
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+@model Lidemia.Core.Models.Misc.BasePagedListModel<Lidemia.Core.Models.Domain.ProductModel>
+
+@inject IStringLocalizer<AppResources> localizer
+
+@{
+    ViewData.SetBigTitle(localizer["SupplierProductsPageTitle"]);
+}
+
+<a class="btn btn-primary" asp-action="Create" asp-controller="SupplierProducts">@localizer["SupplierProductsCreate"]</a>
+
+@if (Model.Items.Any())
+{
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th>@localizer["SupplierProductsListTitle"]</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var product in Model.Items)
+            {
+                <tr>
+                    <td>@product.Title</td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}
+else
+{
+    <h1>@localizer["SupplierProductsListEmpty"]</h1>
+}

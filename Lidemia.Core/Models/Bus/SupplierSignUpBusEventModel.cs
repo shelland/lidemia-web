@@ -4,5 +4,7 @@ namespace Lidemia.Core.Models.Bus;
 
 public record SupplierSignUpBusEventModel
 (
-    long Id
+    long Id,
+    string Email,
+    string Name
 );

@@ -18,4 +18,15 @@ public static class RequestExtensions
 
         return Guid.Parse(id.ToString());
     }
+
+    public static string? GetReferrer(this HttpRequest request)
+    {
+        if (request.Query.TryGetValue("returnUrl", out var returnUrl))
+        {
+            return returnUrl;
+        }
+
+        var referrerHeader = request.GetTypedHeaders().Referer;
+        return referrerHeader != null ? referrerHeader.ToString() : null;
+    }
 }

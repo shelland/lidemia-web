@@ -8,7 +8,6 @@ using Lidemia.Core.Models.Configuration;
 using Lidemia.Logic;
 using Lidemia.Logic.Extensions;
 using Lidemia.ServiceDefaults;
-using MassTransit;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc.Razor;
 using OpenTelemetry.Metrics;
@@ -28,6 +27,9 @@ public class Program
 
         builder.Services.Configure<AppIdSettings>(builder.Configuration.GetSection("AppId"));
         builder.Services.Configure<RecaptchaSettingsModel>(builder.Configuration.GetSection("Integrations:Recaptcha"));
+        builder.Services.Configure<LocalServicesSettingsModel>(builder.Configuration.GetSection("LocalServices"));
+        builder.Services.Configure<ApplicationSettingsModel>(builder.Configuration.GetSection("Application"));
+        builder.Services.Configure<IntegrationsSettingsModel>(builder.Configuration.GetSection("Integrations"));
 
         builder.Services
             .AddDataProtection()
@@ -76,6 +78,9 @@ public class Program
         builder.Services.AddValidatorsFromAssembly(typeof(ICommonModule).Assembly);
         builder.Services.RegisterBus(builder.Configuration);
 
+        builder.Services.AddBundles();
+
+        builder.Services.AddHttpContextAccessor();
 
         var app = builder.Build();
 
@@ -103,6 +108,8 @@ public class Program
 
         app.MapPrometheusScrapingEndpoint().DisableHttpMetrics();
         app.MapHealthChecks("/healthz").DisableHttpMetrics();
+
+        app.AddBundles();
 
         await app.RunMigrations();
         await app.RunAsync();

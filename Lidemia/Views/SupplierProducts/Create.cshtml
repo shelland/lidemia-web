@@ -1,0 +1,111 @@
+﻿@model Lidemia.ViewModels.CreateProductViewModel
+
+@using Lidemia.Core.Extensions
+@using Lidemia.Logic.Extensions
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<AppResources> localizer
+
+@{
+    ViewData.SetBigTitle(localizer["CreateProductTitle"]);
+
+    var productObject = new
+    {
+        id = Model.Product?.Id,
+        kek = 1
+    };
+
+    //var fakeObj = @Html.Raw(new { a = 1, b = new[] { "tag1", "tag2" } }.Serialize());
+    // var fakeTags = @Html.Raw(new[] { new { value = "#tag1" }, new { value = "#tag2" } }.Serialize());
+}
+
+<form id="mainForm" autocomplete="off">
+
+    <div class="mb-3">
+        <label class="form-label" for="title">@localizer["CreateProductTitle"]</label>
+        <input type="text" class="form-control" value="@Model.Product?.Title" id="title" name="title"/>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@localizer["CreateProductTags"]</label>
+        <input id="tags" type="text" class="form-control"/>
+    </div>
+
+    <div class="mb-3">
+        <div id="editorjs" style="border: 1px solid #ccc; padding: 20px; margin: 20px auto;"></div>
+    </div>
+
+</form>
+
+<link rel="stylesheet" href="~/lib/tagify/tagify.css"/>
+<link rel="stylesheet" href="~/lib/Trumbowyg/ui/trumbowyg.css"/>
+
+<style>
+    .ce-block__content,
+    .ce-toolbar__content {
+        max-width: unset;
+    }
+</style>
+
+@section Scripts
+{
+    <script src="~/lib/tagify/tagify.js"></script>
+    
+    <script src="~/lib/editorjs/editorjs/dist/editorjs.umd.js"></script>
+    <script src="~/lib/editorjs/checklist/dist/checklist.umd.js"></script>
+    <script src="~/lib/editorjs/header/dist/header.umd.js"></script>
+    <script src="~/lib/editorjs/image/dist/image.umd.js"></script>
+    <script src="~/lib/editorjs/inline-code/dist/inline-code.umd.js"></script>
+    <script src="~/lib/editorjs/link/dist/link.umd.js"></script>
+    <script src="~/lib/editorjs/list/dist/editorjs-list.umd.js"></script>
+    <script src="~/lib/editorjs/quote/dist/quote.umd.js"></script>
+    <script src="~/lib/editorjs/table/dist/table.umd.js"></script>
+    <script src="~/lib/editorjs/underline/dist/underline.umd.js"></script>
+    <script src="~/lib/editorjs/warning/dist/warning.umd.js"></script>
+    <script src="~/lib/editorjs/delimiter/dist/delimiter.umd.js"></script>
+    <script src="~/lib/editorjs/embed/dist/embed.umd.js"></script>
+    <script src="~/lib/editorjs/raw/dist/raw.umd.js"></script>
+    <script src="~/lib/editorjs/nested-list/dist/nested-list.umd.js"></script>
+    <script src="~/lib/editorjs/marker/dist/marker.umd.js"></script>
+    <script src="~/lib/editorjs/code/dist/code.umd.js"></script>
+    <script src="~/Pages/Scripts/CreateProduct.js"></script>
+
+    <script>
+
+        var product = @(Model.Product != null ? Html.Raw(productObject.Serialize()) : "null");
+        
+        const hashtagRegex = /^#[\p{Script=Cyrl}\p{Script=Latn}\d_-]+$/u;
+
+        console.log(hashtagRegex.test("#nature"));         // true (Latin)
+        console.log(hashtagRegex.test("#природа"));        // true (Cyrillic)
+        console.log(hashtagRegex.test("#tech-news_2026")); // true (Mixed with - and _)
+
+        // Invalid cases
+        console.log(hashtagRegex.test("nature"));          // false (Missing #)
+        console.log(hashtagRegex.test("#nature!"));        // false (Contains invalid symbol '!')
+        console.log(hashtagRegex.test("#"));
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            CreateProduct.init({
+                urls: {
+                    saveProductUrl: '@Url.Action("Save", "SupplierProducts")'
+                },
+                values: {
+
+                }
+            });
+
+
+            /* var tagify = new Tagify(document.getElementById("tags"), {
+                pattern: hashtagRegex
+            });
+
+          
+
+            tagify.addTags([]); */
+        });
+
+    </script>
+}

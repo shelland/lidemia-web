@@ -4,11 +4,11 @@
 @using Lidemia.Resources.App
 @using Microsoft.Extensions.Localization
 
-@{
-    ViewData.SetBigTitle("SIGN UP");
-}
-
 @inject IStringLocalizer<AppResources> localizer
+
+@{
+    ViewData.SetBigTitle(localizer["SupplierSignUpTitle"]);
+}
 
 <form id="mainForm">
     <div class="mb-3">
@@ -33,7 +33,7 @@
         <label for="phone" class="form-label">
             @localizer["SupplierSignUpPhone"]
         </label>
-        <input type="tel" class="form-control" id="phone" required>
+        <input type="tel" class="form-control" id="phone" minlength="10" maxlength="20" required>
     </div>
     <div class="mb-3">
         <label for="inn" class="form-label">
@@ -51,7 +51,7 @@
         <label for="orgType" class="form-label">
             @localizer["SupplierSignUpOrgType"]
         </label>
-        @Html.DropDownList("orgType", EnumExtensions.GetValues<OrganizationType>(), new { @class = "form-control" })
+        @Html.DropDownList("orgType", EnumExtensions.GetValues<OrganizationType>(), new { @class = "form-control", required = "required" })
     </div>
 
     <div class="mb-3">

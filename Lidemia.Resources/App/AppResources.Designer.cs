@@ -59,5 +59,25 @@ namespace Lidemia.Resources.App {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] BaseTemplate {
+            get {
+                object obj = ResourceManager.GetObject("BaseTemplate", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] SupplierSignUpEmailTemplate {
+            get {
+                object obj = ResourceManager.GetObject("SupplierSignUpEmailTemplate", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

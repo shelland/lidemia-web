@@ -43,4 +43,10 @@ public class SupplierService : ISupplierService
         var supplier = (await this.supplierRepository.FindSupplierByUserId(user.Id, cancellationToken)).NotNull();
         return new SignInResult<SupplierModel?>(Status: LoginResultStatus.Success, Entity: supplier.ToModel());
     }
+
+    public async Task<SupplierModel?> FindById(long id, CancellationToken cancellationToken)
+    {
+        var entity = await this.supplierRepository.GetById(id, cancellationToken);
+        return entity?.ToModel();
+    }
 }

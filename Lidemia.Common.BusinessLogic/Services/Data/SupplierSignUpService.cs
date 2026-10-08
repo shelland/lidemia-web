@@ -23,14 +23,18 @@ public class SupplierSignUpService : ISupplierSignUpService
     private readonly IPublishEndpoint publishEndpoint;
     private readonly ILogger<SupplierSignUpService> logger;
 
-    public SupplierSignUpService(ISupplierService supplierService, ISecurityService securityService, SupplierMetrics metrics,
-        ILogger<SupplierSignUpService> logger, IPublishEndpoint publishEndpoint)
+    public SupplierSignUpService(
+        ISupplierService supplierService,
+        ISecurityService securityService,
+        SupplierMetrics metrics,
+        IPublishEndpoint publishEndpoint,
+        ILogger<SupplierSignUpService> logger)
     {
         this.supplierService = supplierService;
         this.securityService = securityService;
         this.metrics = metrics;
-        this.logger = logger;
         this.publishEndpoint = publishEndpoint;
+        this.logger = logger;
     }
 
     public async Task<Result<long>> SignUp(SupplierSignUpRequestDto request, CancellationToken cancellationToken)
@@ -51,7 +55,11 @@ public class SupplierSignUpService : ISupplierSignUpService
             cancellationToken);
 
         this.metrics.OnNewSupplier();
-        await this.publishEndpoint.Publish(new SupplierSignUpBusEventModel(Id: result.Value), cancellationToken);
+
+        await this.publishEndpoint.Publish(new SupplierSignUpBusEventModel(
+            Id: result.Value,
+            Email: request.Email,
+            Name: request.Name), cancellationToken);
 
         this.logger.LogInformation("Created a new supplier {Email} with ID: {Id}", request.Email, result.Value);
 

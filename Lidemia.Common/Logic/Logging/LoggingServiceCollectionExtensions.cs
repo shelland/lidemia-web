@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Filters;
+using Serilog.Sinks.OpenSearch;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Lidemia.Common.Logic.Logging;
@@ -14,17 +15,20 @@ public static class LoggingServiceCollectionExtensions
 {
     public static void RegisterLogging(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        var seqUrl = configuration.GetValue<string>("Integrations:Seq:Url");
-        var seqApiKey = configuration.GetValue<string>("Integrations:Seq:ApiKey");
-
         const string outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}][{SourceContext}] {Message:lj}{NewLine}{Exception}";
+
+        var openSearchUrl = configuration["LocalServices:OpenSearch:Url"].NotNull();
 
         var logger = new LoggerConfiguration()
             .MinimumLevel.Information()
             .Enrich.FromLogContext()
             .Enrich.With<CorrelationIdEnricher>()
             .WriteTo.Console(outputTemplate: outputTemplate, theme: AnsiConsoleTheme.Code)
-            .WriteTo.Seq(seqUrl.NotNull(), apiKey: seqApiKey)
+            .WriteTo.OpenSearch(new OpenSearchSinkOptions(new Uri(openSearchUrl))
+            {
+                IndexFormat = "lidemia-logs-{0:yyyy.MM.dd}",
+                AutoRegisterTemplate = true,
+            })
             .Filter.ByExcluding(Matching.FromSource("Microsoft"))
             .Filter.ByExcluding(Matching.FromSource("Microsoft.AspNetCore"))
             .Filter.ByExcluding(Matching.FromSource("System"))

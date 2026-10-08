@@ -13,6 +13,7 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<OrderEntity>
     {
         builder.Property(x => x.Number).HasMaxLength(32);
         builder.Property(x => x.Metadata).AsJsonb();
+        builder.Property(x => x.Comment).HasMaxLength(500);
 
         builder.HasMany(x => x.Items).WithOne(x => x.Order);
 

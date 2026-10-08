@@ -12,6 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Lidemia.Common.BusinessLogic\Lidemia.Common.BusinessLogic.csproj" />
 		<ProjectReference Include="..\Lidemia.Common\Lidemia.Common.csproj" />
 		<ProjectReference Include="..\Lidemia.DataAccess\Lidemia.DataAccess.csproj" />
 	</ItemGroup>

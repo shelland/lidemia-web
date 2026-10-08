@@ -2,9 +2,12 @@
 
 using FluentValidation;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
+using Lidemia.Core.Enums;
 using Lidemia.Core.Extensions;
+using Lidemia.Core.Models.Domain;
 using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Service;
+using Lidemia.Web.BusinessLogic.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lidemia.Controllers.Supplier;
@@ -13,11 +16,16 @@ namespace Lidemia.Controllers.Supplier;
 public class SupplierSignUpController : BaseController
 {
     private readonly ISupplierSignUpService signUpService;
+    private readonly IWebAuthService webAuthService;
+    private readonly ISupplierService supplierService;
     private readonly IValidator<SupplierSignUpRequestDto> validator;
 
-    public SupplierSignUpController(ISupplierSignUpService signUpService, IValidator<SupplierSignUpRequestDto> validator)
+    public SupplierSignUpController(ISupplierSignUpService signUpService, IWebAuthService webAuthService, ISupplierService supplierService,
+        IValidator<SupplierSignUpRequestDto> validator)
     {
         this.signUpService = signUpService;
+        this.webAuthService = webAuthService;
+        this.supplierService = supplierService;
         this.validator = validator;
     }
 
@@ -37,7 +45,10 @@ public class SupplierSignUpController : BaseController
             return new ErrorResultInfo(validationResult.GetErrors());
         }
 
-        await this.signUpService.SignUp(request, cancellationToken);
+        var signUpResult = await this.signUpService.SignUp(request, cancellationToken);
+        var supplier = await this.supplierService.FindById(signUpResult.Value, cancellationToken);
+        await this.webAuthService.AuthSupplier(new SignInResult<SupplierModel>(LoginResultStatus.Success, supplier), cancellationToken);
+
         return ResultInfo.Ok;
     }
 }

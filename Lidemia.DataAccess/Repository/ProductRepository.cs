@@ -49,9 +49,15 @@ public class ProductRepository : IProductRepository
         {
             var product = await this.context.Products.AsActive()
                 .FirstOrDefaultAsync(x => x.Id == model.Id && x.SupplierId == supplierId, cancellationToken: cancellationToken);
-            
+
             await this.context.Products.Where(x => x.Id == model.Id && x.SupplierId == supplierId)
-                .ExecuteUpdateAsync(x => x.SetProperty(e => e.Title, model.Title), cancellationToken: cancellationToken);
+                .ExecuteUpdateAsync(x => x
+                        .SetProperty(e => e.Title, model.Title)
+                        .SetProperty(e => e.ParentId, model.ParentId)
+                        .SetProperty(e => e.Description, model.Description)
+                        .SetProperty(e => e.ShortDescription, model.ShortDescription)
+                        .SetProperty(e => e.AvailabilityType, model.AvailabilityType),
+                    cancellationToken: cancellationToken);
 
             productId = model.Id.Value;
         }
@@ -60,7 +66,11 @@ public class ProductRepository : IProductRepository
             var product = new ProductEntity
             {
                 SupplierId = supplierId,
-                Title = model.Title
+                Title = model.Title,
+                ParentId = model.ParentId,
+                Description = model.Description,
+                ShortDescription = model.ShortDescription,
+                AvailabilityType = model.AvailabilityType
             };
 
             this.context.Products.Add(product);
@@ -70,6 +80,32 @@ public class ProductRepository : IProductRepository
         }
 
         return Result.Ok(productId);
+    }
+
+    public async Task<Result<(int Enabled, int Disabled)>> EnablePendingDiscounts(DateTimeOffset now, CancellationToken cancellationToken)
+    {
+        var enabledCount = await this.context.Products
+            .AsActive()
+            .Where(x => x.IsVisible && !x.HasCurrentDiscount && x.DiscountStartDate >= now)
+            .ExecuteUpdateAsync(x => x.SetProperty(e => e.HasCurrentDiscount, true), cancellationToken: cancellationToken);
+
+        var disabledCount = await this.context.Products
+            .AsActive()
+            .Where(x => x.IsVisible && x.HasCurrentDiscount && x.DiscountEndDate <= now)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(e => e.HasCurrentDiscount, false)
+                    .SetProperty(e => e.DiscountStartDate, (DateTimeOffset?)null)
+                    .SetProperty(e => e.DiscountEndDate, (DateTimeOffset?)null), cancellationToken: cancellationToken);
+
+        return Result.Ok((enabledCount, disabledCount));
+    }
+
+    public Task SetProductVisibility(long productId, bool isVisible, CancellationToken cancellationToken)
+    {
+        return this.context.Products
+            .AsActive()
+            .Where(x => x.Id == productId)
+            .ExecuteUpdateAsync(x => x.SetProperty(e => e.IsVisible, isVisible), cancellationToken: cancellationToken);
     }
 
     public Task Delete(long key, CancellationToken cancellationToken)
@@ -96,7 +132,8 @@ public class ProductRepository : IProductRepository
     {
         var products = await this.context.Products
             .AsActive().Where(x => x.SupplierId == id)
-            .OrderByDescending(x => x.Id).ToPagedListEx(pagingInfoModel, cancellationToken);
+            .OrderByDescending(x => x.Id)
+            .ToPagedListEx(pagingInfoModel, cancellationToken);
 
         return products;
     }

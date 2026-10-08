@@ -4,6 +4,7 @@ using Lidemia.Common;
 using Lidemia.Common.BusinessLogic;
 using Lidemia.DataAccess;
 using Lidemia.EmailNotifications;
+using Lidemia.ExternalServices;
 using Lidemia.Search;
 using Lidemia.Web.BusinessLogic;
 
@@ -19,6 +20,7 @@ public static class ModulesExtensions
         services.AddSearchModule(configuration);
         services.AddEmailNotificationsModule(configuration);
         services.AddCommonModule();
+        services.AddExternalServicesModule();
         services.AddWebModule();
     }
 }

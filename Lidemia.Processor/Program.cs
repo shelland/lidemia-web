@@ -1,4 +1,5 @@
 ﻿using Lidemia.Common.Logic.Bus;
+using Lidemia.Common.Logic.Logging;
 
 namespace Lidemia.Processor;
 
@@ -12,7 +13,7 @@ internal class Program
 
         builder.Services.RegisterBus(builder.Configuration);
         // builder.Services.AddEmailNotificationsModule(builder.Configuration);
-        // builder.Services.RegisterLogging(builder.Configuration);
+        builder.Services.RegisterLogging(builder.Configuration);
 
         using var app = builder.Build();
         await app.RunAsync();

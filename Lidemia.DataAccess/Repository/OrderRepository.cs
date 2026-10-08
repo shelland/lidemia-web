@@ -37,7 +37,8 @@ public class OrderRepository : IOrderRepository
 
     public Task<IPagedList<OrderEntity>> GetCustomerOrders(long customerId, PagingInfoModel pagingInfo, CancellationToken cancellationToken)
     {
-        return this.context.Orders.AsActive()
+        return this.context.Orders
+            .AsActive()
             .Where(x => x.CustomerId == customerId)
             .OrderByDescending(x => x.Id)
             .ToPagedListEx(pagingInfo, cancellationToken);

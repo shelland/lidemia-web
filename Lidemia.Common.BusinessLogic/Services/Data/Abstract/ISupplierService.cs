@@ -12,4 +12,6 @@ public interface ISupplierService
     Task<Result<long>> Create(CreateSupplierModel request, CancellationToken cancellationToken);
 
     Task<SignInResult<SupplierModel?>> SignIn(SupplierSignInRequestDto request, CancellationToken cancellationToken);
+
+    Task<SupplierModel?> FindById(long id, CancellationToken cancellationToken);
 }

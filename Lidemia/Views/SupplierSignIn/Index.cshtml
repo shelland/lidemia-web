@@ -1,5 +1,37 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Lidemia.Core.Extensions
+
 @{
+    var referrerUrl = Context.Request.GetReferrer();
+    var returnUrl = Url.IsLocalUrl(referrerUrl) ? referrerUrl : Url.Action("Index", "Home");
+}
+
+<form class="text-start mb-3">
+    <div class="form-floating mb-4">
+        <input type="email" class="form-control" placeholder="Email" id="email">
+        <label for="email">Email</label>
+    </div>
+    <div class="form-floating password-field mb-4">
+        <input type="password" class="form-control" placeholder="Password" id="password">
+        <span class="password-toggle"><i class="uil uil-eye"></i></span>
+        <label for="password">Password</label>
+    </div>
+    <a class="btn btn-primary rounded-pill btn-login w-100 mb-2" id="signInBtn">Sign In</a>
+</form>
+
+@section Scripts
+{
+    <script src="~/Pages/Scripts/SupplierSignIn.js"></script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            SupplierSignIn.init({
+                urls: {
+                    signInUrl: '@Url.Action("Post", "SupplierSignIn")',
+                    returnUrl: '@returnUrl'
+                }
+            })
+        });
+
+    </script>
 }

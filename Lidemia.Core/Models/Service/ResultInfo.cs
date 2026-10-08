@@ -72,6 +72,11 @@ public class ResultInfo<T> : ResultInfo
     {
     }
 
+    public ResultInfo(T data) : base(true)
+    {
+        Data = data;
+    }
+
     public ResultInfo(bool isSuccess) : base(isSuccess)
     {
     }
