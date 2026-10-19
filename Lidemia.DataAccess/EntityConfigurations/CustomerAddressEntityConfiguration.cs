@@ -13,6 +13,8 @@ public class CustomerAddressEntityConfiguration : IEntityTypeConfiguration<Custo
     {
         builder.AddBaseColumns<CustomerAddressEntity, Guid>();
 
+        builder.Property(x => x.Comment).HasMaxLength(500);
+
         builder.HasIndex(x => new
         {
             x.CustomerId,

@@ -5,5 +5,6 @@ namespace Lidemia.Core.Enums;
 public enum OrderDeliveryType
 {
     Delivery,
+
     SelfPickup
 }

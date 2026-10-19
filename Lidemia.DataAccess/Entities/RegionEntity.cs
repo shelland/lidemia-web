@@ -15,6 +15,10 @@ public class RegionEntity : IHasId<Guid>, IDbEntity
 
     public string Name { get; set; } = string.Empty;
 
+    public string? Area { get; set; }
+
+    public ICollection<CityEntity> Cities { get; set; } = new HashSet<CityEntity>();
+
     public int RowVersion { get; set; }
 
     public bool IsActive { get; set; }

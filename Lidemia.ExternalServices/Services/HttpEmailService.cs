@@ -33,7 +33,7 @@ public class HttpEmailService : IHttpEmailService
     {
         try
         {
-            var client = this.httpClientFactory.CreateClient(nameof(HttpEmailService));
+            using var client = this.httpClientFactory.CreateClient(nameof(HttpEmailService));
             client.DefaultRequestHeaders.Add("Authorization", this.options.Value.HttpEmail.ApiKey);
             var result = await (await client.PostAsJsonAsync(this.BaseApiUrl, request, cancellationToken: cancellationToken)).Content
                 .ReadFromJsonAsync<HttpEmailResponseDto>(cancellationToken: cancellationToken);

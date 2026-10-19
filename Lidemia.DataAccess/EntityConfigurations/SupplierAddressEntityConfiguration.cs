@@ -13,6 +13,8 @@ public class SupplierAddressEntityConfiguration : IEntityTypeConfiguration<Suppl
     {
         builder.AddBaseColumns<SupplierAddressEntity, Guid>();
 
+        builder.Property(x => x.Comment).HasMaxLength(500);
+
         builder.HasIndex(x => new
         {
             x.SupplierId,

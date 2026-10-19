@@ -1,4 +1,6 @@
-﻿namespace Lidemia.Core.Models.Service;
+﻿using FluentResults;
+
+namespace Lidemia.Core.Models.Service;
 
 public class ResultInfo
 {
@@ -64,6 +66,8 @@ public class ErrorResultInfo : ResultInfo
     public int Code { get; set; }
 
     public ErrorResponseBody<string>? Data { get; set; }
+
+    public static ErrorResultInfo Error { get; } = new();
 }
 
 public class ResultInfo<T> : ResultInfo

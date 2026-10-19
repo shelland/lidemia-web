@@ -2,7 +2,6 @@
 
 using FluentValidation;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
-using Lidemia.Common.Validators;
 using Lidemia.Core.Attributes;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Dto;

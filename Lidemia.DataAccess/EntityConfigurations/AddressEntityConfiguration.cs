@@ -14,19 +14,11 @@ public class AddressEntityConfiguration : IEntityTypeConfiguration<AddressEntity
         builder.Property(x => x.PostalIndex).HasMaxLength(6);
         builder.Property(x => x.AddressLine1).HasMaxLength(250);
         builder.Property(x => x.AddressLine2).HasMaxLength(250);
-
-        builder.HasIndex(x => new
-        {
-            x.CustomerId,
-            x.IsActive
-        });
-
-        builder.HasIndex(x => new
-        {
-            x.CustomerId,
-            x.IsDefault,
-            x.IsActive
-        });
+        builder.Property(x => x.HouseAdd1).HasMaxLength(50);
+        builder.Property(x => x.HouseAdd2).HasMaxLength(50);
+        builder.Property(x => x.StreetName).HasMaxLength(250);
+        builder.Property(x => x.HouseNumber).HasMaxLength(50);
+        builder.Property(x => x.FlatNumber).HasMaxLength(50);
 
         builder.AddBaseColumns<AddressEntity, Guid>();
     }

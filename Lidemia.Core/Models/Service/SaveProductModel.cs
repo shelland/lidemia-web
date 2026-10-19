@@ -11,5 +11,6 @@ public record SaveProductModel
     string? Title,
     string? Description,
     string? ShortDescription,
-    ProductAvailabilityType? AvailabilityType
+    ProductAvailabilityType? AvailabilityType,
+    string[] Tags
 );

@@ -9,6 +9,13 @@ public static class ProductMapping
 {
     public static ProductModel ToModel(this ProductEntity entity)
     {
-        return new ProductModel();
+        return new ProductModel
+        {
+            Id = entity.Id,
+            SupplierId = entity.SupplierId,
+            Description = entity.Description,
+            Title = entity.Title,
+            Tags = entity.Tags,
+        };
     }
 }

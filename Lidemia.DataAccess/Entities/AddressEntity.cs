@@ -9,10 +9,6 @@ public class AddressEntity : IHasId<Guid>, IDbEntity
 {
     public Guid Id { get; set; }
 
-    public long CustomerId { get; set; }
-
-    public CustomerEntity Customer { get; set; } = null!;
-
     public bool IsDefault { get; set; }
 
     public string PostalIndex { get; set; } = string.Empty;
@@ -29,11 +25,19 @@ public class AddressEntity : IHasId<Guid>, IDbEntity
 
     public Guid CityId { get; set; }
 
-    public string AddressLine1 { get; set; } = string.Empty;
+    public string StreetName { get; set; } = string.Empty;
+    
+    public string HouseNumber { get; set; } = string.Empty;
+
+    public string? HouseAdd1 { get; set; }
+
+    public string? HouseAdd2 { get; set; }
+
+    public string? FlatNumber { get; set; }
+
+    public string? AddressLine1 { get; set; }
 
     public string? AddressLine2 { get; set; }
-
-    public string? Comment { get; set; }
 
     public int RowVersion { get; set; }
 

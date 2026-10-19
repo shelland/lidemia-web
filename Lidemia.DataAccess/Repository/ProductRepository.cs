@@ -47,16 +47,18 @@ public class ProductRepository : IProductRepository
 
         if (model.Id.HasValue)
         {
-            var product = await this.context.Products.AsActive()
-                .FirstOrDefaultAsync(x => x.Id == model.Id && x.SupplierId == supplierId, cancellationToken: cancellationToken);
+            // var product = await this.context.Products.AsActive()
+            //     .FirstOrDefaultAsync(x => x.Id == model.Id && x.SupplierId == supplierId, cancellationToken: cancellationToken);
 
-            await this.context.Products.Where(x => x.Id == model.Id && x.SupplierId == supplierId)
+            await this.context.Products
+                .Where(x => x.Id == model.Id && x.SupplierId == supplierId)
                 .ExecuteUpdateAsync(x => x
                         .SetProperty(e => e.Title, model.Title)
                         .SetProperty(e => e.ParentId, model.ParentId)
                         .SetProperty(e => e.Description, model.Description)
                         .SetProperty(e => e.ShortDescription, model.ShortDescription)
-                        .SetProperty(e => e.AvailabilityType, model.AvailabilityType),
+                        .SetProperty(e => e.AvailabilityType, model.AvailabilityType)
+                        .SetProperty(e => e.Tags, model.Tags),
                     cancellationToken: cancellationToken);
 
             productId = model.Id.Value;
@@ -70,7 +72,8 @@ public class ProductRepository : IProductRepository
                 ParentId = model.ParentId,
                 Description = model.Description,
                 ShortDescription = model.ShortDescription,
-                AvailabilityType = model.AvailabilityType
+                AvailabilityType = model.AvailabilityType,
+                Tags = model.Tags
             };
 
             this.context.Products.Add(product);
@@ -106,6 +109,18 @@ public class ProductRepository : IProductRepository
             .AsActive()
             .Where(x => x.Id == productId)
             .ExecuteUpdateAsync(x => x.SetProperty(e => e.IsVisible, isVisible), cancellationToken: cancellationToken);
+    }
+
+    public async Task<IEnumerable<ProductEntity>> GetProducts(IEnumerable<long> ids, CancellationToken cancellationToken)
+    {
+        var products = await this.context
+            .Products
+            .AsActive()
+            .Include(x => x.PrimaryPhoto)
+            .Where(x => ids.Contains(x.Id))
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return products;
     }
 
     public Task Delete(long key, CancellationToken cancellationToken)

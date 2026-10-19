@@ -13,6 +13,10 @@ public class ShoppingCartEntityConfiguration : IEntityTypeConfiguration<Shopping
     {
         builder.Property(x => x.Items).AsJsonb();
 
-        builder.HasIndex(x => new { x.UserId, x.IsActive });
+        builder.HasIndex(x => new
+        {
+            x.CustomerId,
+            x.IsActive
+        }).IsUnique();
     }
 }

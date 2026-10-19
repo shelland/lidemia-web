@@ -18,6 +18,7 @@
         <thead>
             <tr>
                 <th>@localizer["SupplierProductsListTitle"]</th>
+                <th>@localizer["SupplierProductsActions"]</th>
             </tr>
         </thead>
 
@@ -27,6 +28,9 @@
             {
                 <tr>
                     <td>@product.Title</td>
+                    <td>
+                        <a class="btn btn-primary" href="@Url.Action("Edit", "SupplierProducts", new { id = product.Id })">@localizer["SupplierProductsEdit"]</a>
+                    </td>
                 </tr>
             }
 

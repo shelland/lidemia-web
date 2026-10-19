@@ -1,5 +1,3 @@
-using Lidemia.Core.Models.Dto;
-using Lidemia.Core.Models.Misc;
 using Lidemia.Search.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +8,7 @@ public class HomeController : BaseController
     [HttpGet]
     public IActionResult Index([FromServices] ISearchService searchService, [FromServices] ILogger<HomeController> logger)
     {
-        var products = new List<ProductMainInfoModel>
+        /*var products = new List<ProductMainInfoModel>
         {
             new(1, "Шоколад молочный", 250, 1, "Супер молочный шоколад", 1, ["шоколад", "молочный"], true),
             new(2, "Шоколад темный", 280, 1, "Супер темный шоколад", 1, ["шоколад", "темный"], true),
@@ -25,7 +23,7 @@ public class HomeController : BaseController
         var results = searchService.Search(new ProductsListFilterModel
         {
             Title = "белы"
-        }).Result; 
+        }).Result; */
 
         return View();
     }

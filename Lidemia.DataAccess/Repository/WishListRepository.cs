@@ -36,11 +36,11 @@ public class WishListRepository : IWishListRepository
         return this.context.WishLists.AsActive().CountAsync(x => x.CustomerId == customerId, cancellationToken: cancellationToken);
     }
 
-    public async Task AddItem(long customerId, long productId, Guid? wishListId, CancellationToken cancellationToken)
+    public async Task<bool> AddItem(long customerId, long productId, Guid? wishListId, CancellationToken cancellationToken)
     {
         var strategy = this.context.Database.CreateExecutionStrategy();
 
-        await strategy.ExecuteAsync(async () =>
+        return await strategy.ExecuteAsync(async () =>
         {
             await using var transaction = await this.context.Database.BeginTransactionAsync(cancellationToken);
 
@@ -72,6 +72,14 @@ public class WishListRepository : IWishListRepository
                 targetList = (await this.context.WishLists
                     .AsActive()
                     .FirstOrDefaultAsync(x => x.Id == wishListId, cancellationToken: cancellationToken)).NotNull();
+
+                var existingEntry = await this.context.WishListItems.FirstOrDefaultAsync(x => x.ProductId == productId && x.WishListId == wishListId,
+                    cancellationToken: cancellationToken);
+
+                if (existingEntry != null)
+                {
+                    return false;
+                }
             }
 
             var listItemsCount = await this.context.WishListItems
@@ -84,6 +92,7 @@ public class WishListRepository : IWishListRepository
                 .ExecuteUpdateAsync(x => x.SetProperty(e => e.ItemsCount, listItemsCount), cancellationToken: cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
+            return true;
         });
     }
 }

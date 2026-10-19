@@ -3,6 +3,24 @@
 ## Overview
 .NET 10 / ASP.NET Core MVC solution (modular monolith) orchestrated by .NET Aspire. Use the `.slnx` solution file — there is no `.sln`.
 
+## Project structure
+
+├── Lidemia/           # Main web project
+├── Lidemia.Admin/     # Admin web project
+├── Lidemia.AppHost/           # Aspire project
+├── Lidemia.Common/            # Utility logic (mappings, validators)
+├── Lidemia.Common.BusinessLogic/     # Business logic, data services (layer between presentation and data access)
+├── Lidemia.Core/           # Core models (domain/dto)
+├── Lidemia.DataAccess/     # Data access layer (repositories, db context)
+├── Lidemia.EmailNotifications/           # Email notifications library
+├── Lidemia.ExternalServices/     # Integrations with external services (recaptcha, geo ip, etc)
+├── Lidemia.Processor/           # Custom GitHub Copilot agent definitions (.agent.md files)
+├── Lidemia.Resources/     # Coding standards and guidelines (.instructions.md files)
+├── Lidemia.Scheduler/           # Custom GitHub Copilot agent definitions (.agent.md files)
+├── Lidemia.Search/     # Coding standards and guidelines (.instructions.md files)
+├── Lidemia.Storage/           # Custom GitHub Copilot agent definitions (.agent.md files)
+├── Lidemia.Web.BusinessLogic/     # Coding standards and guidelines (.instructions.md files)
+
 ## Commands
 - Build: `dotnet build Lidemia.slnx`
 - Run everything web-facing via Aspire: `dotnet run --project Lidemia.AppHost` (starts `Lidemia` web, `Lidemia.Admin`, `Lidemia.Storage`; dashboard on http://localhost:15137)
@@ -32,3 +50,7 @@ Register services with Scrutor's attribute plus marker-interface scan — do not
 - Styles are authored as `.less` in `Lidemia/wwwroot/Pages/Styles` and compiled to `Main.css`/`Main.min.css` by Visual Studio Web Compiler (`compilerconfig.json`); the generated CSS is committed, so update it when changing LESS.
 - Client libraries are managed with `Lidemia/libman.json`. Localization supports `ru`/`en` (default `en`); resources are in `Lidemia.Resources/App/AppResources.resx`.
 - `Lidemia/appsettings.json` contains a checked-in reCAPTCHA key pair (dev, not a production secret).
+
+- Data access layer implemented in `Lidemia.DataAccess` project. Repository consist of interface placed in `Lidemia.DataAccess.Repository.Abstract` directory and implementation in `Lidemia.DataAccess.Repository` directory.
+- Use Bootstrap standard classes for markup, try to use responsive markup
+- All request and response dto placed in `Lidemia.Core.Models.Dto` directory

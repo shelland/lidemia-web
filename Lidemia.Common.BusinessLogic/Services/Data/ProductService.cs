@@ -4,8 +4,6 @@ using FluentResults;
 using Lidemia.Common.BusinessLogic.Services.App.Abstract;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.Mapping;
-using Lidemia.Core.Enums;
-using Lidemia.Core.Exceptions;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Bus;
 using Lidemia.Core.Models.Domain;
@@ -21,18 +19,25 @@ using Scrutor;
 namespace Lidemia.Common.BusinessLogic.Services.Data;
 
 [ServiceDescriptor<IProductService>(ServiceLifetime.Scoped)]
-public class ProductService : IProductService
+public class ProductService : BaseDataService, IProductService
 {
     private readonly IProductRepository productRepository;
     private readonly IUtc utc;
     private readonly IPublishEndpoint publishEndpoint;
+    private readonly ISanitizerService sanitizerService;
     private readonly ILogger<ProductService> logger;
 
-    public ProductService(IProductRepository productRepository, IUtc utc, IPublishEndpoint publishEndpoint, ILogger<ProductService> logger)
+    public ProductService(
+        IProductRepository productRepository,
+        IUtc utc,
+        IPublishEndpoint publishEndpoint,
+        ISanitizerService sanitizerService,
+        ILogger<ProductService> logger)
     {
         this.productRepository = productRepository;
         this.utc = utc;
         this.publishEndpoint = publishEndpoint;
+        this.sanitizerService = sanitizerService;
         this.logger = logger;
     }
 
@@ -79,9 +84,10 @@ public class ProductService : IProductService
             Id: request.Id,
             ParentId: request.ParentId,
             Title: request.Title,
-            Description: request.Description,
+            Description: this.sanitizerService.Sanitize(request.Description),
             ShortDescription: request.ShortDescription,
-            AvailabilityType: request.AvailabilityType
+            AvailabilityType: request.AvailabilityType,
+            Tags: request.Tags
         );
 
         var result = await this.productRepository.Save(supplierId, model, cancellationToken);
@@ -104,13 +110,19 @@ public class ProductService : IProductService
         this.logger.LogInformation("Product {Id} visibility was changed to {State}", request.ProductId, request.IsVisible);
     }
 
+    public async Task<IEnumerable<ProductModel>> GetProducts(IEnumerable<long> ids, CancellationToken cancellationToken)
+    {
+        var products = await this.productRepository.GetProducts(ids, cancellationToken);
+        return products.Select(x => x.ToModel());
+    }
+
     private async Task EnsureOwnership(long productId, long supplierId, CancellationToken cancellationToken)
     {
         var product = (await this.productRepository.GetById(productId, cancellationToken)).NotNull();
 
         if (product.SupplierId != supplierId)
         {
-            throw new AppFlowException(AppFlowExceptionType.Unauthorized);
+            ThrowNotAuthorized();
         }
     }
 }

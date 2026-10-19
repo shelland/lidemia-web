@@ -9,6 +9,10 @@
 
         bindEvents: function () {
 
+        },
+
+        addToCart: function () {
+
         }
 
     }

@@ -1,1 +1,31 @@
 ﻿@model Lidemia.ViewModels.ProductDetailsViewModel
+
+@foreach (var tag in Model.Product.Tags)
+{
+    <a class="btn btn-secondary" href="@Url.Action("Index", "Products", new { tag = tag })">@tag</a>
+}
+
+<h1>@Model.Product.Title</h1>
+
+@section Scripts
+{
+    <script src="~/Pages/Scripts/ProductDetails.js"></script>
+    
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            ProductDetails.init({
+                values: {
+
+                },
+                urls: {
+                    addToCartUrl: '@Url.Action("Post", "CustomerShoppingCart")',
+
+                }
+            })
+
+        });
+
+    </script>
+}

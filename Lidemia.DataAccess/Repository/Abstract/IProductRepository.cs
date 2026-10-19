@@ -23,4 +23,6 @@ public interface IProductRepository : IRepository<ProductEntity, long>
     Task<Result<(int Enabled, int Disabled)>> EnablePendingDiscounts(DateTimeOffset now, CancellationToken cancellationToken);
 
     Task SetProductVisibility(long productId, bool isVisible, CancellationToken cancellationToken);
+
+    Task<IEnumerable<ProductEntity>> GetProducts(IEnumerable<long> ids, CancellationToken cancellationToken);
 }

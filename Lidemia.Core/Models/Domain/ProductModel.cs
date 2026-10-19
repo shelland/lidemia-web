@@ -13,4 +13,12 @@ public class ProductModel : AbstractEntity<long>
     public long SupplierId { get; set; }
 
     public string[] Tags { get; set; } = [];
+
+    public string? Description { get; set; }
+
+    public int TotalRates { get; set; }
+
+    public double AverageRate { get; set; }
+
+    public SupplierModel Supplier { get; set; } = null!;
 }

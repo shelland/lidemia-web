@@ -11,6 +11,7 @@
 		<PackageReference Include="Scrutor" Version="7.0.0" />
 		<PackageReference Include="MassTransit" Version="8.5.8" />
 		<PackageReference Include="MassTransit.RabbitMQ" Version="8.5.8" />
+		<PackageReference Include="HtmlSanitizer" Version="9.2.1039" />
 	</ItemGroup>
 
 	<ItemGroup>

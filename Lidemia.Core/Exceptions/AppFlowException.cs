@@ -16,5 +16,5 @@ public class AppFlowException : Exception
 
     public string? Details { get; }
 
-    public static AppFlowException Unauthorized { get; } = new AppFlowException(AppFlowExceptionType.Unauthorized);
+    public static AppFlowException Unauthorized { get; } = new(AppFlowExceptionType.Unauthorized);
 }

@@ -17,5 +17,6 @@ public record SaveProductRequestDto
     DateTime? DiscountStartDate,
     DateTime? DiscountEndDate,
     double? MinQuantity,
-    double? MaxQuantity
+    double? MaxQuantity,
+    string[] Tags
 );

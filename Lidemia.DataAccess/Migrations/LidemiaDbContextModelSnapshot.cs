@@ -20,7 +20,7 @@ namespace Lidemia.DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.12")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "postgis");
@@ -34,7 +34,6 @@ namespace Lidemia.DataAccess.Migrations
                         .HasDefaultValueSql("uuidv7()");
 
                     b.Property<string>("AddressLine1")
-                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)")
                         .HasColumnName("address_line1");
@@ -48,10 +47,6 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("city_id");
 
-                    b.Property<string>("Comment")
-                        .HasColumnType("text")
-                        .HasColumnName("comment");
-
                     b.Property<Guid>("CountryId")
                         .HasColumnType("uuid")
                         .HasColumnName("country_id");
@@ -62,9 +57,26 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnName("create_date")
                         .HasDefaultValueSql("now()");
 
-                    b.Property<long>("CustomerId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("customer_id");
+                    b.Property<string>("FlatNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("flat_number");
+
+                    b.Property<string>("HouseAdd1")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("house_add1");
+
+                    b.Property<string>("HouseAdd2")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("house_add2");
+
+                    b.Property<string>("HouseNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("house_number");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
@@ -90,6 +102,12 @@ namespace Lidemia.DataAccess.Migrations
                         .HasDefaultValue(1)
                         .HasColumnName("row_version");
 
+                    b.Property<string>("StreetName")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("street_name");
+
                     b.Property<DateTimeOffset?>("UpdateDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_date");
@@ -108,12 +126,6 @@ namespace Lidemia.DataAccess.Migrations
 
                     b.HasIndex("RegionId")
                         .HasDatabaseName("ix_addresses_region_id");
-
-                    b.HasIndex("CustomerId", "IsActive")
-                        .HasDatabaseName("ix_addresses_customer_id_is_active");
-
-                    b.HasIndex("CustomerId", "IsDefault", "IsActive")
-                        .HasDatabaseName("ix_addresses_customer_id_is_default_is_active");
 
                     b.ToTable("addresses", (string)null);
                 });
@@ -288,6 +300,11 @@ namespace Lidemia.DataAccess.Migrations
                     b.Property<Guid>("AddressId1")
                         .HasColumnType("uuid")
                         .HasColumnName("address_id1");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("comment");
 
                     b.Property<DateTimeOffset>("CreateDate")
                         .ValueGeneratedOnAdd()
@@ -854,9 +871,6 @@ namespace Lidemia.DataAccess.Migrations
                     b.HasIndex("IsActive")
                         .HasDatabaseName("ix_products_is_active");
 
-                    b.HasIndex("IsVisible")
-                        .HasDatabaseName("ix_products_is_visible");
-
                     b.HasIndex("ParentId")
                         .HasDatabaseName("ix_products_parent_id");
 
@@ -865,6 +879,9 @@ namespace Lidemia.DataAccess.Migrations
 
                     b.HasIndex("SupplierId")
                         .HasDatabaseName("ix_products_supplier_id");
+
+                    b.HasIndex("IsVisible", "IsActive")
+                        .HasDatabaseName("ix_products_is_visible_is_active");
 
                     b.ToTable("products", (string)null);
                 });
@@ -1079,6 +1096,11 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnName("id")
                         .HasDefaultValueSql("uuidv7()");
 
+                    b.Property<string>("Area")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("area");
+
                     b.Property<Guid>("CountryId")
                         .HasColumnType("uuid")
                         .HasColumnName("country_id");
@@ -1177,6 +1199,11 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("address_id1");
 
+                    b.Property<string>("Comment")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("comment");
+
                     b.Property<DateTimeOffset>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
@@ -1197,7 +1224,7 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("supplier_id");
 
-                    b.Property<int>("Type")
+                    b.Property<int?>("Type")
                         .HasColumnType("integer")
                         .HasColumnName("type");
 
@@ -1547,13 +1574,6 @@ namespace Lidemia.DataAccess.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_addresses_countries_country_id");
 
-                    b.HasOne("Lidemia.DataAccess.Entities.CustomerEntity", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_addresses_customers_customer_id");
-
                     b.HasOne("Lidemia.DataAccess.Entities.RegionEntity", "Region")
                         .WithMany()
                         .HasForeignKey("RegionId")
@@ -1565,15 +1585,13 @@ namespace Lidemia.DataAccess.Migrations
 
                     b.Navigation("Country");
 
-                    b.Navigation("Customer");
-
                     b.Navigation("Region");
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.CityEntity", b =>
                 {
                     b.HasOne("Lidemia.DataAccess.Entities.RegionEntity", "Region")
-                        .WithMany()
+                        .WithMany("Cities")
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -1793,7 +1811,7 @@ namespace Lidemia.DataAccess.Migrations
             modelBuilder.Entity("Lidemia.DataAccess.Entities.RegionEntity", b =>
                 {
                     b.HasOne("Lidemia.DataAccess.Entities.CountryEntity", "Country")
-                        .WithMany()
+                        .WithMany("Regions")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -1880,9 +1898,19 @@ namespace Lidemia.DataAccess.Migrations
                     b.Navigation("WishList");
                 });
 
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.CountryEntity", b =>
+                {
+                    b.Navigation("Regions");
+                });
+
             modelBuilder.Entity("Lidemia.DataAccess.Entities.OrderEntity", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.RegionEntity", b =>
+                {
+                    b.Navigation("Cities");
                 });
 #pragma warning restore 612, 618
         }

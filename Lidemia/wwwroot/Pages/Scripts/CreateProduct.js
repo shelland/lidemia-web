@@ -4,15 +4,27 @@
 
 		init: function (data) {
 			CreateProduct.urls = data.urls;
-			CreateProduct.value = data.values;
+			CreateProduct.values = data.values;
 
 			this.bindEvents();
-			this.initPlugins();
+            this.initPlugins();
+
+            if (CreateProduct.values.product) {
+                this.loadProduct();
+            }
 		},
 
-		bindEvents: function () {
+        bindEvents: function () {
+            document.getElementById("saveBtn").addEventListener("click", function () {
+                CreateProduct.save();
+            });
+        },
 
-		},
+        loadProduct: function () {
+            var product = CreateProduct.values.product;
+
+            CreateProduct.values.tagify.addTags(product.tags);
+        },
 
 		initPlugins: function () {
 			var regExp = Shared.getHashTagRegExp();
@@ -21,8 +33,16 @@
 				pattern: regExp
             });
 
-            this.initEditor();
-		},
+            CreateProduct.values.tagify = tagify;
+
+            this.initEditor2();
+        },
+
+        initEditor2: function () {
+            Wysi({
+                el: '#descriptionEditor'
+            });
+        },
 
         initEditor: function () {
 
@@ -112,7 +132,37 @@
             }).catch((error) => {
                 console.log('Saving failed: ', error)
             });
-		}
+        },
+
+        save: async function () {
+
+            var title = document.getElementById("title").value;
+            var description = document.getElementById("descriptionEditor").value;
+
+            var tags = CreateProduct.values.tagify.value.map(function (x) { return x.value })
+
+            var payload = {
+                title: title,
+                description: description,
+                tags: tags
+            };
+
+            if (CreateProduct.values.product) {
+                payload.id = CreateProduct.values.product.id;
+            }
+
+            const response = await window.appFetch(CreateProduct.urls.saveProductUrl, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+
+            }
+
+            var result = await response.json();
+
+        }
 
 	}
 

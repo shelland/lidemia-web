@@ -11,6 +11,8 @@ public class CountryEntity : IHasId<Guid>, IDbEntity
 
     public string Name { get; set; } = string.Empty;
 
+    public ICollection<RegionEntity> Regions { get; set; } = new HashSet<RegionEntity>();
+
     public int RowVersion { get; set; }
 
     public bool IsActive { get; set; }

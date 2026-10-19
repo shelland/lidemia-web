@@ -18,7 +18,9 @@ public class SupplierAddressEntity : IDbEntity, IHasId<Guid>
 
     public AddressEntity Address { get; set; } = null!;
 
-    public SupplierAddressType Type { get; set; }
+    public SupplierAddressType? Type { get; set; }
+
+    public string? Comment { get; set; }
 
     public int RowVersion { get; set; }
 

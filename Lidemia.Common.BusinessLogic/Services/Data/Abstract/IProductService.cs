@@ -20,4 +20,6 @@ public interface IProductService
     Task<Result<(int Enabled, int Disabled)>> EnablePendingDiscounts(CancellationToken cancellationToken);
 
     Task SetProductVisibility(long supplierId, SetProductVisibilityRequestDto request, CancellationToken cancellationToken);
+
+    Task<IEnumerable<ProductModel>> GetProducts(IEnumerable<long> ids, CancellationToken cancellationToken);
 }

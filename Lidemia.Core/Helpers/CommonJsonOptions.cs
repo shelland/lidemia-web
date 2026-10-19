@@ -3,6 +3,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Lidemia.Core.Helpers.Converters;
+using System.Text.Encodings.Web;
 
 namespace Lidemia.Core.Helpers;
 
@@ -18,7 +19,8 @@ public class CommonJsonOptions
             Converters =
             {
                 new LongConverter()
-            }
+            },
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
     }
 

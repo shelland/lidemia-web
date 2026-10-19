@@ -11,6 +11,7 @@ public static class ExternalServicesModule
     {
         services.AddHttpClient(nameof(HttpEmailService));
         services.AddHttpClient(nameof(RecaptchaService));
+        services.AddHttpClient(nameof(GeoIpApiService));
 
         return services;
     }

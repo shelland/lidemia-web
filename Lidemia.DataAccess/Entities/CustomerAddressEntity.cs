@@ -17,6 +17,8 @@ public class CustomerAddressEntity : IDbEntity, IHasId<Guid>
 
     public AddressEntity Address { get; set; } = null!;
 
+    public string? Comment { get; set; }
+
     public int RowVersion { get; set; }
 
     public bool IsActive { get; set; }

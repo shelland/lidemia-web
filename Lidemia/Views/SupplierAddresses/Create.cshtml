@@ -1,0 +1,99 @@
+@model Lidemia.ViewModels.CreateSupplierAddressViewModel
+
+@using Lidemia.Core.Extensions
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<AppResources> localizer
+
+@{
+    var regionsItems = Model.Regions.Select(x => new SelectListItem(x.Name, x.Id.ToString(), x.Id == Model.Address?.Region.Id));
+}
+
+<form id="mainForm" autocomplete="false">
+
+    <div class="mb-3">
+        <label class="form-label" for="country">
+            @localizer["CreateSupplierAddressCountry"]
+        </label>
+
+        <select class="form-control" id="country" name="country">
+
+            @foreach (var item in Model.Countries)
+            {
+                <!option value="@item.Id">@item.Name</!option>
+            }
+
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="region">
+            @localizer["CreateSupplierAddressRegion"]
+        </label>
+
+        @Html.DropDownList("region", regionsItems, new { @class = "form-control" })
+
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="city">
+            @localizer["CreateSupplierAddressCity"]
+        </label>
+
+        <select class="form-control" id="city" name="city">
+        </select>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label class="form-label" for="streetName">@localizer["CreateSupplierAddressStreetName"]</label>
+            <input type="text" class="form-control" value="@Model.Address?.StreetName" id="streetName"/>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="houseNumber">@localizer["CreateSupplierAddressHouseNumber"]</label>
+            <input type="text" class="form-control" value="@Model.Address?.HouseNumber" id="houseNumber"/>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="flatNumber">@localizer["CreateSupplierAddressFlatNumber"]</label>
+            <input type="text" class="form-control" value="@Model.Address?.FlatNumber" id="flatNumber"/>
+        </div>
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label" for="comment">@localizer["CreateSupplierAddressComment"]</label>
+        <input type="text" class="form-control" value="@Model.Address?.Comment" id="comment"/>
+    </div>
+
+    <div class="mb-3">
+        <a class="btn btn-primary" href="javascript:;" id="saveBtn">@localizer["CreateSupplierAddressSaveBtn"]</a>
+    </div>
+
+</form>
+
+@section Scripts
+{
+    <script src="~/Pages/Scripts/CreateSupplierAddress.js"></script>
+
+    <script>
+
+        var cities = @Html.Raw(Model.Cities.Serialize());
+        var address = @(Model.Address != null ? Model.Address.Serialize() : "null");
+
+        window.addEventListener("DOMContentLoaded", function() {
+
+            CreateSupplierAddress.init({
+                values: {
+                    cities: cities,
+                    currentCity: @(Model.Address?.City.Id.ToString() ?? "null"),
+                    address: address
+                },
+                urls: {
+                    saveUrl: '@Url.Action("Post", "SupplierAddresses")'
+                }
+            });
+
+        });
+
+    </script>
+}

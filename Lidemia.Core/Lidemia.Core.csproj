@@ -8,8 +8,8 @@
 
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.12" />
-		<PackageReference Include="FluentValidation" Version="12.1.1" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.13" />
+		<PackageReference Include="FluentValidation" Version="12.2.0" />
 		<PackageReference Include="FluentResults" Version="4.0.0" />
 		<PackageReference Include="X.PagedList.Mvc.Core" Version="10.6.0" />
 	</ItemGroup>

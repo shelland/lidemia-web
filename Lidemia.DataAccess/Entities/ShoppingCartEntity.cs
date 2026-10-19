@@ -10,9 +10,9 @@ public class ShoppingCartEntity : IDbEntity, IHasId<Guid>
 {
     public Guid Id { get; set; }
 
-    public UserEntity User { get; set; } = null!;
+    public CustomerEntity Customer { get; set; } = null!;
 
-    public long UserId { get; set; }
+    public long CustomerId { get; set; }
 
     public IEnumerable<ShoppingCartItemDbModel> Items { get; set; } = [];
 

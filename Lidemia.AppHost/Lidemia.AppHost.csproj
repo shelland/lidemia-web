@@ -10,6 +10,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="MessagePack" Version="3.1.12" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\Lidemia.Admin\Lidemia.Admin.csproj" />
 		<ProjectReference Include="..\Lidemia.Storage\Lidemia.Storage.csproj" />
 		<ProjectReference Include="..\Lidemia\Lidemia.csproj" />

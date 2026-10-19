@@ -4,5 +4,7 @@ namespace Lidemia.Core.Enums;
 
 public enum SupplierAddressType
 {
-    General
+    General,
+
+    PickupPoint
 }
