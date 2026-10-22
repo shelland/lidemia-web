@@ -5,9 +5,9 @@ using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class AddressEntity : IHasId<Guid>, IDbEntity
+public class AddressEntity : IHasId<long>, IDbEntity
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
 
     public bool IsDefault { get; set; }
 
@@ -15,15 +15,15 @@ public class AddressEntity : IHasId<Guid>, IDbEntity
 
     public CountryEntity Country { get; set; } = null!;
 
-    public Guid CountryId { get; set; }
+    public long CountryId { get; set; }
 
     public RegionEntity Region { get; set; } = null!;
 
-    public Guid RegionId { get; set; }
+    public long RegionId { get; set; }
 
     public CityEntity City { get; set; } = null!;
 
-    public Guid CityId { get; set; }
+    public long CityId { get; set; }
 
     public string StreetName { get; set; } = string.Empty;
     

@@ -1,6 +1,7 @@
 ﻿// Created on 02/09/2026 20:18 by Laserson
 
 using Lidemia.DataAccess.Entities;
+using Lidemia.DataAccess.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,6 +11,6 @@ public class ProductPhotoEntityConfiguration : IEntityTypeConfiguration<ProductP
 {
     public void Configure(EntityTypeBuilder<ProductPhotoEntity> builder)
     {
-        builder.HasNoKey();
+        builder.AddBaseColumns<ProductPhotoEntity, long>();
     }
 }

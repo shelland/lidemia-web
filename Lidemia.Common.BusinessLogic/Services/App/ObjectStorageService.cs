@@ -1,8 +1,8 @@
 ﻿// Created on 11/12/2025 23:08 by Laserson
 
+using Lidemia.Common.BusinessLogic.Services.App.Abstract;
 using Lidemia.Core.Enums;
 using Lidemia.Core.Models.Misc;
-using Lidemia.Web.BusinessLogic.Services.Abstract;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Minio;
@@ -10,7 +10,7 @@ using Minio.DataModel.Args;
 using Minio.DataModel.Tags;
 using Scrutor;
 
-namespace Lidemia.Web.BusinessLogic.Services;
+namespace Lidemia.Common.BusinessLogic.Services.App;
 
 [ServiceDescriptor<IObjectStorageService>(ServiceLifetime.Singleton)]
 public class ObjectStorageService : IObjectStorageService
@@ -30,13 +30,14 @@ public class ObjectStorageService : IObjectStorageService
         this.logger = logger;
     }
 
-    public async Task<Stream> GetFileContent(string bucket, string path, CancellationToken cancellationToken)
+    public async Task<Stream> GetFileContent(ObjectStoragePayloadType type, string fileName, CancellationToken cancellationToken)
     {
         var memoryStream = new MemoryStream();
+        var path = this.pathResolver.Resolve(type, fileName);
 
         var args = new GetObjectArgs()
-            .WithBucket(bucket)
-            .WithObject(path)
+            .WithBucket(path.BucketName)
+            .WithObject(path.Path)
             .WithCallbackStream(async (stream, token) =>
             {
                 await stream.CopyToAsync(memoryStream, token);
@@ -46,7 +47,8 @@ public class ObjectStorageService : IObjectStorageService
         return memoryStream;
     }
 
-    public async Task<ObjectStorageUploadResult> Upload(Stream content, ObjectStoragePayloadType type, string? fileName = null, IDictionary<string, string>? tags = null,
+    public async Task<ObjectStorageUploadResult> Upload(Stream content, ObjectStoragePayloadType type, string? fileName = null,
+        IDictionary<string, string>? tags = null,
         CancellationToken cancellationToken = default)
     {
         fileName ??= Guid.NewGuid().ToString();

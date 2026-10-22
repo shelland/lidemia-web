@@ -15,7 +15,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lidemia.DataAccess.Migrations
 {
     [DbContext(typeof(LidemiaDbContext))]
-    [Migration("20260918131157_Initial")]
+    [Migration("20261021164422_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -23,7 +23,7 @@ namespace Lidemia.DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.12")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "postgis");
@@ -31,13 +31,14 @@ namespace Lidemia.DataAccess.Migrations
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.AddressEntity", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("uuidv7()");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
                     b.Property<string>("AddressLine1")
-                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)")
                         .HasColumnName("address_line1");
@@ -47,19 +48,40 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("character varying(250)")
                         .HasColumnName("address_line2");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)")
-                        .HasColumnName("city");
+                    b.Property<long>("CityId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("city_id");
+
+                    b.Property<long>("CountryId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("country_id");
 
                     b.Property<DateTimeOffset>("CreateDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_date");
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("now()");
 
-                    b.Property<long>("CustomerId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("customer_id");
+                    b.Property<string>("FlatNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("flat_number");
+
+                    b.Property<string>("HouseAdd1")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("house_add1");
+
+                    b.Property<string>("HouseAdd2")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("house_add2");
+
+                    b.Property<string>("HouseNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("house_number");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
@@ -75,15 +97,21 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("character varying(6)")
                         .HasColumnName("postal_index");
 
-                    b.Property<string>("Region")
+                    b.Property<long>("RegionId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("region_id");
+
+                    b.Property<int>("RowVersion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1)
+                        .HasColumnName("row_version");
+
+                    b.Property<string>("StreetName")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)")
-                        .HasColumnName("region");
-
-                    b.Property<int>("RowVersion")
-                        .HasColumnType("integer")
-                        .HasColumnName("row_version");
+                        .HasColumnName("street_name");
 
                     b.Property<DateTimeOffset?>("UpdateDate")
                         .HasColumnType("timestamp with time zone")
@@ -92,11 +120,17 @@ namespace Lidemia.DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("pk_addresses");
 
-                    b.HasIndex("CustomerId", "IsActive")
-                        .HasDatabaseName("ix_addresses_customer_id_is_active");
+                    b.HasIndex("CityId")
+                        .HasDatabaseName("ix_addresses_city_id");
 
-                    b.HasIndex("CustomerId", "IsDefault", "IsActive")
-                        .HasDatabaseName("ix_addresses_customer_id_is_default_is_active");
+                    b.HasIndex("CountryId")
+                        .HasDatabaseName("ix_addresses_country_id");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("ix_addresses_is_active");
+
+                    b.HasIndex("RegionId")
+                        .HasDatabaseName("ix_addresses_region_id");
 
                     b.ToTable("addresses", (string)null);
                 });
@@ -158,41 +192,159 @@ namespace Lidemia.DataAccess.Migrations
                     b.ToTable("auth_tokens", (string)null);
                 });
 
-            modelBuilder.Entity("Lidemia.DataAccess.Entities.CustomerAddressEntity", b =>
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.CityEntity", b =>
                 {
-                    b.Property<long>("CustomerId")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("id");
 
-                    b.Property<long>("AddressId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("address_id");
-
-                    b.Property<Guid>("AddressId1")
-                        .HasColumnType("uuid")
-                        .HasColumnName("address_id1");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
                     b.Property<DateTimeOffset>("CreateDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_date");
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
                         .HasColumnName("is_active");
 
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("double precision")
+                        .HasColumnName("latitude");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("double precision")
+                        .HasColumnName("longitude");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("name");
+
+                    b.Property<long>("RegionId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("region_id");
+
                     b.Property<int>("RowVersion")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasDefaultValue(1)
                         .HasColumnName("row_version");
 
                     b.Property<DateTimeOffset?>("UpdateDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_date");
 
-                    b.HasKey("CustomerId", "AddressId")
+                    b.HasKey("Id")
+                        .HasName("pk_cities");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("ix_cities_is_active");
+
+                    b.HasIndex("RegionId")
+                        .HasDatabaseName("ix_cities_region_id");
+
+                    b.ToTable("cities", (string)null);
+                });
+
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.CountryEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("CreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("RowVersion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1)
+                        .HasColumnName("row_version");
+
+                    b.Property<DateTimeOffset?>("UpdateDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_date");
+
+                    b.HasKey("Id")
+                        .HasName("pk_countries");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("ix_countries_is_active");
+
+                    b.ToTable("countries", (string)null);
+                });
+
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.CustomerAddressEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("AddressId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("address_id");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("comment");
+
+                    b.Property<DateTimeOffset>("CreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("customer_id");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<int>("RowVersion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1)
+                        .HasColumnName("row_version");
+
+                    b.Property<DateTimeOffset?>("UpdateDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_date");
+
+                    b.HasKey("Id")
                         .HasName("pk_customer_addresses");
 
-                    b.HasIndex("AddressId1")
-                        .HasDatabaseName("ix_customer_addresses_address_id1");
+                    b.HasIndex("AddressId")
+                        .HasDatabaseName("ix_customer_addresses_address_id");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("ix_customer_addresses_is_active");
 
                     b.HasIndex("CustomerId", "IsActive")
                         .HasDatabaseName("ix_customer_addresses_customer_id_is_active");
@@ -205,8 +357,9 @@ namespace Lidemia.DataAccess.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("service.next_id()");
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
                     b.Property<DateTimeOffset>("CreateDate")
                         .ValueGeneratedOnAdd()
@@ -269,11 +422,13 @@ namespace Lidemia.DataAccess.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("service.next_id()");
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Comment")
-                        .HasColumnType("text")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
                         .HasColumnName("comment");
 
                     b.Property<DateTimeOffset>("CreateDate")
@@ -282,9 +437,21 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnName("create_date")
                         .HasDefaultValueSql("now()");
 
+                    b.Property<Guid?>("CustomerAddressId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_address_id");
+
+                    b.Property<long?>("CustomerAddressId1")
+                        .HasColumnType("bigint")
+                        .HasColumnName("customer_address_id1");
+
                     b.Property<long>("CustomerId")
                         .HasColumnType("bigint")
                         .HasColumnName("customer_id");
+
+                    b.Property<int>("DeliveryType")
+                        .HasColumnType("integer")
+                        .HasColumnName("delivery_type");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
@@ -323,6 +490,14 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("status");
 
+                    b.Property<Guid?>("SupplierAddressId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("supplier_address_id");
+
+                    b.Property<long?>("SupplierAddressId1")
+                        .HasColumnType("bigint")
+                        .HasColumnName("supplier_address_id1");
+
                     b.Property<DateTimeOffset?>("UpdateDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_date");
@@ -330,11 +505,17 @@ namespace Lidemia.DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("pk_orders");
 
+                    b.HasIndex("CustomerAddressId1")
+                        .HasDatabaseName("ix_orders_customer_address_id1");
+
                     b.HasIndex("IsActive")
                         .HasDatabaseName("ix_orders_is_active");
 
                     b.HasIndex("PromoCodeId")
                         .HasDatabaseName("ix_orders_promo_code_id");
+
+                    b.HasIndex("SupplierAddressId1")
+                        .HasDatabaseName("ix_orders_supplier_address_id1");
 
                     b.HasIndex("CustomerId", "IsActive")
                         .HasDatabaseName("ix_orders_customer_id_is_active");
@@ -386,10 +567,12 @@ namespace Lidemia.DataAccess.Migrations
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.PasswordResetEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -439,8 +622,9 @@ namespace Lidemia.DataAccess.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("service.next_id()");
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
                     b.Property<DateTimeOffset>("CreateDate")
                         .ValueGeneratedOnAdd()
@@ -507,8 +691,9 @@ namespace Lidemia.DataAccess.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("service.next_id()");
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
                     b.Property<DateTimeOffset>("CreateDate")
                         .ValueGeneratedOnAdd()
@@ -564,12 +749,17 @@ namespace Lidemia.DataAccess.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("service.next_id()");
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
                     b.Property<int?>("AvailabilityType")
                         .HasColumnType("integer")
                         .HasColumnName("availability_type");
+
+                    b.Property<double?>("AvailableUnits")
+                        .HasColumnType("double precision")
+                        .HasColumnName("available_units");
 
                     b.Property<double?>("AverageRatingOverall")
                         .HasColumnType("double precision")
@@ -593,7 +783,7 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<DateTime?>("DiscountEndDate")
+                    b.Property<DateTimeOffset?>("DiscountEndDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("discount_end_date");
 
@@ -601,11 +791,11 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("discount_price");
 
-                    b.Property<DateTime?>("DiscountStartDate")
+                    b.Property<DateTimeOffset?>("DiscountStartDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("discount_start_date");
 
-                    b.Property<DateTime?>("FirstSeenDate")
+                    b.Property<DateTimeOffset?>("FirstSeenDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("first_seen_date");
 
@@ -676,6 +866,11 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("supplier_id");
 
+                    b.PrimitiveCollection<string[]>("Tags")
+                        .IsRequired()
+                        .HasColumnType("text[]")
+                        .HasColumnName("tags");
+
                     b.Property<string>("Title")
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)")
@@ -698,9 +893,6 @@ namespace Lidemia.DataAccess.Migrations
                     b.HasIndex("IsActive")
                         .HasDatabaseName("ix_products_is_active");
 
-                    b.HasIndex("IsVisible")
-                        .HasDatabaseName("ix_products_is_visible");
-
                     b.HasIndex("ParentId")
                         .HasDatabaseName("ix_products_parent_id");
 
@@ -710,15 +902,20 @@ namespace Lidemia.DataAccess.Migrations
                     b.HasIndex("SupplierId")
                         .HasDatabaseName("ix_products_supplier_id");
 
+                    b.HasIndex("IsVisible", "IsActive")
+                        .HasDatabaseName("ix_products_is_visible_is_active");
+
                     b.ToTable("products", (string)null);
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.ProductFeedbackEntity", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("uuidv7()");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Comment")
                         .HasMaxLength(5000)
@@ -726,8 +923,10 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnName("comment");
 
                     b.Property<DateTimeOffset>("CreateDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_date");
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<long>("CustomerId")
                         .HasColumnType("bigint")
@@ -746,7 +945,9 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnName("rate");
 
                     b.Property<int>("RowVersion")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasDefaultValue(1)
                         .HasColumnName("row_version");
 
                     b.Property<int>("State")
@@ -759,6 +960,9 @@ namespace Lidemia.DataAccess.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_product_feedbacks");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("ix_product_feedbacks_is_active");
 
                     b.HasIndex("CustomerId", "IsActive")
                         .HasDatabaseName("ix_product_feedbacks_customer_id_is_active");
@@ -774,13 +978,18 @@ namespace Lidemia.DataAccess.Migrations
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.ProductPhotoEntity", b =>
                 {
-                    b.Property<DateTimeOffset>("CreateDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_date");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("CreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
@@ -799,12 +1008,20 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnName("product_id");
 
                     b.Property<int>("RowVersion")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasDefaultValue(1)
                         .HasColumnName("row_version");
 
                     b.Property<DateTimeOffset?>("UpdateDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_date");
+
+                    b.HasKey("Id")
+                        .HasName("pk_products_photos");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("ix_products_photos_is_active");
 
                     b.HasIndex("PhotoId")
                         .HasDatabaseName("ix_products_photos_photo_id");
@@ -820,8 +1037,9 @@ namespace Lidemia.DataAccess.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("service.next_id()");
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
                     b.PrimitiveCollection<long[]>("AllowedCategories")
                         .IsRequired()
@@ -916,16 +1134,78 @@ namespace Lidemia.DataAccess.Migrations
                     b.ToTable("promo_codes", (string)null);
                 });
 
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.RegionEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Area")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("area");
+
+                    b.Property<long>("CountryId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("country_id");
+
+                    b.Property<DateTimeOffset>("CreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("RowVersion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1)
+                        .HasColumnName("row_version");
+
+                    b.Property<DateTimeOffset?>("UpdateDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_date");
+
+                    b.HasKey("Id")
+                        .HasName("pk_regions");
+
+                    b.HasIndex("CountryId")
+                        .HasDatabaseName("ix_regions_country_id");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("ix_regions_is_active");
+
+                    b.ToTable("regions", (string)null);
+                });
+
             modelBuilder.Entity("Lidemia.DataAccess.Entities.ShoppingCartEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("create_date");
+
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("customer_id");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
@@ -944,54 +1224,70 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_date");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("user_id");
-
                     b.HasKey("Id")
                         .HasName("pk_shopping_carts");
 
-                    b.HasIndex("UserId", "IsActive")
-                        .HasDatabaseName("ix_shopping_carts_user_id_is_active");
+                    b.HasIndex("CustomerId", "IsActive")
+                        .IsUnique()
+                        .HasDatabaseName("ix_shopping_carts_customer_id_is_active");
 
                     b.ToTable("shopping_carts", (string)null);
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.SupplierAddressEntity", b =>
                 {
-                    b.Property<long>("SupplierId")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("supplier_id");
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
                     b.Property<long>("AddressId")
                         .HasColumnType("bigint")
                         .HasColumnName("address_id");
 
-                    b.Property<Guid>("AddressId1")
-                        .HasColumnType("uuid")
-                        .HasColumnName("address_id1");
+                    b.Property<string>("Comment")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("comment");
 
                     b.Property<DateTimeOffset>("CreateDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_date");
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
                         .HasColumnName("is_active");
 
                     b.Property<int>("RowVersion")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasDefaultValue(1)
                         .HasColumnName("row_version");
+
+                    b.Property<long>("SupplierId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("supplier_id");
+
+                    b.Property<int?>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
 
                     b.Property<DateTimeOffset?>("UpdateDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_date");
 
-                    b.HasKey("SupplierId", "AddressId")
+                    b.HasKey("Id")
                         .HasName("pk_suppliers_addresses");
 
-                    b.HasIndex("AddressId1")
-                        .HasDatabaseName("ix_suppliers_addresses_address_id1");
+                    b.HasIndex("AddressId")
+                        .HasDatabaseName("ix_suppliers_addresses_address_id");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("ix_suppliers_addresses_is_active");
 
                     b.HasIndex("SupplierId", "IsActive")
                         .HasDatabaseName("ix_suppliers_addresses_supplier_id_is_active");
@@ -1004,8 +1300,9 @@ namespace Lidemia.DataAccess.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("service.next_id()");
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
                     b.Property<string>("ActualAddress")
                         .HasColumnType("text")
@@ -1137,8 +1434,9 @@ namespace Lidemia.DataAccess.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("service.next_id()");
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
                     b.Property<DateTimeOffset>("CreateDate")
                         .ValueGeneratedOnAdd()
@@ -1220,10 +1518,12 @@ namespace Lidemia.DataAccess.Migrations
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.WishListEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone")
@@ -1265,14 +1565,18 @@ namespace Lidemia.DataAccess.Migrations
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.WishListItemEntity", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("uuidv7()");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
 
                     b.Property<DateTimeOffset>("CreateDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_date");
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
@@ -1283,19 +1587,24 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnName("product_id");
 
                     b.Property<int>("RowVersion")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasDefaultValue(1)
                         .HasColumnName("row_version");
 
                     b.Property<DateTimeOffset?>("UpdateDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_date");
 
-                    b.Property<Guid>("WishListId")
-                        .HasColumnType("uuid")
+                    b.Property<long>("WishListId")
+                        .HasColumnType("bigint")
                         .HasColumnName("wish_list_id");
 
                     b.HasKey("Id")
                         .HasName("pk_wish_list_items");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("ix_wish_list_items_is_active");
 
                     b.HasIndex("ProductId")
                         .HasDatabaseName("ix_wish_list_items_product_id");
@@ -1312,24 +1621,54 @@ namespace Lidemia.DataAccess.Migrations
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.AddressEntity", b =>
                 {
-                    b.HasOne("Lidemia.DataAccess.Entities.CustomerEntity", "Customer")
+                    b.HasOne("Lidemia.DataAccess.Entities.CityEntity", "City")
                         .WithMany()
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_addresses_customers_customer_id");
+                        .HasConstraintName("fk_addresses_cities_city_id");
 
-                    b.Navigation("Customer");
+                    b.HasOne("Lidemia.DataAccess.Entities.CountryEntity", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_addresses_countries_country_id");
+
+                    b.HasOne("Lidemia.DataAccess.Entities.RegionEntity", "Region")
+                        .WithMany()
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_addresses_regions_region_id");
+
+                    b.Navigation("City");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Region");
+                });
+
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.CityEntity", b =>
+                {
+                    b.HasOne("Lidemia.DataAccess.Entities.RegionEntity", "Region")
+                        .WithMany("Cities")
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_cities_regions_region_id");
+
+                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.CustomerAddressEntity", b =>
                 {
                     b.HasOne("Lidemia.DataAccess.Entities.AddressEntity", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId1")
+                        .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_customer_addresses_addresses_address_id1");
+                        .HasConstraintName("fk_customer_addresses_addresses_address_id");
 
                     b.HasOne("Lidemia.DataAccess.Entities.CustomerEntity", "Customer")
                         .WithMany()
@@ -1357,6 +1696,11 @@ namespace Lidemia.DataAccess.Migrations
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.OrderEntity", b =>
                 {
+                    b.HasOne("Lidemia.DataAccess.Entities.CustomerAddressEntity", "CustomerAddress")
+                        .WithMany()
+                        .HasForeignKey("CustomerAddressId1")
+                        .HasConstraintName("fk_orders_customer_addresses_customer_address_id1");
+
                     b.HasOne("Lidemia.DataAccess.Entities.CustomerEntity", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
@@ -1369,9 +1713,18 @@ namespace Lidemia.DataAccess.Migrations
                         .HasForeignKey("PromoCodeId")
                         .HasConstraintName("fk_orders_promo_codes_promo_code_id");
 
+                    b.HasOne("Lidemia.DataAccess.Entities.SupplierAddressEntity", "SupplierAddress")
+                        .WithMany()
+                        .HasForeignKey("SupplierAddressId1")
+                        .HasConstraintName("fk_orders_suppliers_addresses_supplier_address_id1");
+
                     b.Navigation("Customer");
 
+                    b.Navigation("CustomerAddress");
+
                     b.Navigation("PromoCode");
+
+                    b.Navigation("SupplierAddress");
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.OrderItemEntity", b =>
@@ -1516,26 +1869,38 @@ namespace Lidemia.DataAccess.Migrations
                     b.Navigation("Supplier");
                 });
 
-            modelBuilder.Entity("Lidemia.DataAccess.Entities.ShoppingCartEntity", b =>
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.RegionEntity", b =>
                 {
-                    b.HasOne("Lidemia.DataAccess.Entities.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                    b.HasOne("Lidemia.DataAccess.Entities.CountryEntity", "Country")
+                        .WithMany("Regions")
+                        .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_shopping_carts_users_user_id");
+                        .HasConstraintName("fk_regions_countries_country_id");
 
-                    b.Navigation("User");
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.ShoppingCartEntity", b =>
+                {
+                    b.HasOne("Lidemia.DataAccess.Entities.CustomerEntity", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_shopping_carts_customers_customer_id");
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.SupplierAddressEntity", b =>
                 {
                     b.HasOne("Lidemia.DataAccess.Entities.AddressEntity", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId1")
+                        .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_suppliers_addresses_addresses_address_id1");
+                        .HasConstraintName("fk_suppliers_addresses_addresses_address_id");
 
                     b.HasOne("Lidemia.DataAccess.Entities.SupplierEntity", "Supplier")
                         .WithMany()
@@ -1594,9 +1959,19 @@ namespace Lidemia.DataAccess.Migrations
                     b.Navigation("WishList");
                 });
 
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.CountryEntity", b =>
+                {
+                    b.Navigation("Regions");
+                });
+
             modelBuilder.Entity("Lidemia.DataAccess.Entities.OrderEntity", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.RegionEntity", b =>
+                {
+                    b.Navigation("Cities");
                 });
 #pragma warning restore 612, 618
         }

@@ -15,7 +15,7 @@ public static class ModulesExtensions
     public static void RegisterModules(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDataAccessModule(configuration);
-        services.AddCommonBusinessLogicModule();
+        services.AddCommonBusinessLogicModule(configuration);
         services.AddWebBusinessLogicModule();
         services.AddSearchModule(configuration);
         services.AddEmailNotificationsModule(configuration);

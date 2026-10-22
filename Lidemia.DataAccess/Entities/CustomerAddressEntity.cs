@@ -5,9 +5,9 @@ using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class CustomerAddressEntity : IDbEntity, IHasId<Guid>
+public class CustomerAddressEntity : IDbEntity, IHasId<long>
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
 
     public long CustomerId { get; set; }
 

@@ -7,5 +7,4 @@ namespace Lidemia.DataAccess.Repository.Abstract;
 
 public interface IPhotoRepository : IRepository<PhotoEntity, long>
 {
-    Task<IEnumerable<PhotoEntity>> GetProductPhotos(long productId, CancellationToken cancellationToken);
 }

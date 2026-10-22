@@ -5,11 +5,11 @@ using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class WishListItemEntity : IHasId<Guid>, IDbEntity
+public class WishListItemEntity : IHasId<long>, IDbEntity
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
 
-    public Guid WishListId { get; set; }
+    public long WishListId { get; set; }
 
     public WishListEntity WishList { get; set; } = null!;
 

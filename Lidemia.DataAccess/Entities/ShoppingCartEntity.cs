@@ -6,9 +6,9 @@ using Lidemia.DataAccess.Entities.Misc;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class ShoppingCartEntity : IDbEntity, IHasId<Guid>
+public class ShoppingCartEntity : IDbEntity, IHasId<long>
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
 
     public CustomerEntity Customer { get; set; } = null!;
 

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Lidemia.DataAccess.Entities.Meta;
 using Lidemia.DataAccess.Entities.Misc;
-using Lidemia.DataAccess.Extensions;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -15,8 +15,6 @@ namespace Lidemia.DataAccess.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.PreInit();
-
             migrationBuilder.AlterDatabase()
                 .Annotation("Npgsql:PostgresExtension:postgis", ",,");
 
@@ -39,10 +37,28 @@ namespace Lidemia.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "countries",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    name = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
+                    row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false),
+                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_countries", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "product_categories",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "service.next_id()"),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     name_key = table.Column<string>(type: "text", nullable: false),
                     description_key = table.Column<string>(type: "text", nullable: true),
                     image_class = table.Column<string>(type: "text", nullable: true),
@@ -79,7 +95,8 @@ namespace Lidemia.DataAccess.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "service.next_id()"),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     email_normalized = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     password = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
@@ -98,10 +115,36 @@ namespace Lidemia.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "regions",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    country_id = table.Column<long>(type: "bigint", nullable: false),
+                    name = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
+                    area = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
+                    row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false),
+                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_regions", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_regions_countries_country_id",
+                        column: x => x.country_id,
+                        principalTable: "countries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "customers",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "service.next_id()"),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     user_id = table.Column<long>(type: "bigint", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     logo_url = table.Column<string>(type: "text", nullable: true),
@@ -127,7 +170,8 @@ namespace Lidemia.DataAccess.Migrations
                 name: "password_resets",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     user_id = table.Column<long>(type: "bigint", nullable: false),
                     entity_type = table.Column<int>(type: "integer", nullable: false),
                     code = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
@@ -151,7 +195,8 @@ namespace Lidemia.DataAccess.Migrations
                 name: "photos",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "service.next_id()"),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     large_thumb_url = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     medium_thumb_url = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     small_thumb_url = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -175,33 +220,11 @@ namespace Lidemia.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "shopping_carts",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    user_id = table.Column<long>(type: "bigint", nullable: false),
-                    items = table.Column<IEnumerable<ShoppingCartItemDbModel>>(type: "jsonb", nullable: false),
-                    row_version = table.Column<int>(type: "integer", nullable: false),
-                    is_active = table.Column<bool>(type: "boolean", nullable: false),
-                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_shopping_carts", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_shopping_carts_users_user_id",
-                        column: x => x.user_id,
-                        principalTable: "users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "suppliers",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "service.next_id()"),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     user_id = table.Column<long>(type: "bigint", nullable: false),
                     name = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     short_description = table.Column<string>(type: "text", nullable: true),
@@ -235,17 +258,39 @@ namespace Lidemia.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "addresses",
+                name: "cities",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    name = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
+                    region_id = table.Column<long>(type: "bigint", nullable: false),
+                    latitude = table.Column<double>(type: "double precision", nullable: true),
+                    longitude = table.Column<double>(type: "double precision", nullable: true),
+                    row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false),
+                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_cities", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_cities_regions_region_id",
+                        column: x => x.region_id,
+                        principalTable: "regions",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "shopping_carts",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     customer_id = table.Column<long>(type: "bigint", nullable: false),
-                    is_default = table.Column<bool>(type: "boolean", nullable: false),
-                    postal_index = table.Column<string>(type: "character varying(6)", maxLength: 6, nullable: false),
-                    region = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
-                    city = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
-                    address_line1 = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
-                    address_line2 = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
+                    items = table.Column<IEnumerable<ShoppingCartItemDbModel>>(type: "jsonb", nullable: false),
                     row_version = table.Column<int>(type: "integer", nullable: false),
                     is_active = table.Column<bool>(type: "boolean", nullable: false),
                     create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -253,9 +298,9 @@ namespace Lidemia.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_addresses", x => x.id);
+                    table.PrimaryKey("pk_shopping_carts", x => x.id);
                     table.ForeignKey(
-                        name: "fk_addresses_customers_customer_id",
+                        name: "fk_shopping_carts_customers_customer_id",
                         column: x => x.customer_id,
                         principalTable: "customers",
                         principalColumn: "id",
@@ -266,7 +311,8 @@ namespace Lidemia.DataAccess.Migrations
                 name: "wish_lists",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     customer_id = table.Column<long>(type: "bigint", nullable: false),
                     name = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     items_count = table.Column<int>(type: "integer", nullable: false),
@@ -290,7 +336,8 @@ namespace Lidemia.DataAccess.Migrations
                 name: "products",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "service.next_id()"),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     category_id = table.Column<long>(type: "bigint", nullable: true),
                     supplier_id = table.Column<long>(type: "bigint", nullable: false),
                     parent_id = table.Column<long>(type: "bigint", nullable: true),
@@ -301,8 +348,8 @@ namespace Lidemia.DataAccess.Migrations
                     primary_photo_id = table.Column<long>(type: "bigint", nullable: true),
                     is_discount = table.Column<bool>(type: "boolean", nullable: false),
                     has_current_discount = table.Column<bool>(type: "boolean", nullable: false),
-                    discount_end_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    discount_start_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    discount_end_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    discount_start_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     discount_price = table.Column<decimal>(type: "numeric", nullable: true),
                     min_quantity = table.Column<double>(type: "double precision", nullable: true),
                     max_quantity = table.Column<double>(type: "double precision", nullable: true),
@@ -311,11 +358,13 @@ namespace Lidemia.DataAccess.Migrations
                     average_rating_recent = table.Column<double>(type: "double precision", nullable: true),
                     average_rating_overall = table.Column<double>(type: "double precision", nullable: true),
                     total_rates = table.Column<int>(type: "integer", nullable: false),
-                    first_seen_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    first_seen_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     price_unit = table.Column<int>(type: "integer", nullable: true),
                     availability_type = table.Column<int>(type: "integer", nullable: true),
+                    available_units = table.Column<double>(type: "double precision", nullable: true),
                     order_rank = table.Column<int>(type: "integer", nullable: true),
                     sku = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    tags = table.Column<string[]>(type: "text[]", nullable: false),
                     row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
                     is_active = table.Column<bool>(type: "boolean", nullable: false),
                     create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
@@ -351,7 +400,8 @@ namespace Lidemia.DataAccess.Migrations
                 name: "promo_codes",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "service.next_id()"),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     code = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     description = table.Column<string>(type: "text", nullable: true),
                     starts_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -383,59 +433,47 @@ namespace Lidemia.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "customer_addresses",
+                name: "addresses",
                 columns: table => new
                 {
-                    customer_id = table.Column<long>(type: "bigint", nullable: false),
-                    address_id = table.Column<long>(type: "bigint", nullable: false),
-                    address_id1 = table.Column<Guid>(type: "uuid", nullable: false),
-                    row_version = table.Column<int>(type: "integer", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    is_default = table.Column<bool>(type: "boolean", nullable: false),
+                    postal_index = table.Column<string>(type: "character varying(6)", maxLength: 6, nullable: false),
+                    country_id = table.Column<long>(type: "bigint", nullable: false),
+                    region_id = table.Column<long>(type: "bigint", nullable: false),
+                    city_id = table.Column<long>(type: "bigint", nullable: false),
+                    street_name = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
+                    house_number = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    house_add1 = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    house_add2 = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    flat_number = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    address_line1 = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
+                    address_line2 = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
+                    row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
                     is_active = table.Column<bool>(type: "boolean", nullable: false),
-                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_customer_addresses", x => new { x.customer_id, x.address_id });
+                    table.PrimaryKey("pk_addresses", x => x.id);
                     table.ForeignKey(
-                        name: "fk_customer_addresses_addresses_address_id1",
-                        column: x => x.address_id1,
-                        principalTable: "addresses",
+                        name: "fk_addresses_cities_city_id",
+                        column: x => x.city_id,
+                        principalTable: "cities",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_customer_addresses_customers_customer_id",
-                        column: x => x.customer_id,
-                        principalTable: "customers",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "suppliers_addresses",
-                columns: table => new
-                {
-                    supplier_id = table.Column<long>(type: "bigint", nullable: false),
-                    address_id = table.Column<long>(type: "bigint", nullable: false),
-                    address_id1 = table.Column<Guid>(type: "uuid", nullable: false),
-                    row_version = table.Column<int>(type: "integer", nullable: false),
-                    is_active = table.Column<bool>(type: "boolean", nullable: false),
-                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_suppliers_addresses", x => new { x.supplier_id, x.address_id });
-                    table.ForeignKey(
-                        name: "fk_suppliers_addresses_addresses_address_id1",
-                        column: x => x.address_id1,
-                        principalTable: "addresses",
+                        name: "fk_addresses_countries_country_id",
+                        column: x => x.country_id,
+                        principalTable: "countries",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_suppliers_addresses_suppliers_supplier_id",
-                        column: x => x.supplier_id,
-                        principalTable: "suppliers",
+                        name: "fk_addresses_regions_region_id",
+                        column: x => x.region_id,
+                        principalTable: "regions",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -444,15 +482,16 @@ namespace Lidemia.DataAccess.Migrations
                 name: "product_feedbacks",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     product_id = table.Column<long>(type: "bigint", nullable: false),
                     customer_id = table.Column<long>(type: "bigint", nullable: false),
                     comment = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: true),
                     rate = table.Column<byte>(type: "smallint", nullable: false),
                     state = table.Column<int>(type: "integer", nullable: false),
-                    row_version = table.Column<int>(type: "integer", nullable: false),
+                    row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
                     is_active = table.Column<bool>(type: "boolean", nullable: false),
-                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -476,17 +515,19 @@ namespace Lidemia.DataAccess.Migrations
                 name: "products_photos",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     photo_id = table.Column<long>(type: "bigint", nullable: false),
                     product_id = table.Column<long>(type: "bigint", nullable: false),
                     is_primary = table.Column<bool>(type: "boolean", nullable: false),
-                    row_version = table.Column<int>(type: "integer", nullable: false),
+                    row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
                     is_active = table.Column<bool>(type: "boolean", nullable: false),
-                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("pk_products_photos", x => x.id);
                     table.ForeignKey(
                         name: "fk_products_photos_photos_photo_id",
                         column: x => x.photo_id,
@@ -505,12 +546,13 @@ namespace Lidemia.DataAccess.Migrations
                 name: "wish_list_items",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                    wish_list_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    wish_list_id = table.Column<long>(type: "bigint", nullable: false),
                     product_id = table.Column<long>(type: "bigint", nullable: false),
-                    row_version = table.Column<int>(type: "integer", nullable: false),
+                    row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
                     is_active = table.Column<bool>(type: "boolean", nullable: false),
-                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -531,18 +573,87 @@ namespace Lidemia.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "customer_addresses",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    customer_id = table.Column<long>(type: "bigint", nullable: false),
+                    address_id = table.Column<long>(type: "bigint", nullable: false),
+                    comment = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false),
+                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_customer_addresses", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_customer_addresses_addresses_address_id",
+                        column: x => x.address_id,
+                        principalTable: "addresses",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_customer_addresses_customers_customer_id",
+                        column: x => x.customer_id,
+                        principalTable: "customers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "suppliers_addresses",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    supplier_id = table.Column<long>(type: "bigint", nullable: false),
+                    address_id = table.Column<long>(type: "bigint", nullable: false),
+                    type = table.Column<int>(type: "integer", nullable: true),
+                    comment = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false),
+                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_suppliers_addresses", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_suppliers_addresses_addresses_address_id",
+                        column: x => x.address_id,
+                        principalTable: "addresses",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_suppliers_addresses_suppliers_supplier_id",
+                        column: x => x.supplier_id,
+                        principalTable: "suppliers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "orders",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "service.next_id()"),
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     number = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     customer_id = table.Column<long>(type: "bigint", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
-                    comment = table.Column<string>(type: "text", nullable: true),
+                    comment = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     is_finish_confirmed = table.Column<bool>(type: "boolean", nullable: false),
                     last_status_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     metadata = table.Column<OrderMetadata>(type: "jsonb", nullable: false),
                     promo_code_id = table.Column<long>(type: "bigint", nullable: true),
+                    delivery_type = table.Column<int>(type: "integer", nullable: false),
+                    supplier_address_id1 = table.Column<long>(type: "bigint", nullable: true),
+                    supplier_address_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    customer_address_id1 = table.Column<long>(type: "bigint", nullable: true),
+                    customer_address_id = table.Column<Guid>(type: "uuid", nullable: true),
                     row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
                     is_active = table.Column<bool>(type: "boolean", nullable: false),
                     create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
@@ -551,6 +662,11 @@ namespace Lidemia.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_orders", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_orders_customer_addresses_customer_address_id1",
+                        column: x => x.customer_address_id1,
+                        principalTable: "customer_addresses",
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "fk_orders_customers_customer_id",
                         column: x => x.customer_id,
@@ -561,6 +677,11 @@ namespace Lidemia.DataAccess.Migrations
                         name: "fk_orders_promo_codes_promo_code_id",
                         column: x => x.promo_code_id,
                         principalTable: "promo_codes",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "fk_orders_suppliers_addresses_supplier_address_id1",
+                        column: x => x.supplier_address_id1,
+                        principalTable: "suppliers_addresses",
                         principalColumn: "id");
                 });
 
@@ -594,14 +715,24 @@ namespace Lidemia.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_addresses_customer_id_is_active",
+                name: "ix_addresses_city_id",
                 table: "addresses",
-                columns: new[] { "customer_id", "is_active" });
+                column: "city_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_addresses_customer_id_is_default_is_active",
+                name: "ix_addresses_country_id",
                 table: "addresses",
-                columns: new[] { "customer_id", "is_default", "is_active" });
+                column: "country_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_addresses_is_active",
+                table: "addresses",
+                column: "is_active");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_addresses_region_id",
+                table: "addresses",
+                column: "region_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_auth_tokens_access_token_is_active",
@@ -619,14 +750,34 @@ namespace Lidemia.DataAccess.Migrations
                 column: "is_active");
 
             migrationBuilder.CreateIndex(
-                name: "ix_customer_addresses_address_id1",
+                name: "ix_cities_is_active",
+                table: "cities",
+                column: "is_active");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_cities_region_id",
+                table: "cities",
+                column: "region_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_countries_is_active",
+                table: "countries",
+                column: "is_active");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_customer_addresses_address_id",
                 table: "customer_addresses",
-                column: "address_id1");
+                column: "address_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_customer_addresses_customer_id_is_active",
                 table: "customer_addresses",
                 columns: new[] { "customer_id", "is_active" });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_customer_addresses_is_active",
+                table: "customer_addresses",
+                column: "is_active");
 
             migrationBuilder.CreateIndex(
                 name: "ix_customers_is_active",
@@ -650,6 +801,11 @@ namespace Lidemia.DataAccess.Migrations
                 columns: new[] { "product_id", "is_active" });
 
             migrationBuilder.CreateIndex(
+                name: "ix_orders_customer_address_id1",
+                table: "orders",
+                column: "customer_address_id1");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_orders_customer_id_is_active",
                 table: "orders",
                 columns: new[] { "customer_id", "is_active" });
@@ -663,6 +819,11 @@ namespace Lidemia.DataAccess.Migrations
                 name: "ix_orders_promo_code_id",
                 table: "orders",
                 column: "promo_code_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_orders_supplier_address_id1",
+                table: "orders",
+                column: "supplier_address_id1");
 
             migrationBuilder.CreateIndex(
                 name: "ix_password_resets_code",
@@ -701,6 +862,11 @@ namespace Lidemia.DataAccess.Migrations
                 columns: new[] { "customer_id", "is_active" });
 
             migrationBuilder.CreateIndex(
+                name: "ix_product_feedbacks_is_active",
+                table: "product_feedbacks",
+                column: "is_active");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_product_feedbacks_product_id_is_active",
                 table: "product_feedbacks",
                 columns: new[] { "product_id", "is_active" });
@@ -721,9 +887,9 @@ namespace Lidemia.DataAccess.Migrations
                 column: "is_active");
 
             migrationBuilder.CreateIndex(
-                name: "ix_products_is_visible",
+                name: "ix_products_is_visible_is_active",
                 table: "products",
-                column: "is_visible");
+                columns: new[] { "is_visible", "is_active" });
 
             migrationBuilder.CreateIndex(
                 name: "ix_products_parent_id",
@@ -739,6 +905,11 @@ namespace Lidemia.DataAccess.Migrations
                 name: "ix_products_supplier_id",
                 table: "products",
                 column: "supplier_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_products_photos_is_active",
+                table: "products_photos",
+                column: "is_active");
 
             migrationBuilder.CreateIndex(
                 name: "ix_products_photos_photo_id",
@@ -761,9 +932,20 @@ namespace Lidemia.DataAccess.Migrations
                 column: "supplier_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_shopping_carts_user_id_is_active",
+                name: "ix_regions_country_id",
+                table: "regions",
+                column: "country_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_regions_is_active",
+                table: "regions",
+                column: "is_active");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_shopping_carts_customer_id_is_active",
                 table: "shopping_carts",
-                columns: new[] { "user_id", "is_active" });
+                columns: new[] { "customer_id", "is_active" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_suppliers_is_active",
@@ -777,9 +959,14 @@ namespace Lidemia.DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_suppliers_addresses_address_id1",
+                name: "ix_suppliers_addresses_address_id",
                 table: "suppliers_addresses",
-                column: "address_id1");
+                column: "address_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_suppliers_addresses_is_active",
+                table: "suppliers_addresses",
+                column: "is_active");
 
             migrationBuilder.CreateIndex(
                 name: "ix_suppliers_addresses_supplier_id_is_active",
@@ -810,6 +997,11 @@ namespace Lidemia.DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "ix_wish_list_items_is_active",
+                table: "wish_list_items",
+                column: "is_active");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_wish_list_items_product_id",
                 table: "wish_list_items",
                 column: "product_id");
@@ -838,9 +1030,6 @@ namespace Lidemia.DataAccess.Migrations
                 name: "auth_tokens");
 
             migrationBuilder.DropTable(
-                name: "customer_addresses");
-
-            migrationBuilder.DropTable(
                 name: "order_items");
 
             migrationBuilder.DropTable(
@@ -856,9 +1045,6 @@ namespace Lidemia.DataAccess.Migrations
                 name: "shopping_carts");
 
             migrationBuilder.DropTable(
-                name: "suppliers_addresses");
-
-            migrationBuilder.DropTable(
                 name: "suppliers_stats");
 
             migrationBuilder.DropTable(
@@ -868,16 +1054,19 @@ namespace Lidemia.DataAccess.Migrations
                 name: "orders");
 
             migrationBuilder.DropTable(
-                name: "addresses");
-
-            migrationBuilder.DropTable(
                 name: "products");
 
             migrationBuilder.DropTable(
                 name: "wish_lists");
 
             migrationBuilder.DropTable(
+                name: "customer_addresses");
+
+            migrationBuilder.DropTable(
                 name: "promo_codes");
+
+            migrationBuilder.DropTable(
+                name: "suppliers_addresses");
 
             migrationBuilder.DropTable(
                 name: "photos");
@@ -889,10 +1078,22 @@ namespace Lidemia.DataAccess.Migrations
                 name: "customers");
 
             migrationBuilder.DropTable(
+                name: "addresses");
+
+            migrationBuilder.DropTable(
                 name: "suppliers");
 
             migrationBuilder.DropTable(
+                name: "cities");
+
+            migrationBuilder.DropTable(
                 name: "users");
+
+            migrationBuilder.DropTable(
+                name: "regions");
+
+            migrationBuilder.DropTable(
+                name: "countries");
         }
     }
 }

@@ -71,6 +71,51 @@ namespace Lidemia.Resources.App {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string CreateProductImagePreviewClose {
+            get {
+                return ResourceManager.GetString("CreateProductImagePreviewClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove image.
+        /// </summary>
+        public static string CreateProductImageRemove {
+            get {
+                return ResourceManager.GetString("CreateProductImageRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product images.
+        /// </summary>
+        public static string CreateProductImages {
+            get {
+                return ResourceManager.GetString("CreateProductImages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select one or more image files. You can remove selected images before saving..
+        /// </summary>
+        public static string CreateProductImagesHint {
+            get {
+                return ResourceManager.GetString("CreateProductImagesHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click to view the image.
+        /// </summary>
+        public static string CreateProductImageView {
+            get {
+                return ResourceManager.GetString("CreateProductImageView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         public static byte[] SupplierSignUpEmailTemplate {

@@ -9,6 +9,14 @@ public static class PhotoMapping
 {
     public static PhotoModel ToModel(this PhotoEntity entity, string storageHost)
     {
-        return new PhotoModel();
+        return new PhotoModel
+        {
+            Id = entity.Id,
+            OriginalFilePath = $"{storageHost}{entity.ExtraPath}",
+            LargeThumbPath = $"{storageHost}{entity.LargeThumbUrl}",
+            MediumThumbPath = $"{storageHost}{entity.MediumThumbUrl}",
+            SmallThumbPath = $"{storageHost}{entity.SmallThumbUrl}",
+            CreateDate = entity.CreateDate
+        };
     }
 }

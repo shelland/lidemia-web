@@ -6,5 +6,5 @@ namespace Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 
 public interface IRegionService
 {
-    Task<IEnumerable<RegionModel>> GetRegions(Guid? countryId, CancellationToken cancellationToken);
+    Task<IEnumerable<RegionModel>> GetRegions(long? countryId, CancellationToken cancellationToken);
 }

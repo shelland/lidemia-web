@@ -5,6 +5,9 @@
 		init: function (data) {
 			CreateProduct.urls = data.urls;
 			CreateProduct.values = data.values;
+			CreateProduct.values.images = [];
+			CreateProduct.values.previewUrls = [];
+			CreateProduct.values.labels = data.labels || {};
 
 			this.bindEvents();
             this.initPlugins();
@@ -17,6 +20,11 @@
         bindEvents: function () {
             document.getElementById("saveBtn").addEventListener("click", function () {
                 CreateProduct.save();
+            });
+
+            document.getElementById("images").addEventListener("change", function () {
+                CreateProduct.addImages(this.files);
+                this.value = "";
             });
         },
 
@@ -35,125 +43,164 @@
 
             CreateProduct.values.tagify = tagify;
 
-            this.initEditor2();
+            this.initEditor();
         },
 
-        initEditor2: function () {
+        initEditor: function () {
             Wysi({
                 el: '#descriptionEditor'
             });
         },
 
-        initEditor: function () {
+        addImages: function (files) {
+            if (!files || !files.length) {
+                return;
+            }
 
-            const Header = window.Header;
-            const List = window.EditorjsList; // В новых версиях плагин списков может называться NestedList
-            const Checklist = window.Checklist;
-            const Quote = window.Quote;
-            const Table = window.Table;
-            const Delimiter = window.Delimiter;
-            const InlineCode = window.InlineCode;
-            const Marker = window.Marker;
-            const CodeTool = window.CodeTool; // Часто экспортируется как window.Code
-            const RawTool = window.RawTool;
-            const Embed = window.Embed;
-            const Warning = window.Warning;
-            const ImageTool = window.ImageTool;
-
-            const editor = new EditorJS({
-                holder: 'editorjs',
-                placeholder: 'Нажмите Tab или плюсик, чтобы выбрать инструмент...',
-                tools: {
-                    header: {
-                        class: Header,
-                        config: { placeholder: 'Введите заголовок...', levels: [1, 2, 3, 4], defaultLevel: 2 }
-                    },
-                    list: {
-                        class: List,
-                        inlineToolbar: true
-                    },
-                    checklist: {
-                        class: Checklist,
-                        inlineToolbar: true
-                    },
-                    quote: {
-                        class: Quote,
-                        inlineToolbar: true,
-                        config: { quotePlaceholder: 'Введите цитату', captionPlaceholder: 'Автор' }
-                    },
-                    table: {
-                        class: Table,
-                        inlineToolbar: true
-                    },
-                    delimiter: Delimiter,
-                    inlineCode: {
-                        class: InlineCode,
-                    },
-                    marker: {
-                        class: Marker,
-                    },
-                    code: {
-                        class: CodeTool,
-                    },
-                    raw: {
-                        class: RawTool,
-                    },
-                    embed: {
-                        class: Embed,
-                        config: {
-                            services: { youtube: true, coub: true, twitter: true, instagram: true }
-                        }
-                    },
-                    warning: {
-                        class: Warning,
-                        inlineToolbar: true,
-                        config: { titlePlaceholder: 'Название', messagePlaceholder: 'Текст предупреждения' }
-                    },
-                    image: {
-                        class: ImageTool,
-                        config: {
-                            // Пример настройки эндпоинтов загрузки на ваш бэкенд:
-                            // endpoints: { byFile: 'http://localhost:8008/uploadFile', byUrl: 'http://localhost:8008/fetchUrl' }
-                        }
-                    }
-                },
-                data: {
-                    blocks: [
-                        {
-                            type: 'header',
-                            data: { text: 'Все плагины Editor.js подключены', level: 1 }
-                        }
-                    ]
+            Array.prototype.forEach.call(files, function (file) {
+                if (file.type.indexOf("image/") !== 0) {
+                    return;
                 }
+
+                CreateProduct.values.images.push(file);
             });
 
-            editor.save().then((outputData) => {
-                console.log('Article data: ', outputData)
-            }).catch((error) => {
-                console.log('Saving failed: ', error)
+            this.renderImagesPreview();
+        },
+
+        removeImage: function (index) {
+            this.closeImagePreview();
+            CreateProduct.values.images.splice(index, 1);
+            this.renderImagesPreview();
+        },
+
+        clearImages: function () {
+            this.closeImagePreview();
+            CreateProduct.values.images = [];
+            this.renderImagesPreview();
+        },
+
+        showImagePreview: function (url, title) {
+            var modalElement = document.getElementById("imagePreviewModal");
+
+            if (!modalElement || typeof bootstrap === "undefined") {
+                window.open(url, "_blank");
+                return;
+            }
+
+            document.getElementById("imagePreviewModalTitle").textContent = title;
+            document.getElementById("imagePreviewModalImg").src = url;
+
+            bootstrap.Modal.getOrCreateInstance(modalElement).show();
+        },
+
+        closeImagePreview: function () {
+            var modalElement = document.getElementById("imagePreviewModal");
+
+            if (!modalElement || typeof bootstrap === "undefined") {
+                return;
+            }
+
+            var modal = bootstrap.Modal.getInstance(modalElement);
+
+            if (modal) {
+                modal.hide();
+            }
+
+            document.getElementById("imagePreviewModalImg").removeAttribute("src");
+        },
+
+        renderImagesPreview: function () {
+            var container = document.getElementById("imagesPreview");
+
+            CreateProduct.values.previewUrls.forEach(function (url) {
+                URL.revokeObjectURL(url);
+            });
+
+            CreateProduct.values.previewUrls = [];
+            container.innerHTML = "";
+
+            CreateProduct.values.images.forEach(function (file, index) {
+
+                var url = URL.createObjectURL(file);
+                CreateProduct.values.previewUrls.push(url);
+
+                var column = document.createElement("div");
+                column.className = "col-6 col-sm-4 col-md-3";
+
+                var wrapper = document.createElement("div");
+                wrapper.className = "position-relative border rounded overflow-hidden";
+
+                var previewBtn = document.createElement("button");
+                previewBtn.type = "button";
+                previewBtn.className = "btn p-0 border-0 w-100 d-block";
+                previewBtn.title = CreateProduct.values.labels.viewImage || file.name;
+                previewBtn.addEventListener("click", function () {
+                    CreateProduct.showImagePreview(url, file.name);
+                });
+
+                var image = document.createElement("img");
+                image.src = url;
+                image.alt = file.name;
+                image.className = "w-100 d-block";
+                image.style.height = "120px";
+                image.style.objectFit = "cover";
+
+                previewBtn.appendChild(image);
+
+                var removeBtn = document.createElement("button");
+                removeBtn.type = "button";
+                removeBtn.className = "btn btn-sm btn-danger position-absolute top-0 end-0 m-1";
+                removeBtn.title = CreateProduct.values.labels.removeImage || "×";
+                removeBtn.innerHTML = "&times;";
+                removeBtn.addEventListener("click", function () {
+                    CreateProduct.removeImage(index);
+                });
+
+                wrapper.appendChild(previewBtn);
+                wrapper.appendChild(removeBtn);
+
+                var caption = document.createElement("div");
+                caption.className = "small text-truncate mt-1";
+                caption.title = file.name;
+                caption.textContent = file.name;
+
+                column.appendChild(wrapper);
+                column.appendChild(caption);
+
+                container.appendChild(column);
             });
         },
 
         save: async function () {
+
+            Shared.setLoading(true);
 
             var title = document.getElementById("title").value;
             var description = document.getElementById("descriptionEditor").value;
 
             var tags = CreateProduct.values.tagify.value.map(function (x) { return x.value })
 
-            var payload = {
-                title: title,
-                description: description,
-                tags: tags
-            };
+            var formData = new FormData();
 
-            if (CreateProduct.values.product) {
-                payload.id = CreateProduct.values.product.id;
+            formData.append("title", title);
+            formData.append("description", description);
+
+            tags.forEach(function (tag) {
+                formData.append("tags", tag);
+            });
+
+            if (CreateProduct.values.product && CreateProduct.values.product.id) {
+                formData.append("id", CreateProduct.values.product.id);
             }
+
+            CreateProduct.values.images.forEach(function (file) {
+                formData.append("images", file);
+            });
 
             const response = await window.appFetch(CreateProduct.urls.saveProductUrl, {
                 method: "POST",
-                body: JSON.stringify(payload)
+                body: formData
             });
 
             if (!response.ok) {
@@ -161,6 +208,12 @@
             }
 
             var result = await response.json();
+
+            if (result.isSuccess) {
+                CreateProduct.clearImages();
+            }
+
+            Shared.setLoading(false);
 
         }
 

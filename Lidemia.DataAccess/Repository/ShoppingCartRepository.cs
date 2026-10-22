@@ -21,12 +21,12 @@ public class ShoppingCartRepository : IShoppingCartRepository
         this.context = context;
     }
 
-    public Task<ShoppingCartEntity?> GetById(Guid key, CancellationToken cancellationToken)
+    public Task<ShoppingCartEntity?> GetById(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task Delete(Guid key, CancellationToken cancellationToken)
+    public Task Delete(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

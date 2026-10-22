@@ -20,5 +20,11 @@ public class ProductModel : AbstractEntity<long>
 
     public double AverageRate { get; set; }
 
+    public decimal Price { get; set; }
+
+    public decimal? DiscountPrice { get; set; }
+
+    public bool HasCurrentDiscount { get; set; }
+
     public SupplierModel Supplier { get; set; } = null!;
 }

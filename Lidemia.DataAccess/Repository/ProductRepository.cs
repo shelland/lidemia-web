@@ -58,7 +58,7 @@ public class ProductRepository : IProductRepository
                         .SetProperty(e => e.Description, model.Description)
                         .SetProperty(e => e.ShortDescription, model.ShortDescription)
                         .SetProperty(e => e.AvailabilityType, model.AvailabilityType)
-                        .SetProperty(e => e.Tags, model.Tags),
+                        .SetProperty(e => e.Tags, model.Tags ?? []),
                     cancellationToken: cancellationToken);
 
             productId = model.Id.Value;
@@ -73,7 +73,7 @@ public class ProductRepository : IProductRepository
                 Description = model.Description,
                 ShortDescription = model.ShortDescription,
                 AvailabilityType = model.AvailabilityType,
-                Tags = model.Tags
+                Tags = model.Tags ?? []
             };
 
             this.context.Products.Add(product);

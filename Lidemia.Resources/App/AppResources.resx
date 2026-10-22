@@ -124,4 +124,19 @@
   <data name="SupplierSignUpEmailTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Files\EmailTemplates\SupplierSignUpEmailTemplate.html;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="CreateProductImages" xml:space="preserve">
+    <value>Product images</value>
+  </data>
+  <data name="CreateProductImagesHint" xml:space="preserve">
+    <value>Select one or more image files. You can remove selected images before saving.</value>
+  </data>
+  <data name="CreateProductImageRemove" xml:space="preserve">
+    <value>Remove image</value>
+  </data>
+  <data name="CreateProductImageView" xml:space="preserve">
+    <value>Click to view the image</value>
+  </data>
+  <data name="CreateProductImagePreviewClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
 </root>

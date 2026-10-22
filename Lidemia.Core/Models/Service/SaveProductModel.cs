@@ -12,5 +12,13 @@ public record SaveProductModel
     string? Description,
     string? ShortDescription,
     ProductAvailabilityType? AvailabilityType,
-    string[] Tags
+    ProductPriceUnit? PriceUnit,
+    string[]? Tags,
+    decimal? Price,
+    decimal? DiscountPrice,
+    DateTimeOffset? DiscountStartDate,
+    DateTimeOffset? DiscountEndDate,
+    decimal? MinQuantity,
+    decimal? MaxQuantity,
+    string? Sku
 );

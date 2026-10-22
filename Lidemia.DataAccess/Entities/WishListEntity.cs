@@ -5,9 +5,9 @@ using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class WishListEntity : IHasId<Guid>, IDbEntity
+public class WishListEntity : IHasId<long>, IDbEntity
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
 
     public CustomerEntity Customer { get; set; } = null!;
 

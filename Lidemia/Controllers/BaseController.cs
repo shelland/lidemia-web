@@ -12,7 +12,11 @@ public class BaseController : Controller
 
     protected long RequireEntityId => EntityId.NotNull().Value;
 
+    protected long? UserId => this.HttpContext.User.GetUserId();
+
+    protected long RequireUserId => UserId.NotNull().Value;
+
     protected EntityType EntityType => this.HttpContext.User.GetEntityRole();
 
-    public IActionResult NotFoundView => View("NotFound");
+    protected IActionResult NotFoundView => View("NotFound");
 }

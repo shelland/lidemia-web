@@ -20,12 +20,12 @@ public class CountryRepository : ICountryRepository
         this.context = context;
     }
 
-    public Task<CountryEntity?> GetById(Guid key, CancellationToken cancellationToken)
+    public Task<CountryEntity?> GetById(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task Delete(Guid key, CancellationToken cancellationToken)
+    public Task Delete(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

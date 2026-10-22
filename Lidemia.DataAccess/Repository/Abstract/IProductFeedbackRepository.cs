@@ -5,7 +5,7 @@ using Lidemia.DataAccess.Repository.Abstract.Base;
 
 namespace Lidemia.DataAccess.Repository.Abstract;
 
-public interface IProductFeedbackRepository : IRepository<ProductFeedbackEntity, Guid>
+public interface IProductFeedbackRepository : IRepository<ProductFeedbackEntity, long>
 {
     Task<IReadOnlyList<ProductFeedbackEntity>> GetRecentFeedback(long productId, int count = 5, CancellationToken cancellationToken = default);
 }

@@ -47,8 +47,8 @@ public class SupplierAddressesController : BaseController
         return View(viewModel);
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> Edit([FromRoute] Guid id, CancellationToken cancellationToken)
+    [HttpGet("{id:long}")]
+    public async Task<IActionResult> Edit([FromRoute] long id, CancellationToken cancellationToken)
     {
         var viewModel = await GetViewModel(id, cancellationToken);
         return View("Create", viewModel);
@@ -68,7 +68,7 @@ public class SupplierAddressesController : BaseController
         return ResultInfo.Ok;
     }
 
-    private async Task<CreateSupplierAddressViewModel> GetViewModel(Guid? addressId, CancellationToken cancellationToken)
+    private async Task<CreateSupplierAddressViewModel> GetViewModel(long? addressId, CancellationToken cancellationToken)
     {
         var address = addressId != null ? await this.supplierAddressService.GetById(addressId.Value, cancellationToken) : null;
 

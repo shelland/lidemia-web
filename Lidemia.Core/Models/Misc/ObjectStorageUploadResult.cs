@@ -4,6 +4,6 @@ namespace Lidemia.Core.Models.Misc;
 
 public record ObjectStorageUploadResult
 (
-    string Bucket,
+    string BucketName,
     string ObjectName
 );

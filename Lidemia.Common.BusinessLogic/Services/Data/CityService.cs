@@ -19,7 +19,7 @@ public class CityService : ICityService
         this.cityRepository = cityRepository;
     }
 
-    public async Task<IEnumerable<CityModel>> GetCities(Guid? regionId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<CityModel>> GetCities(long? regionId, CancellationToken cancellationToken)
     {
         var cities = await this.cityRepository.GetCities(regionId, cancellationToken);
         return cities.Select(x => x.ToModel());

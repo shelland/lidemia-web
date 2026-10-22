@@ -27,13 +27,13 @@ public class SupplierAddressService : BaseDataService, ISupplierAddressService
         throw new NotImplementedException();
     }
 
-    public async Task<SupplierAddressModel?> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<SupplierAddressModel?> GetById(long id, CancellationToken cancellationToken)
     {
         var address = await this.supplierAddressRepository.GetById(id, cancellationToken);
         return address?.ToModel();
     }
 
-    public async Task<Result<Guid>> Save(long supplierId, SaveSupplierAddressRequestDto request, CancellationToken cancellationToken)
+    public async Task<Result<long>> Save(long supplierId, SaveSupplierAddressRequestDto request, CancellationToken cancellationToken)
     {
         if (request.Id != null)
         {

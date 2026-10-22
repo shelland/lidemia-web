@@ -5,15 +5,15 @@ using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class CityEntity : IHasId<Guid>, IDbEntity
+public class CityEntity : IHasId<long>, IDbEntity
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
 
     public string Name { get; set; } = string.Empty;
 
     public RegionEntity Region { get; set; } = null!;
 
-    public Guid RegionId { get; set; }
+    public long RegionId { get; set; }
 
     public double? Latitude { get; set; }
 

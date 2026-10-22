@@ -15,6 +15,6 @@ public class RegionEntityConfiguration : IEntityTypeConfiguration<RegionEntity>
         builder.Property(x => x.Area).HasMaxLength(250);
         builder.HasIndex(x => x.CountryId);
 
-        builder.AddBaseColumns<RegionEntity, Guid>();
+        builder.AddBaseColumns<RegionEntity, long>();
     }
 }

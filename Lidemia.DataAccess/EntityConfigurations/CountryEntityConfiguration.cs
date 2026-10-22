@@ -13,6 +13,6 @@ public class CountryEntityConfiguration : IEntityTypeConfiguration<CountryEntity
     {
         builder.Property(x => x.Name).HasMaxLength(250);
 
-        builder.AddBaseColumns<CountryEntity, Guid>();
+        builder.AddBaseColumns<CountryEntity, long>();
     }
 }

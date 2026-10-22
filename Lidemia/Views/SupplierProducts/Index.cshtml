@@ -29,7 +29,12 @@
                 <tr>
                     <td>@product.Title</td>
                     <td>
-                        <a class="btn btn-primary" href="@Url.Action("Edit", "SupplierProducts", new { id = product.Id })">@localizer["SupplierProductsEdit"]</a>
+                        <a class="btn btn-primary" href="@Url.Action("Edit", "SupplierProducts", new { id = product.Id })">
+                            @localizer["SupplierProductsEdit"]
+                        </a>
+                        <a class="btn btn-primary" href="@Url.Action("Details", "Products", new { id = product.Id })" target="_blank">
+                            @localizer["SupplierProductsViewInStore"]
+                        </a>
                     </td>
                 </tr>
             }

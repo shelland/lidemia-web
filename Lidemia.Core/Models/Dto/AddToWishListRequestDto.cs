@@ -5,5 +5,5 @@ namespace Lidemia.Core.Models.Dto;
 public record AddToWishListRequestDto
 (
     long ProductId,
-    Guid? WishListId
+    long? WishListId
 );

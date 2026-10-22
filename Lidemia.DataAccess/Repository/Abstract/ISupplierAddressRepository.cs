@@ -7,7 +7,7 @@ using Lidemia.DataAccess.Repository.Abstract.Base;
 
 namespace Lidemia.DataAccess.Repository.Abstract;
 
-public interface ISupplierAddressRepository : IRepository<SupplierAddressEntity, Guid>
+public interface ISupplierAddressRepository : IRepository<SupplierAddressEntity, long>
 {
-    Task<Result<Guid>> Save(SaveSupplierAddressModel model, CancellationToken cancellationToken);
+    Task<Result<long>> Save(SaveSupplierAddressModel model, CancellationToken cancellationToken);
 }

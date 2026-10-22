@@ -20,17 +20,17 @@ public class RegionRepository : IRegionRepository
         this.context = context;
     }
 
-    public Task<RegionEntity?> GetById(Guid key, CancellationToken cancellationToken)
+    public Task<RegionEntity?> GetById(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task Delete(Guid key, CancellationToken cancellationToken)
+    public Task Delete(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<RegionEntity>> GetRegions(Guid? countryId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RegionEntity>> GetRegions(long? countryId, CancellationToken cancellationToken)
     {
         var regions = this.context.Regions.AsActive();
 

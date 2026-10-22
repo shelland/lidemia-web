@@ -6,5 +6,9 @@
   {
     "outputFile": "wwwroot/Pages/Styles/Overrides.css",
     "inputFile": "wwwroot/Pages/Styles/Overrides.less"
+  },
+  {
+    "outputFile": "wwwroot/Pages/Styles/ProductDetails.css",
+    "inputFile": "wwwroot/Pages/Styles/ProductDetails.less"
   }
 ]

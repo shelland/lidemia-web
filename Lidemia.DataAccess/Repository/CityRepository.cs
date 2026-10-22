@@ -20,17 +20,17 @@ public class CityRepository : ICityRepository
         this.context = context;
     }
 
-    public Task<CityEntity?> GetById(Guid key, CancellationToken cancellationToken)
+    public Task<CityEntity?> GetById(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task Delete(Guid key, CancellationToken cancellationToken)
+    public Task Delete(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<CityEntity>> GetCities(Guid? regionId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<CityEntity>> GetCities(long? regionId, CancellationToken cancellationToken)
     {
         var cities = this.context.Cities.AsActive();
 

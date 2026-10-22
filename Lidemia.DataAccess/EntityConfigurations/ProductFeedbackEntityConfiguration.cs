@@ -11,8 +11,7 @@ public class ProductFeedbackEntityConfiguration : IEntityTypeConfiguration<Produ
 {
     public void Configure(EntityTypeBuilder<ProductFeedbackEntity> builder)
     {
-        builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).AsGuidV7();
+        builder.AddBaseColumns<ProductFeedbackEntity, long>();
 
         builder.Property(x => x.Comment).HasMaxLength(5000);
 

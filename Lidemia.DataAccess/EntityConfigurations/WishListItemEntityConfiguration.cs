@@ -11,7 +11,7 @@ public class WishListItemEntityConfiguration : IEntityTypeConfiguration<WishList
 {
     public void Configure(EntityTypeBuilder<WishListItemEntity> builder)
     {
-        builder.Property(x => x.Id).AsGuidV7();
+        builder.AddBaseColumns<WishListItemEntity, long>();
 
         builder.HasIndex(x => new
         {

@@ -42,4 +42,16 @@ public static class ClaimsPrincipalExtensions
         var roleClaim = claimsPrincipal.FindFirst(x => x.Type == Constants.Claims.RoleClaimName).NotNull();
         return Enum.Parse<EntityType>(roleClaim.Value);
     }
+
+    public static long? GetUserId(this ClaimsPrincipal claimsPrincipal)
+    {
+        var userIdClaim = claimsPrincipal.FindFirst(x => x.Type == Constants.Claims.UserIdClaimName);
+
+        if (userIdClaim == null)
+        {
+            return null;
+        }
+
+        return long.Parse(userIdClaim.Value);
+    }
 }

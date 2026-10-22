@@ -4,7 +4,7 @@ using Lidemia.Core.Models.Base;
 
 namespace Lidemia.Core.Models.Domain;
 
-public class AddressModel : AbstractEntity<Guid>
+public class AddressModel : AbstractEntity<long>
 {
     public CountryModel Country { get; set; } = null!;
 

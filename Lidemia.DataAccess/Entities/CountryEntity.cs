@@ -5,9 +5,9 @@ using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class CountryEntity : IHasId<Guid>, IDbEntity
+public class CountryEntity : IHasId<long>, IDbEntity
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
 
     public string Name { get; set; } = string.Empty;
 

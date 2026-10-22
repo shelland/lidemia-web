@@ -3,7 +3,7 @@
 using Lidemia.Core.Enums;
 using Lidemia.Core.Models.Misc;
 
-namespace Lidemia.Web.BusinessLogic.Services.Abstract;
+namespace Lidemia.Common.BusinessLogic.Services.App.Abstract;
 
 public interface IObjectStorageService
 {
@@ -15,5 +15,5 @@ public interface IObjectStorageService
 
     Task Delete(string bucket, string path, CancellationToken cancellationToken);
 
-    Task<Stream> GetFileContent(string bucket, string path, CancellationToken cancellationToken);
+    Task<Stream> GetFileContent(ObjectStoragePayloadType type, string fileName, CancellationToken cancellationToken);
 }

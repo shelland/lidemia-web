@@ -30,6 +30,7 @@ public class Program
         builder.Services.Configure<LocalServicesSettingsModel>(builder.Configuration.GetSection("LocalServices"));
         builder.Services.Configure<ApplicationSettingsModel>(builder.Configuration.GetSection("Application"));
         builder.Services.Configure<IntegrationsSettingsModel>(builder.Configuration.GetSection("Integrations"));
+        builder.Services.Configure<StorageSettingsModel>(builder.Configuration.GetSection("Storage"));
 
         builder.Services
             .AddDataProtection()

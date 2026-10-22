@@ -12,11 +12,14 @@ public record SaveProductRequestDto
     string? Description,
     string? ShortDescription,
     ProductAvailabilityType? AvailabilityType,
+    ProductPriceUnit? PriceUnit,
     bool? HasCurrentDiscount,
-    double? DiscountPrice,
+    decimal? Price,
+    decimal? DiscountPrice,
     DateTime? DiscountStartDate,
     DateTime? DiscountEndDate,
-    double? MinQuantity,
-    double? MaxQuantity,
-    string[] Tags
+    decimal? MinQuantity,
+    decimal? MaxQuantity,
+    string[]? Tags,
+    string? Sku
 );

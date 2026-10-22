@@ -5,15 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lidemia.Controllers;
 
+[Route("Products")]
 public class ProductsController : BaseController
 {
     private readonly IProductService productService;
-    private readonly IPhotoService photoService;
+    private readonly IProductPhotoService productPhotoService;
 
-    public ProductsController(IProductService productService, IPhotoService photoService)
+    public ProductsController(IProductService productService, IProductPhotoService productPhotoService)
     {
         this.productService = productService;
-        this.photoService = photoService;
+        this.productPhotoService = productPhotoService;
     }
 
     [HttpGet]
@@ -21,7 +22,7 @@ public class ProductsController : BaseController
     {
         filter ??= new ProductsListFilterModel();
         var products = await this.productService.GetPublicList(filter, cancellationToken);
-        
+
         var viewModel = new ProductsListViewModel
         {
             CurrentPage = filter.Page,
@@ -44,7 +45,7 @@ public class ProductsController : BaseController
             return NotFoundView;
         }
 
-        var photos = await this.photoService.GetProductPhotos(id, cancellationToken);
+        var photos = await this.productPhotoService.GetProductPhotos(id, cancellationToken);
 
         var viewModel = new ProductDetailsViewModel(
             Product: product,

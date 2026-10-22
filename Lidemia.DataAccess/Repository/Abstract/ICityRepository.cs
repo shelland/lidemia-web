@@ -5,7 +5,7 @@ using Lidemia.DataAccess.Repository.Abstract.Base;
 
 namespace Lidemia.DataAccess.Repository.Abstract;
 
-public interface ICityRepository : IRepository<CityEntity, Guid>
+public interface ICityRepository : IRepository<CityEntity, long>
 {
-    Task<IEnumerable<CityEntity>> GetCities(Guid? regionId, CancellationToken cancellationToken);
+    Task<IEnumerable<CityEntity>> GetCities(long? regionId, CancellationToken cancellationToken);
 }

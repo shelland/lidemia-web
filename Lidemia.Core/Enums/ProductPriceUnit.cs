@@ -13,6 +13,6 @@ public enum ProductPriceUnit
     [Display(Name = "EnumsProductPriceUnitItemWeight", ResourceType = typeof(AppResources))]
     Weight, 
 
-    [Display(Name = "EnumsProductPriceUnitItemLiter", ResourceType = typeof(AppResources))]
-    Liter
+    [Display(Name = "EnumsProductPriceUnitItemVolume", ResourceType = typeof(AppResources))]
+    Volume
 }

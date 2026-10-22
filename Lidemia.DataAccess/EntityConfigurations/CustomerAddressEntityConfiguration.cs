@@ -11,7 +11,7 @@ public class CustomerAddressEntityConfiguration : IEntityTypeConfiguration<Custo
 {
     public void Configure(EntityTypeBuilder<CustomerAddressEntity> builder)
     {
-        builder.AddBaseColumns<CustomerAddressEntity, Guid>();
+        builder.AddBaseColumns<CustomerAddressEntity, long>();
 
         builder.Property(x => x.Comment).HasMaxLength(500);
 

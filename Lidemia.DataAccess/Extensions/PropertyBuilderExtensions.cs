@@ -16,11 +16,6 @@ public static class PropertyBuilderExtensions
         return propertyBuilder.HasColumnType($"geography(point, {Constants.DefaultSrid})");
     }
 
-    public static PropertyBuilder<TProperty> AsServiceId<TProperty>(this PropertyBuilder<TProperty> propertyBuilder)
-    {
-        return propertyBuilder.HasDefaultValueSql("service.next_id()").ValueGeneratedOnAdd();
-    }
-
     public static PropertyBuilder<TProperty> AsGuidV7<TProperty>(this PropertyBuilder<TProperty> propertyBuilder)
     {
         return propertyBuilder.HasDefaultValueSql("uuidv7()").ValueGeneratedNever();

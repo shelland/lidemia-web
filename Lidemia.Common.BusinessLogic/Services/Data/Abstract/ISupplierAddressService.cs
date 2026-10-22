@@ -10,7 +10,7 @@ public interface ISupplierAddressService
 {
     Task<BasePagedListModel<SupplierAddressModel>> GetAddresses();
 
-    Task<SupplierAddressModel?> GetById(Guid id, CancellationToken cancellationToken);
+    Task<SupplierAddressModel?> GetById(long id, CancellationToken cancellationToken);
 
-    Task<Result<Guid>> Save(long supplierId, SaveSupplierAddressRequestDto request, CancellationToken cancellationToken);
+    Task<Result<long>> Save(long supplierId, SaveSupplierAddressRequestDto request, CancellationToken cancellationToken);
 }

@@ -16,6 +16,9 @@ public static class ProductMapping
             Description = entity.Description,
             Title = entity.Title,
             Tags = entity.Tags,
+            Price = entity.Price,
+            DiscountPrice = entity.DiscountPrice,
+            HasCurrentDiscount = entity.HasCurrentDiscount
         };
     }
 }

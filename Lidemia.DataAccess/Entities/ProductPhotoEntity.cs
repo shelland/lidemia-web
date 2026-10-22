@@ -5,9 +5,9 @@ using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class ProductPhotoEntity : IDbEntity, IHasId<Guid>
+public class ProductPhotoEntity : IDbEntity, IHasId<long>
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
 
     public long PhotoId { get; set; }
 

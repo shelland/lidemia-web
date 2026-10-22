@@ -1,13 +1,13 @@
 ﻿// Created on 12/12/2025 20:38 by Laserson
 
+using Lidemia.Common.BusinessLogic.Services.App.Abstract;
 using Lidemia.Core.Enums;
 using Lidemia.Core.Models.Configuration;
-using Lidemia.Web.BusinessLogic.Services.Abstract;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Scrutor;
 
-namespace Lidemia.Web.BusinessLogic.Services;
+namespace Lidemia.Common.BusinessLogic.Services.App;
 
 [ServiceDescriptor<IObjectStoragePathResolver>(ServiceLifetime.Singleton)]
 public class ObjectStoragePathResolver : IObjectStoragePathResolver
@@ -22,6 +22,6 @@ public class ObjectStoragePathResolver : IObjectStoragePathResolver
     public (string BucketName, string Path) Resolve(ObjectStoragePayloadType type, string fileName)
     {
         var bucket = this.options.Value.StorageBucket;
-        return (bucket, $"/{type}/{fileName}");
+        return (bucket, fileName);
     }
 }

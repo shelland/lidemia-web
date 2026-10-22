@@ -1,6 +1,4 @@
-﻿using FluentResults;
-
-namespace Lidemia.Core.Models.Service;
+﻿namespace Lidemia.Core.Models.Service;
 
 public class ResultInfo
 {

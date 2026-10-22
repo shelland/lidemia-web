@@ -5,13 +5,13 @@ using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class RegionEntity : IHasId<Guid>, IDbEntity
+public class RegionEntity : IHasId<long>, IDbEntity
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
 
     public CountryEntity Country { get; set; } = null!;
 
-    public Guid CountryId { get; set; }
+    public long CountryId { get; set; }
 
     public string Name { get; set; } = string.Empty;
 

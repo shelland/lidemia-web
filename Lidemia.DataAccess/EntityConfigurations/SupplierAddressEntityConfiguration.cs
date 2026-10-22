@@ -11,7 +11,7 @@ public class SupplierAddressEntityConfiguration : IEntityTypeConfiguration<Suppl
 {
     public void Configure(EntityTypeBuilder<SupplierAddressEntity> builder)
     {
-        builder.AddBaseColumns<SupplierAddressEntity, Guid>();
+        builder.AddBaseColumns<SupplierAddressEntity, long>();
 
         builder.Property(x => x.Comment).HasMaxLength(500);
 

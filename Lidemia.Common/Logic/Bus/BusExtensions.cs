@@ -20,6 +20,32 @@ public static class BusExtensions
 
         service.AddMassTransit(busConfig =>
         {
+            busConfig.UsingRabbitMq((ctx, rabbitConf) =>
+            {
+                rabbitConf.Host(url, port, vHost, localCfg =>
+                {
+                    localCfg.Username(userName);
+                    localCfg.Password(password);
+                });
+
+                rabbitConf.UseJsonSerializer();
+                rabbitConf.ConfigureEndpoints(ctx);
+            });
+        });
+
+        return service;
+    }
+
+    public static IServiceCollection RegisterBusWithConsumers(this IServiceCollection service, IConfiguration configuration)
+    {
+        var url = configuration["LocalServices:Rabbit:Url"].NotNull();
+        var vHost = configuration["LocalServices:Rabbit:Vhost"].NotNull();
+        var userName = configuration["LocalServices:Rabbit:Name"].NotNull();
+        var password = configuration["LocalServices:Rabbit:Password"].NotNull();
+        var port = ushort.Parse(configuration["LocalServices:Rabbit:Port"].NotNull());
+
+        service.AddMassTransit(busConfig =>
+        {
             busConfig.AddConsumer<SupplierSignUpEventConsumer>();
             busConfig.AddConsumer<ProductSavedEventConsumer>();
 

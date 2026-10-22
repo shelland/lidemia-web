@@ -19,7 +19,7 @@ public class RegionService : IRegionService
         this.regionRepository = regionRepository;
     }
 
-    public async Task<IEnumerable<RegionModel>> GetRegions(Guid? countryId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RegionModel>> GetRegions(long? countryId, CancellationToken cancellationToken)
     {
         var regions = await this.regionRepository.GetRegions(countryId, cancellationToken);
         return regions.Select(x => x.ToModel());

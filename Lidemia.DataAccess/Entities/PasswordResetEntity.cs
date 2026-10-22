@@ -6,9 +6,9 @@ using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class PasswordResetEntity : IHasId<Guid>, IDbEntity
+public class PasswordResetEntity : IHasId<long>, IDbEntity
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
 
     public long UserId { get; set; }
 

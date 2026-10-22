@@ -5,9 +5,9 @@ using Lidemia.DataAccess.Repository.Abstract.Base;
 
 namespace Lidemia.DataAccess.Repository.Abstract;
 
-public interface IWishListRepository : IRepository<WishListEntity, Guid>
+public interface IWishListRepository : IRepository<WishListEntity, long>
 {
     Task<int> CountUserLists(long customerId, CancellationToken cancellationToken);
 
-    Task<bool> AddItem(long customerId, long productId, Guid? wishListId, CancellationToken cancellationToken);
+    Task<bool> AddItem(long customerId, long productId, long? wishListId, CancellationToken cancellationToken);
 }

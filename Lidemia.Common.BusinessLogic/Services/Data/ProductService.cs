@@ -87,7 +87,15 @@ public class ProductService : BaseDataService, IProductService
             Description: this.sanitizerService.Sanitize(request.Description),
             ShortDescription: request.ShortDescription,
             AvailabilityType: request.AvailabilityType,
-            Tags: request.Tags
+            Tags: request.Tags,
+            PriceUnit: request.PriceUnit,
+            Price: request.Price,
+            DiscountPrice: request.DiscountPrice,
+            DiscountStartDate: request.DiscountStartDate,
+            DiscountEndDate: request.DiscountEndDate,
+            MinQuantity: request.MinQuantity,
+            MaxQuantity: request.MaxQuantity,
+            Sku: request.Sku
         );
 
         var result = await this.productRepository.Save(supplierId, model, cancellationToken);

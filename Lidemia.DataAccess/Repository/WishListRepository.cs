@@ -21,12 +21,12 @@ public class WishListRepository : IWishListRepository
         this.context = context;
     }
 
-    public Task<WishListEntity?> GetById(Guid key, CancellationToken cancellationToken)
+    public Task<WishListEntity?> GetById(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task Delete(Guid key, CancellationToken cancellationToken)
+    public Task Delete(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
@@ -36,7 +36,7 @@ public class WishListRepository : IWishListRepository
         return this.context.WishLists.AsActive().CountAsync(x => x.CustomerId == customerId, cancellationToken: cancellationToken);
     }
 
-    public async Task<bool> AddItem(long customerId, long productId, Guid? wishListId, CancellationToken cancellationToken)
+    public async Task<bool> AddItem(long customerId, long productId, long? wishListId, CancellationToken cancellationToken)
     {
         var strategy = this.context.Database.CreateExecutionStrategy();
 

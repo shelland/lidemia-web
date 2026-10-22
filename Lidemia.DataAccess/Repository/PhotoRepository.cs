@@ -2,7 +2,6 @@
 
 using Lidemia.DataAccess.Context;
 using Lidemia.DataAccess.Entities;
-using Lidemia.DataAccess.Extensions;
 using Lidemia.DataAccess.Repository.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,16 +27,5 @@ public class PhotoRepository : IPhotoRepository
     public Task Delete(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
-    }
-
-    public async Task<IEnumerable<PhotoEntity>> GetProductPhotos(long productId, CancellationToken cancellationToken)
-    {
-        var query = this.context.ProductsPhotos
-            .AsActive()
-            .Include(x => x.Photo)
-            .Where(x => x.ProductId == productId)
-            .Select(x => x.Photo);
-
-        return await query.ToListAsync(cancellationToken: cancellationToken);
     }
 }

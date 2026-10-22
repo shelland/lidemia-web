@@ -14,6 +14,6 @@ public class CityEntityConfiguration : IEntityTypeConfiguration<CityEntity>
         builder.Property(x => x.Name).HasMaxLength(250);
         builder.HasIndex(x => x.RegionId);
 
-        builder.AddBaseColumns<CityEntity, Guid>();
+        builder.AddBaseColumns<CityEntity, long>();
     }
 }

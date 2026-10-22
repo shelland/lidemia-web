@@ -25,8 +25,7 @@ public class ImportController : Controller
 
         var country = new CountryEntity
         {
-            Name = "Россия",
-            Id = Guid.CreateVersion7()
+            Name = "Россия"
         };
 
         context.Countries.Add(country);
@@ -39,7 +38,6 @@ public class ImportController : Controller
             var region = new RegionEntity
             {
                 Name = gr.Key,
-                Id = Guid.CreateVersion7(),
                 Area = gr.First().District,
                 CountryId = country.Id
             };
@@ -54,7 +52,6 @@ public class ImportController : Controller
 
             context.Cities.Add(new CityEntity
             {
-                Id = Guid.CreateVersion7(),
                 Latitude = city.Latitude,
                 Longitude = city.Longitude,
                 Name = city.City,

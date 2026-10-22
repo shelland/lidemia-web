@@ -9,6 +9,19 @@ public class LocalServicesSettingsModel
     public SeqSettings Seq { get; set; } = null!;
 
     public RabbitSettings Rabbit { get; set; } = null!;
+
+    public MinioSettings Minio { get; set; } = null!;
+}
+
+public class MinioSettings
+{
+    public string AccessKey { get; set; } = string.Empty;
+
+    public string SecretKey { get; set; } = string.Empty;
+
+    public string BaseUrl { get; set; } = "127.0.0.1:9000";
+
+    public bool UseSsl { get; set; }
 }
 
 public class OpenSearchSettings

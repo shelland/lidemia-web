@@ -6,10 +6,10 @@ namespace Lidemia.Core.Models.Domain;
 
 public record SaveSupplierAddressRequestDto
 (
-    Guid? Id,
-    Guid CountryId,
-    Guid RegionId,
-    Guid CityId,
+    long? Id,
+    long CountryId,
+    long RegionId,
+    long CityId,
     string StreetName,
     string HouseNumber,
     string FlatNumber,

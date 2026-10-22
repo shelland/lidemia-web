@@ -22,7 +22,7 @@ public class SupplierAddressRepository : ISupplierAddressRepository
         this.context = context;
     }
 
-    public Task<SupplierAddressEntity?> GetById(Guid key, CancellationToken cancellationToken)
+    public Task<SupplierAddressEntity?> GetById(long key, CancellationToken cancellationToken)
     {
         return this.context.SuppliersAddresses
             .Include(x => x.Address)
@@ -30,14 +30,14 @@ public class SupplierAddressRepository : ISupplierAddressRepository
             .FirstOrDefaultAsync(x => x.Id == key, cancellationToken: cancellationToken);
     }
 
-    public Task Delete(Guid key, CancellationToken cancellationToken)
+    public Task Delete(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<Result<Guid>> Save(SaveSupplierAddressModel model, CancellationToken cancellationToken)
+    public async Task<Result<long>> Save(SaveSupplierAddressModel model, CancellationToken cancellationToken)
     {
-        Guid id;
+        long id;
 
         if (model.Id != null)
         {

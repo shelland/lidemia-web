@@ -6,5 +6,5 @@ namespace Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 
 public interface ICityService
 {
-    Task<IEnumerable<CityModel>> GetCities(Guid? regionId, CancellationToken cancellationToken);
+    Task<IEnumerable<CityModel>> GetCities(long? regionId, CancellationToken cancellationToken);
 }

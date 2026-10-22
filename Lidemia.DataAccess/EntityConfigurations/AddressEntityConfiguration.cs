@@ -20,6 +20,6 @@ public class AddressEntityConfiguration : IEntityTypeConfiguration<AddressEntity
         builder.Property(x => x.HouseNumber).HasMaxLength(50);
         builder.Property(x => x.FlatNumber).HasMaxLength(50);
 
-        builder.AddBaseColumns<AddressEntity, Guid>();
+        builder.AddBaseColumns<AddressEntity, long>();
     }
 }

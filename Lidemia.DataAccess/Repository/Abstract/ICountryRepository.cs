@@ -5,7 +5,7 @@ using Lidemia.DataAccess.Repository.Abstract.Base;
 
 namespace Lidemia.DataAccess.Repository.Abstract;
 
-public interface ICountryRepository : IRepository<CountryEntity, Guid>
+public interface ICountryRepository : IRepository<CountryEntity, long>
 {
     Task<IEnumerable<CountryEntity>> GetCountries(CancellationToken cancellationToken);
 }

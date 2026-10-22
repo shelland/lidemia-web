@@ -7,10 +7,10 @@ namespace Lidemia.Core.Models.Service;
 public record SaveSupplierAddressModel
 (
     long SupplierId,
-    Guid? Id,
-    Guid CountryId,
-    Guid RegionId,
-    Guid CityId,
+    long? Id,
+    long CountryId,
+    long RegionId,
+    long CityId,
     string StreetName,
     string HouseNumber,
     string FlatNumber,

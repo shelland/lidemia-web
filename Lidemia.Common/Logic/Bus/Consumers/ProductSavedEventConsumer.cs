@@ -42,7 +42,7 @@ public class ProductSavedEventConsumer : IConsumer<ProductSavedBusEventModel>
             Price: product.Price,
             SupplierId: product.SupplierId,
             Description: product.Description!,
-            CategoryId: product.CategoryId!.Value,
+            CategoryId: product.CategoryId ?? -1,
             Tags: product.Tags,
             IsVisible: product.IsVisible
         ), cancellationToken);

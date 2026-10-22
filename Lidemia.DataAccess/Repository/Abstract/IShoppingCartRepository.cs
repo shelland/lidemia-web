@@ -5,7 +5,7 @@ using Lidemia.DataAccess.Repository.Abstract.Base;
 
 namespace Lidemia.DataAccess.Repository.Abstract;
 
-public interface IShoppingCartRepository : IRepository<ShoppingCartEntity, Guid>
+public interface IShoppingCartRepository : IRepository<ShoppingCartEntity, long>
 {
     Task<ShoppingCartEntity?> GetCustomerShoppingCart(long customerId, CancellationToken cancellationToken);
 

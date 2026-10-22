@@ -2,7 +2,7 @@
 
 using Lidemia.Core.Enums;
 
-namespace Lidemia.Web.BusinessLogic.Services.Abstract;
+namespace Lidemia.Common.BusinessLogic.Services.App.Abstract;
 
 public interface IObjectStoragePathResolver
 {

@@ -40,7 +40,7 @@ public static class EntityTypeBuilderExtensions
             }
             else
             {
-                builder.Property(e => e.Id).AsServiceId();
+                builder.Property(e => e.Id).UseIdentityAlwaysColumn();
             }
         }
 

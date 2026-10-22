@@ -21,12 +21,12 @@ public class ProductFeedbackRepository : IProductFeedbackRepository
         this.context = context;
     }
 
-    public Task<ProductFeedbackEntity?> GetById(Guid key, CancellationToken cancellationToken)
+    public Task<ProductFeedbackEntity?> GetById(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task Delete(Guid key, CancellationToken cancellationToken)
+    public Task Delete(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
