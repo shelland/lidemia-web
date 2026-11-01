@@ -38,9 +38,13 @@ public class ProductPhotosUploadedEventConsumer : IConsumer<ProductPhotosUploade
             await using var content =
                 await this.objectStorageService.GetFileContent(ObjectStoragePayloadType.ProductPhoto, photo.ObjectName, context.CancellationToken);
             var path = this.photoPathProvider.GetStoragePath();
-            
+
             var fileInfo = new FileInfo(path.FullPath);
-            fileInfo.Directory.NotNull().Create();
+
+            if (!fileInfo.Directory.NotNull().Exists)
+            {
+                fileInfo.Directory.NotNull().Create();
+            }
 
             await using var fileStream = new FileStream(path.FullPath, FileMode.Create);
             content.Position = 0;

@@ -21,5 +21,7 @@ public record SaveProductRequestDto
     decimal? MinQuantity,
     decimal? MaxQuantity,
     string[]? Tags,
-    string? Sku
+    string? Sku,
+    long? PrimaryPhotoId,
+    long[]? RemovedPhotoIds
 );

@@ -25,7 +25,7 @@ public partial class SlugHelper
     [GeneratedRegex(@"[\s\-]+")]
     private static partial Regex ConvertHyphens();
 
-    public static string CreateTransliteratedSlug(string phrase)
+    public static string CreateTransliteratedSlug(string? phrase)
     {
         if (string.IsNullOrWhiteSpace(phrase))
         {

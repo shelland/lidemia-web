@@ -1,12 +1,10 @@
 ﻿// Created on 12/10/2026 20:29 by Laserson
 
 using CsvHelper;
-using CsvHelper.Configuration.Attributes;
 using Lidemia.DataAccess.Context;
 using Lidemia.DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 
 namespace Lidemia.Controllers;
 
@@ -19,7 +17,8 @@ public class ImportController : Controller
         // var file = Request.Form.Files.FirstOrDefault()!;
         await using var fileStream = file.OpenReadStream();
         using var streamReader = new StreamReader(fileStream);
-        using var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
+
+        await using var csvReader = CsvReader.Create(streamReader); // new CsvReader(streamReader, CultureInfo.InvariantCulture);
 
         var records = csvReader.GetRecords<Town>().ToList();
 
@@ -110,13 +109,13 @@ public class ImportController : Controller
 
 public class Town
 {
-    [Name("city")] public string City { get; set; }
+    [CsvColumn("city")] public string City { get; set; }
 
-    [Name("region_name")] public string RegionName { get; set; }
+    [CsvColumn("region_name")] public string RegionName { get; set; }
 
-    [Name("lat")] public double Latitude { get; set; }
+    [CsvColumn("lat")] public double Latitude { get; set; }
 
-    [Name("lon")] public double Longitude { get; set; }
+    [CsvColumn("lon")] public double Longitude { get; set; }
 
-    [Name("federal_district")] public string District { get; set; }
+    [CsvColumn("federal_district")] public string District { get; set; }
 }

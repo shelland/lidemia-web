@@ -2,7 +2,7 @@
 
 namespace Lidemia.Core.Enums;
 
-public enum ProductFeedbackState
+public enum ProductReviewState
 {
     Pending,
     Approved,

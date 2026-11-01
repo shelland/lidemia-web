@@ -36,7 +36,7 @@ public class ShoppingCartRepository : IShoppingCartRepository
         return this.context.ShoppingCarts.AsActive().FirstOrDefaultAsync(x => x.CustomerId == customerId, cancellationToken);
     }
 
-    public async Task AddProduct(long customerId, long productId, double qty, CancellationToken cancellationToken)
+    public async Task AddProduct(long customerId, long productId, decimal qty, CancellationToken cancellationToken)
     {
         var cart = await this.context.ShoppingCarts.AsActive().Include(shoppingCartEntity => shoppingCartEntity.Items)
             .FirstOrDefaultAsync(x => x.CustomerId == customerId, cancellationToken);
@@ -71,5 +71,11 @@ public class ShoppingCartRepository : IShoppingCartRepository
                 .Where(x => x.CustomerId == customerId)
                 .ExecuteUpdateAsync(x => x.SetProperty(e => e.Items, newDbItems), cancellationToken: cancellationToken);
         }
+    }
+
+    public async Task<Dictionary<long, decimal>?> GetListItems(long customerId, CancellationToken cancellationToken)
+    {
+        var items = await this.context.ShoppingCarts.AsActive().FirstOrDefaultAsync(x => x.CustomerId == customerId, cancellationToken: cancellationToken);
+        return items?.Items.ToDictionary(x => x.ProductId, x => x.Qty);
     }
 }

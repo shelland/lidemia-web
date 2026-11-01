@@ -82,6 +82,7 @@ public class Program
         builder.Services.AddBundles();
 
         builder.Services.AddHttpContextAccessor();
+        builder.Services.AddRateLimiting();
 
         var app = builder.Build();
 
@@ -94,7 +95,7 @@ public class Program
         app.MapDefaultEndpoints();
         app.UseStaticFiles();
         app.UseWhen(x => !x.Request.Path.StartsWithSegments("/metrics"), x => x.UseMiddleware<CorrelationIdMiddleware>());
-
+        app.UseRateLimiter();
         app.MapControllers();
         app.UseRouting();
         app.UseAuthentication();
@@ -111,7 +112,7 @@ public class Program
         app.MapHealthChecks("/healthz").DisableHttpMetrics();
 
         app.AddBundles();
-
+        
         await app.RunMigrations();
         await app.RunAsync();
     }

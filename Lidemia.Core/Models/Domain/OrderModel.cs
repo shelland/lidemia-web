@@ -5,12 +5,8 @@ using Lidemia.Core.Models.Base;
 
 namespace Lidemia.Core.Models.Domain;
 
-public class OrderModel : IHasId<long>
+public class OrderModel : AbstractEntity<long>, IHasId<long>
 {
-    public long Id { get; set; }
-
-    public DateTimeOffset Date { get; set; }
-
     public CustomerModel Customer { get; set; } = null!;
 
     public string Number { get; set; } = string.Empty;

@@ -36,7 +36,7 @@ public partial class LidemiaDbContext : DbContext
 
     public DbSet<ShoppingCartEntity> ShoppingCarts => Set<ShoppingCartEntity>();
 
-    public DbSet<ProductFeedbackEntity> ProductFeedbacks => Set<ProductFeedbackEntity>();
+    public DbSet<ProductReviewEntity> ProductReviews => Set<ProductReviewEntity>();
 
     public DbSet<AuthTokenEntity> AuthTokens => Set<AuthTokenEntity>();
 

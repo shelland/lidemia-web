@@ -3,7 +3,8 @@
 using FluentResults;
 using Lidemia.Common.BusinessLogic.Services.App.Abstract;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
-using Lidemia.Common.Mapping;
+using Lidemia.Common.Logic;
+using Lidemia.Common.Mapper;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Bus;
 using Lidemia.Core.Models.Domain;
@@ -25,6 +26,7 @@ public class ProductService : BaseDataService, IProductService
     private readonly IUtc utc;
     private readonly IPublishEndpoint publishEndpoint;
     private readonly ISanitizerService sanitizerService;
+    private readonly IProductMapper productMapper;
     private readonly ILogger<ProductService> logger;
 
     public ProductService(
@@ -32,19 +34,21 @@ public class ProductService : BaseDataService, IProductService
         IUtc utc,
         IPublishEndpoint publishEndpoint,
         ISanitizerService sanitizerService,
+        IProductMapper productMapper,
         ILogger<ProductService> logger)
     {
         this.productRepository = productRepository;
         this.utc = utc;
         this.publishEndpoint = publishEndpoint;
         this.sanitizerService = sanitizerService;
+        this.productMapper = productMapper;
         this.logger = logger;
     }
 
     public async Task<ProductModel?> GetById(long id, CancellationToken cancellationToken)
     {
         var product = await this.productRepository.GetById(id, cancellationToken);
-        return product?.ToModel();
+        return product != null ? this.productMapper.Map(product) : null;
     }
 
     public async Task<BasePagedListModel<ProductModel>> GetPublicList(ProductsListFilterModel filter, CancellationToken cancellationToken)
@@ -55,7 +59,7 @@ public class ProductService : BaseDataService, IProductService
         {
             CurrentPage = filter.Page,
             TotalCount = products.TotalItemCount,
-            Items = products.Select(x => x.ToModel()),
+            Items = products.Select(this.productMapper.Map),
             TotalPages = products.PageCount
         };
     }
@@ -67,7 +71,7 @@ public class ProductService : BaseDataService, IProductService
         return new BasePagedListModel<ProductModel>
         {
             CurrentPage = pagingInfo.Page,
-            Items = products.Select(x => x.ToModel()),
+            Items = products.Select(this.productMapper.Map),
             TotalCount = products.TotalItemCount,
             TotalPages = products.TotalItemCount
         };
@@ -83,19 +87,22 @@ public class ProductService : BaseDataService, IProductService
         var model = new SaveProductModel(
             Id: request.Id,
             ParentId: request.ParentId,
-            Title: request.Title,
+            Title: this.sanitizerService.Sanitize(request.Title),
             Description: this.sanitizerService.Sanitize(request.Description),
-            ShortDescription: request.ShortDescription,
+            ShortDescription: this.sanitizerService.Sanitize(request.ShortDescription),
             AvailabilityType: request.AvailabilityType,
             Tags: request.Tags,
             PriceUnit: request.PriceUnit,
             Price: request.Price,
             DiscountPrice: request.DiscountPrice,
+            HasCurrentDiscount: request.HasCurrentDiscount,
             DiscountStartDate: request.DiscountStartDate,
             DiscountEndDate: request.DiscountEndDate,
             MinQuantity: request.MinQuantity,
             MaxQuantity: request.MaxQuantity,
-            Sku: request.Sku
+            Sku: request.Sku,
+            PrimaryPhotoId: request.PrimaryPhotoId,
+            Slug: SlugHelper.CreateTransliteratedSlug(request.Title)
         );
 
         var result = await this.productRepository.Save(supplierId, model, cancellationToken);
@@ -121,7 +128,12 @@ public class ProductService : BaseDataService, IProductService
     public async Task<IEnumerable<ProductModel>> GetProducts(IEnumerable<long> ids, CancellationToken cancellationToken)
     {
         var products = await this.productRepository.GetProducts(ids, cancellationToken);
-        return products.Select(x => x.ToModel());
+        return products.Select(this.productMapper.Map);
+    }
+
+    public Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, int count = 3, CancellationToken cancellationToken = default)
+    {
+        return this.productRepository.GetRelatedProducts(categoryId, count, cancellationToken);
     }
 
     private async Task EnsureOwnership(long productId, long supplierId, CancellationToken cancellationToken)

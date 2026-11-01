@@ -2,7 +2,7 @@
 
 using FluentResults;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
-using Lidemia.Common.Mapping;
+using Lidemia.Common.Mapper;
 using Lidemia.Core.Enums;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Domain;
@@ -20,10 +20,13 @@ public class CustomerService : ICustomerService
     private readonly ICustomerRepository customerRepository;
     private readonly IUserService userService;
 
-    public CustomerService(ICustomerRepository customerRepository, IUserService userService)
+    private readonly ICustomerMapper customerMapper;
+
+    public CustomerService(ICustomerRepository customerRepository, IUserService userService, ICustomerMapper customerMapper)
     {
         this.customerRepository = customerRepository;
         this.userService = userService;
+        this.customerMapper = customerMapper;
     }
 
     public Task<Result<long>> Create(CreateCustomerModel model, CancellationToken cancellationToken)
@@ -41,6 +44,6 @@ public class CustomerService : ICustomerService
         }
 
         var customer = (await this.customerRepository.FindCustomerByUserId(user.Id, cancellationToken)).NotNull();
-        return new SignInResult<CustomerModel?>(LoginResultStatus.Success, customer.ToModel());
+        return new SignInResult<CustomerModel?>(LoginResultStatus.Success, this.customerMapper.Map(customer));
     }
 }

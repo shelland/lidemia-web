@@ -1,4 +1,5 @@
 
+using Lidemia.Common;
 using Lidemia.Common.BusinessLogic;
 using Lidemia.Common.Logic.Logging;
 using Lidemia.Core.Models.Configuration;
@@ -22,6 +23,7 @@ public class Program
         builder.Services.RegisterBus(builder.Configuration);
         builder.Services.AddCommonBusinessLogicModule(builder.Configuration);
         builder.Services.AddDataAccessModule(builder.Configuration);
+        builder.Services.AddCommonModule();
 
         builder.Services.RegisterStorageModule();
 

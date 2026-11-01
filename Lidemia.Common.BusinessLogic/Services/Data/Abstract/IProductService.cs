@@ -22,4 +22,6 @@ public interface IProductService
     Task SetProductVisibility(long supplierId, SetProductVisibilityRequestDto request, CancellationToken cancellationToken);
 
     Task<IEnumerable<ProductModel>> GetProducts(IEnumerable<long> ids, CancellationToken cancellationToken);
+
+    Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, int count = 3, CancellationToken cancellationToken = default);
 }

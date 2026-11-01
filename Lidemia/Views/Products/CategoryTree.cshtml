@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Lidemia.Core.Models.Domain.ProductCategoryModel>
+
+<ul class="list-unstyled ps-0">
+
+    @foreach (var category in Model)
+    {
+        <li class="mb-1">
+
+            <a href="@Url.Action("Index", "Products", new { categoryId = category.Id })" class="align-items-center rounded link-body" data-bs-toggle="collapse" data-bs-target="#cat-@(category.Id)-collapse" aria-expanded="true">
+                @category.Name
+            </a>
+
+            @if (category.Children.Any())
+            {
+                <div class="collapse show mt-1" id="cat-@(category.Id)-collapse" style="">
+                    @await Html.PartialAsync("CategoryTree", category.Children)
+                </div>
+            }
+
+        </li>
+    }
+
+</ul>

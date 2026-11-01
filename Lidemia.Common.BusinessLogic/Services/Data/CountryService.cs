@@ -1,7 +1,7 @@
 ﻿// Created on 13/10/2026 19:40 by Laserson
 
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
-using Lidemia.Common.Mapping;
+using Lidemia.Common.Mapper;
 using Lidemia.Core.Models.Domain;
 using Lidemia.DataAccess.Repository.Abstract;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,15 +13,17 @@ namespace Lidemia.Common.BusinessLogic.Services.Data;
 public class CountryService : ICountryService
 {
     private readonly ICountryRepository countryRepository;
+    private readonly ICountryMapper countryMapper;
 
-    public CountryService(ICountryRepository countryRepository)
+    public CountryService(ICountryRepository countryRepository, ICountryMapper countryMapper)
     {
         this.countryRepository = countryRepository;
+        this.countryMapper = countryMapper;
     }
 
     public async Task<IEnumerable<CountryModel>> GetCountries(CancellationToken cancellationToken)
     {
         var countries = await this.countryRepository.GetCountries(cancellationToken);
-        return countries.Select(x => x.ToModel());
+        return countries.Select(this.countryMapper.Map);
     }
 }

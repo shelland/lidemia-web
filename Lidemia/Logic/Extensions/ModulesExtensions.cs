@@ -14,13 +14,15 @@ public static class ModulesExtensions
 {
     public static void RegisterModules(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDataAccessModule(configuration);
-        services.AddCommonBusinessLogicModule(configuration);
-        services.AddWebBusinessLogicModule();
-        services.AddSearchModule(configuration);
-        services.AddEmailNotificationsModule(configuration);
-        services.AddCommonModule();
-        services.AddExternalServicesModule();
-        services.AddWebModule();
+        services
+            .AddDataAccessModule(configuration)
+            .AddCommonBusinessLogicModule(configuration)
+            .AddCommonBusinessLogicModule(configuration)
+            .AddWebBusinessLogicModule()
+            .AddSearchModule(configuration)
+            .AddEmailNotificationsModule(configuration)
+            .AddCommonModule()
+            .AddExternalServicesModule()
+            .AddWebModule();
     }
 }

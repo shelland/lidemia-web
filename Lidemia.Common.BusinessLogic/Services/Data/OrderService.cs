@@ -3,7 +3,7 @@
 using FluentResults;
 using Lidemia.Common.BusinessLogic.Services.App.Abstract;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
-using Lidemia.Common.Mapping;
+using Lidemia.Common.Mapper;
 using Lidemia.Common.Metrics;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Domain;
@@ -23,15 +23,18 @@ public class OrderService : IOrderService
     private readonly IOrderRepository orderRepository;
     private readonly IOrderNumberGenerator orderNumberGenerator;
     private readonly OrderMetrics metrics;
+    private readonly IOrderMapper orderMapper;
     private readonly ILogger<OrderService> logger;
 
     private static readonly ActivitySource Source = new("Lidemia.Orders");
 
-    public OrderService(IOrderRepository orderRepository, IOrderNumberGenerator orderNumberGenerator, OrderMetrics metrics, ILogger<OrderService> logger)
+    public OrderService(IOrderRepository orderRepository, IOrderNumberGenerator orderNumberGenerator, OrderMetrics metrics, IOrderMapper orderMapper,
+        ILogger<OrderService> logger)
     {
         this.orderRepository = orderRepository;
         this.orderNumberGenerator = orderNumberGenerator;
         this.metrics = metrics;
+        this.orderMapper = orderMapper;
         this.logger = logger;
     }
 
@@ -40,7 +43,7 @@ public class OrderService : IOrderService
         using var activity = Source.StartActivity().NotNull();
         var number = this.orderNumberGenerator.Generate();
         activity.SetTag("order.id", number);
-        
+
         var result = await this.orderRepository.Create(number, model, cancellationToken);
 
         this.metrics.OnNewOrder();
@@ -58,9 +61,15 @@ public class OrderService : IOrderService
         return new BasePagedListModel<OrderModel>
         {
             CurrentPage = pagingInfo.Page,
-            Items = orders.Select(x => x.ToModel()),
+            Items = orders.Select(this.orderMapper.Map),
             TotalCount = orders.TotalItemCount,
             TotalPages = orders.PageCount
         };
+    }
+
+    public async Task<OrderModel?> GetUserProductLastOrder(long customerId, long productId, CancellationToken cancellationToken)
+    {
+        var order = await this.orderRepository.GetUserProductLastOrder(customerId, productId, cancellationToken);
+        return order != null ? this.orderMapper.Map(order) : null;
     }
 }

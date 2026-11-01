@@ -2,7 +2,7 @@
 
 using FluentResults;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
-using Lidemia.Common.Mapping;
+using Lidemia.Common.Mapper;
 using Lidemia.Core.Enums;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Domain;
@@ -19,11 +19,13 @@ public class SupplierService : ISupplierService
 {
     private readonly ISupplierRepository supplierRepository;
     private readonly IUserService userService;
+    private readonly ISupplierMapper supplierMapper;
 
-    public SupplierService(ISupplierRepository supplierRepository, IUserService userService)
+    public SupplierService(ISupplierRepository supplierRepository, IUserService userService, ISupplierMapper supplierMapper)
     {
         this.supplierRepository = supplierRepository;
         this.userService = userService;
+        this.supplierMapper = supplierMapper;
     }
 
     public async Task<Result<long>> Create(CreateSupplierModel request, CancellationToken cancellationToken)
@@ -41,12 +43,12 @@ public class SupplierService : ISupplierService
         }
 
         var supplier = (await this.supplierRepository.FindSupplierByUserId(user.Id, cancellationToken)).NotNull();
-        return new SignInResult<SupplierModel?>(Status: LoginResultStatus.Success, Entity: supplier.ToModel());
+        return new SignInResult<SupplierModel?>(Status: LoginResultStatus.Success, Entity: this.supplierMapper.Map(supplier));
     }
 
     public async Task<SupplierModel?> FindById(long id, CancellationToken cancellationToken)
     {
         var entity = await this.supplierRepository.GetById(id, cancellationToken);
-        return entity?.ToModel();
+        return entity != null ? this.supplierMapper.Map(entity) : null;
     }
 }

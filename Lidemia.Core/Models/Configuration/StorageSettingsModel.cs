@@ -5,4 +5,6 @@ namespace Lidemia.Core.Models.Configuration;
 public class StorageSettingsModel
 {
     public string StorageDomain { get; set; } = string.Empty;
+
+    public string ProductPlaceholderImageUrl { get; set; } = string.Empty;
 }

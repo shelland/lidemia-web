@@ -2,13 +2,12 @@
 
 using Lidemia.Core.Models.Domain;
 
-namespace Lidemia.ViewModels
-{
-    public record CreateSupplierAddressViewModel
-    (
-        SupplierAddressModel? Address,
-        IEnumerable<CountryModel> Countries,
-        IEnumerable<RegionModel> Regions,
-        IEnumerable<CityModel> Cities
-    );
-}
+namespace Lidemia.ViewModels;
+
+public record CreateSupplierAddressViewModel
+(
+    SupplierAddressModel? Address,
+    IEnumerable<CountryModel> Countries,
+    IEnumerable<RegionModel> Regions,
+    IEnumerable<CityModel> Cities
+);

@@ -1,14 +1,25 @@
 ﻿@model Lidemia.ViewModels.CreateProductViewModel
 
+@using System.Globalization
+@using Lidemia.Core.Enums
 @using Lidemia.Core.Extensions
 @using Lidemia.Logic.Extensions
 @using Lidemia.Resources.App
+@using Microsoft.AspNetCore.Mvc.Rendering
 @using Microsoft.Extensions.Localization
 
 @inject IStringLocalizer<AppResources> localizer
 
 @{
     ViewData.SetBigTitle(localizer["CreateProductTitle"]);
+
+    var priceUnitItems = EnumExtensions.GetValues<ProductPriceUnit>(Model.Product?.PriceUnit)
+        .Prepend(new SelectListItem(string.Empty, string.Empty));
+
+    var availabilityTypeItems = EnumExtensions.GetValues<ProductAvailabilityType>(Model.Product?.AvailabilityType)
+        .Prepend(new SelectListItem(string.Empty, string.Empty));
+
+    long? primaryPhotoId = Model.Product?.PrimaryPhoto?.Id;
 }
 
 <form id="mainForm" autocomplete="off">
@@ -16,6 +27,11 @@
     <div class="mb-3">
         <label class="form-label" for="title">@localizer["CreateProductTitle"]</label>
         <input type="text" class="form-control" value="@Model.Product?.Title" id="title" name="title"/>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="shortDescription">@localizer["CreateProductShortDescription"]</label>
+        <input type="text" class="form-control" value="@Model.Product?.ShortDescription" id="shortDescription" name="shortDescription"/>
     </div>
 
     <div class="mb-3">
@@ -28,6 +44,82 @@
         <textarea id="descriptionEditor" name="descriptionEditor">@Model.Product?.Description</textarea>
     </div>
 
+    <div class="row g-3 mb-3">
+
+        <div class="col-12 col-md-8">
+            <label class="form-label" for="price">@localizer["CreateProductPrice"]</label>
+            <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" value="@Model.Product?.Price.ToString(CultureInfo.InvariantCulture)"/>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="priceUnit">@localizer["CreateProductPriceUnit"]</label>
+            @Html.DropDownList("priceUnit", priceUnitItems, new { @class = "form-control", id = "priceUnit" })
+        </div>
+
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="availabilityType">@localizer["CreateProductAvailabilityType"]</label>
+        @Html.DropDownList("availabilityType", availabilityTypeItems, new { @class = "form-control", id = "availabilityType" })
+    </div>
+
+    <div class="row g-3 mb-3">
+
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="minQuantity">@localizer["CreateProductMinQuantity"]</label>
+            <input type="number" class="form-control" id="minQuantity" name="minQuantity" step="0.01" min="0" value="@Model.Product?.MinQuantity?.ToString(CultureInfo.InvariantCulture)"/>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="maxQuantity">@localizer["CreateProductMaxQuantity"]</label>
+            <input type="number" class="form-control" id="maxQuantity" name="maxQuantity" step="0.01" min="0" value="@Model.Product?.MaxQuantity?.ToString(CultureInfo.InvariantCulture)"/>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="sku">@localizer["CreateProductSku"]</label>
+            <input type="text" class="form-control" id="sku" name="sku" maxlength="50" value="@Model.Product?.Sku"/>
+        </div>
+
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="parentId">@localizer["CreateProductParentId"]</label>
+        <input type="number" class="form-control" id="parentId" name="parentId" min="1" step="1" value="@Model.Product?.ParentId"/>
+        <div class="form-text">@localizer["CreateProductParentIdHint"]</div>
+    </div>
+
+    <div class="mb-3">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="hasDiscount" name="hasDiscount"/>
+            <label class="form-check-label" for="hasDiscount">@localizer["CreateProductHasDiscount"]</label>
+        </div>
+
+        <div class="form-text">@localizer["CreateProductHasDiscountHint"]</div>
+    </div>
+
+    <div class="card card-body bg-light mb-3 d-none" id="discountSection">
+
+        <div class="row g-3">
+
+            <div class="col-12 col-md-4">
+                <label class="form-label" for="discountPrice">@localizer["CreateProductDiscountPrice"]</label>
+                <input type="number" class="form-control" id="discountPrice" name="discountPrice" step="0.01" min="0"/>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <label class="form-label" for="discountStartDate">@localizer["CreateProductDiscountStartDate"]</label>
+                <input type="datetime-local" class="form-control" id="discountStartDate" name="discountStartDate"/>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <label class="form-label" for="discountEndDate">@localizer["CreateProductDiscountEndDate"]</label>
+                <input type="datetime-local" class="form-control" id="discountEndDate" name="discountEndDate"/>
+            </div>
+
+        </div>
+
+    </div>
+
     <div class="mb-3">
         <label class="form-label" for="images">@localizer["CreateProductImages"]</label>
 
@@ -35,7 +127,8 @@
 
         <div class="form-text">@localizer["CreateProductImagesHint"]</div>
 
-        <div class="row g-2 mt-1" id="imagesPreview"></div>
+        <div class="row g-2 mt-1" id="imagesPreview">
+        </div>
     </div>
 
     <div class="mb-3">
@@ -73,6 +166,7 @@
     <script>
 
         var product = @(Model.Product != null ? Html.Raw(Model.Product.Serialize()) : "null");
+        var photos = @(Html.Raw(Model.Photos.Serialize()));
                 
         document.addEventListener("DOMContentLoaded", function() {
 
@@ -81,11 +175,15 @@
                     saveProductUrl: '@Url.Action("Save", "SupplierProducts")'
                 },
                 values: {
-                    product: product
+                    product: product,
+                    photos: photos,
+                    primaryPhotoId: @(primaryPhotoId is > 0 ? primaryPhotoId.ToString() : "null")
                 },
                 labels: {
                     removeImage: '@localizer["CreateProductImageRemove"]',
-                    viewImage: '@localizer["CreateProductImageView"]'
+                    viewImage: '@localizer["CreateProductImageView"]',
+                    setPrimaryImage: '@localizer["CreateProductImageSetPrimary"]',
+                    primaryImage: '@localizer["CreateProductImagePrimary"]'
                 }
             });
 

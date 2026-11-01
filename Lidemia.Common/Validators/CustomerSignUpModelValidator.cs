@@ -5,7 +5,7 @@ using Lidemia.Core.Models.Dto;
 
 namespace Lidemia.Common.Validators;
 
-public class CustomerSignUpModelValidator : AbstractValidator<CustomerSignInRequestDto>
+public class CustomerSignUpModelValidator : AbstractValidator<CustomerSignUpRequestDto>
 {
     public CustomerSignUpModelValidator()
     {

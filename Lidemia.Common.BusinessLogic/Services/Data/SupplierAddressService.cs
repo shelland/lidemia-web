@@ -2,7 +2,7 @@
 
 using FluentResults;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
-using Lidemia.Common.Mapping;
+using Lidemia.Common.Mapper;
 using Lidemia.Core.Models.Domain;
 using Lidemia.Core.Models.Misc;
 using Lidemia.Core.Models.Service;
@@ -16,10 +16,12 @@ namespace Lidemia.Common.BusinessLogic.Services.Data;
 public class SupplierAddressService : BaseDataService, ISupplierAddressService
 {
     private readonly ISupplierAddressRepository supplierAddressRepository;
+    private readonly ISupplierAddressMapper supplierAddressMapper;
 
-    public SupplierAddressService(ISupplierAddressRepository supplierAddressRepository)
+    public SupplierAddressService(ISupplierAddressRepository supplierAddressRepository, ISupplierAddressMapper supplierAddressMapper)
     {
         this.supplierAddressRepository = supplierAddressRepository;
+        this.supplierAddressMapper = supplierAddressMapper;
     }
 
     public Task<BasePagedListModel<SupplierAddressModel>> GetAddresses()
@@ -30,7 +32,7 @@ public class SupplierAddressService : BaseDataService, ISupplierAddressService
     public async Task<SupplierAddressModel?> GetById(long id, CancellationToken cancellationToken)
     {
         var address = await this.supplierAddressRepository.GetById(id, cancellationToken);
-        return address?.ToModel();
+        return address != null ? this.supplierAddressMapper.Map(address) : null;
     }
 
     public async Task<Result<long>> Save(long supplierId, SaveSupplierAddressRequestDto request, CancellationToken cancellationToken)

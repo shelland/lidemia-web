@@ -7,4 +7,7 @@ namespace Lidemia.ViewModels;
 
 public class ProductsListViewModel : BaseListViewModel<ProductModel, ProductsListFilterModel>
 {
+    public IDictionary<long, decimal>? CartItems { get; set; }
+
+    public IEnumerable<ProductCategoryModel> Categories { get; set; } = null!;
 }

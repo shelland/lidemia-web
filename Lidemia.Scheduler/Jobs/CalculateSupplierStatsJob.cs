@@ -4,10 +4,10 @@ using Microsoft.Extensions.Hosting;
 
 namespace Lidemia.Scheduler.Jobs;
 
-public class CalculateSupplierStatsJob:BackgroundService
+public class CalculateSupplierStatsJob : BackgroundService
 {
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 }

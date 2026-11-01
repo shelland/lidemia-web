@@ -77,4 +77,9 @@ public class Constants
 
         public const string SupplierId = "supplierId";
     }
+
+    public static class RateLimitingPolicies
+    {
+        public const string ProductReviewsPolicy = "ProductReviews";
+    }
 }

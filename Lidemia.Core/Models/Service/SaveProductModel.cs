@@ -16,9 +16,12 @@ public record SaveProductModel
     string[]? Tags,
     decimal? Price,
     decimal? DiscountPrice,
+    bool? HasCurrentDiscount,
     DateTimeOffset? DiscountStartDate,
     DateTimeOffset? DiscountEndDate,
     decimal? MinQuantity,
     decimal? MaxQuantity,
-    string? Sku
+    string? Sku,
+    long? PrimaryPhotoId,
+    string? Slug
 );

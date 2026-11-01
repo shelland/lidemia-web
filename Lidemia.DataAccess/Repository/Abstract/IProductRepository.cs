@@ -25,4 +25,6 @@ public interface IProductRepository : IRepository<ProductEntity, long>
     Task SetProductVisibility(long productId, bool isVisible, CancellationToken cancellationToken);
 
     Task<IEnumerable<ProductEntity>> GetProducts(IEnumerable<long> ids, CancellationToken cancellationToken);
+
+    Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, int count = 3, CancellationToken cancellationToken = default);
 }

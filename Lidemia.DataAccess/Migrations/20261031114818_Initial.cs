@@ -479,16 +479,21 @@ namespace Lidemia.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "product_feedbacks",
+                name: "product_reviews",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     product_id = table.Column<long>(type: "bigint", nullable: false),
                     customer_id = table.Column<long>(type: "bigint", nullable: false),
-                    comment = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: true),
+                    review = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: false),
+                    positive_review = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: true),
+                    negative_review = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: true),
                     rate = table.Column<byte>(type: "smallint", nullable: false),
                     state = table.Column<int>(type: "integer", nullable: false),
+                    is_anonymous = table.Column<bool>(type: "boolean", nullable: false),
+                    supplier_feedback = table.Column<string>(type: "text", nullable: true),
+                    supplier_feedback_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
                     is_active = table.Column<bool>(type: "boolean", nullable: false),
                     create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
@@ -496,15 +501,15 @@ namespace Lidemia.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_product_feedbacks", x => x.id);
+                    table.PrimaryKey("pk_product_reviews", x => x.id);
                     table.ForeignKey(
-                        name: "fk_product_feedbacks_customers_customer_id",
+                        name: "fk_product_reviews_customers_customer_id",
                         column: x => x.customer_id,
                         principalTable: "customers",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_product_feedbacks_products_product_id",
+                        name: "fk_product_reviews_products_product_id",
                         column: x => x.product_id,
                         principalTable: "products",
                         principalColumn: "id",
@@ -857,24 +862,29 @@ namespace Lidemia.DataAccess.Migrations
                 column: "parent_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_product_feedbacks_customer_id_is_active",
-                table: "product_feedbacks",
+                name: "ix_product_reviews_customer_id_is_active",
+                table: "product_reviews",
                 columns: new[] { "customer_id", "is_active" });
 
             migrationBuilder.CreateIndex(
-                name: "ix_product_feedbacks_is_active",
-                table: "product_feedbacks",
+                name: "ix_product_reviews_is_active",
+                table: "product_reviews",
                 column: "is_active");
 
             migrationBuilder.CreateIndex(
-                name: "ix_product_feedbacks_product_id_is_active",
-                table: "product_feedbacks",
+                name: "ix_product_reviews_product_id_customer_id_is_active",
+                table: "product_reviews",
+                columns: new[] { "product_id", "customer_id", "is_active" });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_product_reviews_product_id_is_active",
+                table: "product_reviews",
                 columns: new[] { "product_id", "is_active" });
 
             migrationBuilder.CreateIndex(
-                name: "ix_product_feedbacks_product_id_state_is_active",
-                table: "product_feedbacks",
-                columns: new[] { "product_id", "state", "is_active" });
+                name: "ix_product_reviews_product_id_state_is_active_create_date",
+                table: "product_reviews",
+                columns: new[] { "product_id", "state", "is_active", "create_date" });
 
             migrationBuilder.CreateIndex(
                 name: "ix_products_category_id",
@@ -1036,7 +1046,7 @@ namespace Lidemia.DataAccess.Migrations
                 name: "password_resets");
 
             migrationBuilder.DropTable(
-                name: "product_feedbacks");
+                name: "product_reviews");
 
             migrationBuilder.DropTable(
                 name: "products_photos");

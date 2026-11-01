@@ -2,7 +2,7 @@
 
 using Lidemia.Common.BusinessLogic.Services.App.Abstract;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
-using Lidemia.Common.Mapping;
+using Lidemia.Common.Mapper;
 using Lidemia.Core.Enums;
 using Lidemia.Core.Models.Domain;
 using Lidemia.DataAccess.Repository.Abstract;
@@ -16,11 +16,13 @@ public class UserService : IUserService
 {
     private readonly IUserRepository userRepository;
     private readonly ISecurityService securityService;
+    private readonly IUserMapper userMapper;
 
-    public UserService(IUserRepository userRepository, ISecurityService securityService)
+    public UserService(IUserRepository userRepository, ISecurityService securityService, IUserMapper userMapper)
     {
         this.userRepository = userRepository;
         this.securityService = securityService;
+        this.userMapper = userMapper;
     }
 
     public async Task<UserModel?> FindUser(string email, string password, EntityType role, CancellationToken cancellationToken)
@@ -33,6 +35,6 @@ public class UserService : IUserService
         }
 
         var isValidPassword = this.securityService.ValidatePassword(password, user.Password, user.PasswordSalt);
-        return isValidPassword ? user.ToModel() : null;
+        return isValidPassword ? this.userMapper.Map(user) : null;
     }
 }

@@ -1,12 +1,11 @@
 ﻿// Created on 20/10/2026 19:55 by Laserson
 
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
-using Lidemia.Common.Mapping;
-using Lidemia.Core.Models.Configuration;
+using Lidemia.Common.Mapper;
+using Lidemia.Common.Mapper.Abstract;
 using Lidemia.Core.Models.Domain;
 using Lidemia.DataAccess.Repository.Abstract;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Scrutor;
 
 namespace Lidemia.Common.BusinessLogic.Services.Data;
@@ -15,12 +14,12 @@ namespace Lidemia.Common.BusinessLogic.Services.Data;
 public class ProductPhotoService : IProductPhotoService
 {
     private readonly IProductPhotoRepository productPhotoRepository;
-    private readonly IOptions<StorageSettingsModel> storageSettings;
+    private readonly IPhotoMapper photoMapper;
 
-    public ProductPhotoService(IProductPhotoRepository productPhotoRepository, IOptions<StorageSettingsModel> storageSettings)
+    public ProductPhotoService(IProductPhotoRepository productPhotoRepository, IPhotoMapper photoMapper)
     {
         this.productPhotoRepository = productPhotoRepository;
-        this.storageSettings = storageSettings;
+        this.photoMapper = photoMapper;
     }
 
     public Task AddProductPhoto(long userId, long productId, bool isPrimary, string filePath, CancellationToken cancellationToken)
@@ -28,9 +27,14 @@ public class ProductPhotoService : IProductPhotoService
         return this.productPhotoRepository.AddProductPhoto(userId, productId, isPrimary, filePath, cancellationToken);
     }
 
-    public async Task<IEnumerable<PhotoModel>> GetProductPhotos(long productId, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<PhotoModel>> GetProductPhotos(long productId, CancellationToken cancellationToken)
     {
         var results = await this.productPhotoRepository.GetProductPhotos(productId, cancellationToken);
-        return results.Select(x => x.ToModel(this.storageSettings.Value.StorageDomain));
+        return this.photoMapper.MapList(results);
+    }
+
+    public Task<int> RemoveProductPhotos(long productId, IEnumerable<long> photoIds, CancellationToken cancellationToken)
+    {
+        return this.productPhotoRepository.DeleteProductPhotos(productId, photoIds, cancellationToken);
     }
 }

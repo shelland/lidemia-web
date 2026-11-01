@@ -124,19 +124,94 @@
   <data name="SupplierSignUpEmailTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Files\EmailTemplates\SupplierSignUpEmailTemplate.html;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="EnumsProductAvailabilityTypeInStock" xml:space="preserve">
+    <value>In stock</value>
+  </data>
+  <data name="EnumsProductAvailabilityTypePreOrder" xml:space="preserve">
+    <value>Pre-order</value>
+  </data>
+  <data name="EnumsProductAvailabilityTypeOutOfStock" xml:space="preserve">
+    <value>Out of stock</value>
+  </data>
+  <data name="EnumsProductPriceUnitItem" xml:space="preserve">
+    <value>Per item</value>
+  </data>
+  <data name="EnumsProductPriceUnitItemWeight" xml:space="preserve">
+    <value>Per weight</value>
+  </data>
+  <data name="EnumsProductPriceUnitItemVolume" xml:space="preserve">
+    <value>Per volume</value>
+  </data>
+  <data name="CreateProductShortDescription" xml:space="preserve">
+    <value>Short description</value>
+  </data>
+  <data name="CreateProductPrice" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="CreateProductPriceUnit" xml:space="preserve">
+    <value>Price unit</value>
+  </data>
+  <data name="CreateProductAvailabilityType" xml:space="preserve">
+    <value>Availability</value>
+  </data>
+  <data name="CreateProductMinQuantity" xml:space="preserve">
+    <value>Minimum quantity</value>
+  </data>
+  <data name="CreateProductMaxQuantity" xml:space="preserve">
+    <value>Maximum quantity</value>
+  </data>
+  <data name="CreateProductSku" xml:space="preserve">
+    <value>SKU</value>
+  </data>
+  <data name="CreateProductParentId" xml:space="preserve">
+    <value>Parent product</value>
+  </data>
+  <data name="CreateProductParentIdHint" xml:space="preserve">
+    <value>Identifier of the parent product if this one is a variant. Leave empty for a standalone product.</value>
+  </data>
+  <data name="CreateProductHasDiscount" xml:space="preserve">
+    <value>Discount</value>
+  </data>
+  <data name="CreateProductHasDiscountHint" xml:space="preserve">
+    <value>Enable this option to set a discount price and the period when the discount is active.</value>
+  </data>
+  <data name="CreateProductDiscountPrice" xml:space="preserve">
+    <value>Discount price</value>
+  </data>
+  <data name="CreateProductDiscountStartDate" xml:space="preserve">
+    <value>Discount start date and time</value>
+  </data>
+  <data name="CreateProductDiscountEndDate" xml:space="preserve">
+    <value>Discount end date and time</value>
+  </data>
   <data name="CreateProductImages" xml:space="preserve">
     <value>Product images</value>
   </data>
   <data name="CreateProductImagesHint" xml:space="preserve">
-    <value>Select one or more image files. You can remove selected images before saving.</value>
+    <value>Select one or more image files. You can remove selected images before saving. Click a saved photo to make it the primary one.</value>
+  </data>
+  <data name="CreateProductImagePrimary" xml:space="preserve">
+    <value>Primary photo</value>
   </data>
   <data name="CreateProductImageRemove" xml:space="preserve">
     <value>Remove image</value>
+  </data>
+  <data name="CreateProductImageSetPrimary" xml:space="preserve">
+    <value>Set as the primary photo</value>
   </data>
   <data name="CreateProductImageView" xml:space="preserve">
     <value>Click to view the image</value>
   </data>
   <data name="CreateProductImagePreviewClose" xml:space="preserve">
     <value>Close</value>
+  </data>
+  <data name="ProductsDetailsDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="ProductDetailsSpec" xml:space="preserve">
+    <value>Spec</value>
+  </data>
+  <data name="ProductDetailsFeedback" xml:space="preserve">
+    <value>Reviews</value>
   </data>
 </root>

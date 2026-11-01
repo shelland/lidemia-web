@@ -8,5 +8,7 @@ public interface IShoppingCartService
 {
     Task<IEnumerable<ShoppingCartItem>?> GetCustomerShoppingCart(long customerId, CancellationToken cancellationToken);
 
-    Task AddProduct(long customerId, long productId, double qty, CancellationToken cancellationToken);
+    Task AddProduct(long customerId, long productId, decimal qty, CancellationToken cancellationToken);
+
+    Task<Dictionary<long, decimal>?> GetListItems(long customerId, CancellationToken cancellationToken);
 }

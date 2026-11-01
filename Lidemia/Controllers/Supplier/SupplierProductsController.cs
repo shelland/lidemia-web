@@ -25,6 +25,7 @@ public class SupplierProductsController : BaseController
     private readonly IValidator<SaveProductRequestDto> validator;
     private readonly IObjectStorageService objectStorageService;
     private readonly IPublishEndpoint publishEndpoint;
+    private readonly IProductPhotoService productPhotoService;
     private readonly ILogger<SupplierProductsController> logger;
 
     public SupplierProductsController(
@@ -32,12 +33,14 @@ public class SupplierProductsController : BaseController
         IValidator<SaveProductRequestDto> validator,
         IObjectStorageService objectStorageService,
         IPublishEndpoint publishEndpoint,
+        IProductPhotoService productPhotoService,
         ILogger<SupplierProductsController> logger)
     {
         this.productService = productService;
         this.validator = validator;
         this.objectStorageService = objectStorageService;
         this.publishEndpoint = publishEndpoint;
+        this.productPhotoService = productPhotoService;
         this.logger = logger;
     }
 
@@ -51,7 +54,7 @@ public class SupplierProductsController : BaseController
     [HttpGet("Create")]
     public async Task<IActionResult> Create()
     {
-        return View(new CreateProductViewModel(null));
+        return View(new CreateProductViewModel(null, []));
     }
 
     [HttpGet("Edit/{id:long}")]
@@ -64,7 +67,9 @@ public class SupplierProductsController : BaseController
             return RedirectToAction("Index");
         }
 
-        var viewModel = new CreateProductViewModel(product);
+        var photos = await this.productPhotoService.GetProductPhotos(id, cancellationToken);
+        var viewModel = new CreateProductViewModel(product, photos);
+
         return View("Create", viewModel);
     }
 
@@ -83,6 +88,12 @@ public class SupplierProductsController : BaseController
         if (!result.IsSuccess)
         {
             return new ErrorResultInfo(result.Errors.Select(x => x.Message));
+        }
+
+        if (request.RemovedPhotoIds is { Length: > 0 })
+        {
+            var removedPhotos = await this.productPhotoService.RemoveProductPhotos(result.Value, request.RemovedPhotoIds, cancellationToken);
+            this.logger.LogInformation("Removed {Count} photos from product {ProductId}", removedPhotos, result.Value);
         }
 
         var uploadedImages = await this.UploadProductImages(result.Value, images, cancellationToken);

@@ -20,7 +20,7 @@ namespace Lidemia.DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.13")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "postgis");
@@ -905,74 +905,6 @@ namespace Lidemia.DataAccess.Migrations
                     b.ToTable("products", (string)null);
                 });
 
-            modelBuilder.Entity("Lidemia.DataAccess.Entities.ProductFeedbackEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Comment")
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)")
-                        .HasColumnName("comment");
-
-                    b.Property<DateTimeOffset>("CreateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_date")
-                        .HasDefaultValueSql("now()");
-
-                    b.Property<long>("CustomerId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("customer_id");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_active");
-
-                    b.Property<long>("ProductId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("product_id");
-
-                    b.Property<byte>("Rate")
-                        .HasColumnType("smallint")
-                        .HasColumnName("rate");
-
-                    b.Property<int>("RowVersion")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1)
-                        .HasColumnName("row_version");
-
-                    b.Property<int>("State")
-                        .HasColumnType("integer")
-                        .HasColumnName("state");
-
-                    b.Property<DateTimeOffset?>("UpdateDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("update_date");
-
-                    b.HasKey("Id")
-                        .HasName("pk_product_feedbacks");
-
-                    b.HasIndex("IsActive")
-                        .HasDatabaseName("ix_product_feedbacks_is_active");
-
-                    b.HasIndex("CustomerId", "IsActive")
-                        .HasDatabaseName("ix_product_feedbacks_customer_id_is_active");
-
-                    b.HasIndex("ProductId", "IsActive")
-                        .HasDatabaseName("ix_product_feedbacks_product_id_is_active");
-
-                    b.HasIndex("ProductId", "State", "IsActive")
-                        .HasDatabaseName("ix_product_feedbacks_product_id_state_is_active");
-
-                    b.ToTable("product_feedbacks", (string)null);
-                });
-
             modelBuilder.Entity("Lidemia.DataAccess.Entities.ProductPhotoEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -1027,6 +959,100 @@ namespace Lidemia.DataAccess.Migrations
                         .HasDatabaseName("ix_products_photos_product_id");
 
                     b.ToTable("products_photos", (string)null);
+                });
+
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.ProductReviewEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("CreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("customer_id");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsAnonymous")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_anonymous");
+
+                    b.Property<string>("NegativeReview")
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)")
+                        .HasColumnName("negative_review");
+
+                    b.Property<string>("PositiveReview")
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)")
+                        .HasColumnName("positive_review");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("product_id");
+
+                    b.Property<byte>("Rate")
+                        .HasColumnType("smallint")
+                        .HasColumnName("rate");
+
+                    b.Property<string>("Review")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)")
+                        .HasColumnName("review");
+
+                    b.Property<int>("RowVersion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1)
+                        .HasColumnName("row_version");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer")
+                        .HasColumnName("state");
+
+                    b.Property<string>("SupplierFeedback")
+                        .HasColumnType("text")
+                        .HasColumnName("supplier_feedback");
+
+                    b.Property<DateTimeOffset?>("SupplierFeedbackDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("supplier_feedback_date");
+
+                    b.Property<DateTimeOffset?>("UpdateDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_date");
+
+                    b.HasKey("Id")
+                        .HasName("pk_product_reviews");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("ix_product_reviews_is_active");
+
+                    b.HasIndex("CustomerId", "IsActive")
+                        .HasDatabaseName("ix_product_reviews_customer_id_is_active");
+
+                    b.HasIndex("ProductId", "IsActive")
+                        .HasDatabaseName("ix_product_reviews_product_id_is_active");
+
+                    b.HasIndex("ProductId", "CustomerId", "IsActive")
+                        .HasDatabaseName("ix_product_reviews_product_id_customer_id_is_active");
+
+                    b.HasIndex("ProductId", "State", "IsActive", "CreateDate")
+                        .HasDatabaseName("ix_product_reviews_product_id_state_is_active_create_date");
+
+                    b.ToTable("product_reviews", (string)null);
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.PromoCodeEntity", b =>
@@ -1812,27 +1838,6 @@ namespace Lidemia.DataAccess.Migrations
                     b.Navigation("Supplier");
                 });
 
-            modelBuilder.Entity("Lidemia.DataAccess.Entities.ProductFeedbackEntity", b =>
-                {
-                    b.HasOne("Lidemia.DataAccess.Entities.CustomerEntity", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_product_feedbacks_customers_customer_id");
-
-                    b.HasOne("Lidemia.DataAccess.Entities.ProductEntity", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_product_feedbacks_products_product_id");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Lidemia.DataAccess.Entities.ProductPhotoEntity", b =>
                 {
                     b.HasOne("Lidemia.DataAccess.Entities.PhotoEntity", "Photo")
@@ -1850,6 +1855,27 @@ namespace Lidemia.DataAccess.Migrations
                         .HasConstraintName("fk_products_photos_products_product_id");
 
                     b.Navigation("Photo");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.ProductReviewEntity", b =>
+                {
+                    b.HasOne("Lidemia.DataAccess.Entities.CustomerEntity", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_product_reviews_customers_customer_id");
+
+                    b.HasOne("Lidemia.DataAccess.Entities.ProductEntity", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_product_reviews_products_product_id");
+
+                    b.Navigation("Customer");
 
                     b.Navigation("Product");
                 });

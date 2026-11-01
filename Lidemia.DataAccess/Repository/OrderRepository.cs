@@ -9,6 +9,7 @@ using Lidemia.DataAccess.Context;
 using Lidemia.DataAccess.Entities;
 using Lidemia.DataAccess.Extensions;
 using Lidemia.DataAccess.Repository.Abstract;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
 using X.PagedList;
@@ -64,5 +65,17 @@ public class OrderRepository : IOrderRepository
         await this.context.SaveChangesAsync(cancellationToken);
 
         return Result.Ok(entity.Id);
+    }
+
+    public Task<OrderEntity?> GetUserProductLastOrder(long customerId, long productId, CancellationToken cancellationToken)
+    {
+        var order = this.context.OrderItems
+            .AsActive()
+            .Where(x => x.ProductId == productId && x.Order.CustomerId == customerId)
+            .OrderByDescending(x => x.Order.CreateDate)
+            .Select(x => x.Order)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
+        return order;
     }
 }

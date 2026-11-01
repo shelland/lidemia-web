@@ -6,7 +6,7 @@ using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class ProductFeedbackEntity : IDbEntity, IHasId<long>
+public class ProductReviewEntity : IDbEntity, IHasId<long>
 {
     public long Id { get; set; }
 
@@ -18,11 +18,21 @@ public class ProductFeedbackEntity : IDbEntity, IHasId<long>
 
     public CustomerEntity Customer { get; set; } = null!;
 
-    public string? Comment { get; set; }
+    public string Review { get; set; } = string.Empty;
+
+    public string? PositiveReview { get; set; }
+
+    public string? NegativeReview { get; set; }
 
     public byte Rate { get; set; }
 
-    public ProductFeedbackState State { get; set; }
+    public ProductReviewState State { get; set; }
+
+    public bool IsAnonymous { get; set; }
+
+    public string? SupplierFeedback { get; set; }
+
+    public DateTimeOffset? SupplierFeedbackDate { get; set; }
 
     public int RowVersion { get; set; }
 

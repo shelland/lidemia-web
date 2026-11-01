@@ -6,5 +6,6 @@ namespace Lidemia.ViewModels;
 
 public record CreateProductViewModel
 (
-    ProductModel? Product
+    ProductModel? Product,
+    IEnumerable<PhotoModel> Photos
 );

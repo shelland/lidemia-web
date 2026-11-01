@@ -12,4 +12,6 @@ public interface IOrderService
     Task<Result<long>> Create(CreateOrderModel model, CancellationToken cancellationToken);
 
     Task<BasePagedListModel<OrderModel>> GetCustomerOrders(PagingInfoModel pagingInfo, long customerId, CancellationToken cancellationToken);
+
+    Task<OrderModel?> GetUserProductLastOrder(long customerId, long productId, CancellationToken cancellationToken);
 }

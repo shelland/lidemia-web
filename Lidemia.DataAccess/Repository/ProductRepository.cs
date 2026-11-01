@@ -30,6 +30,8 @@ public class ProductRepository : IProductRepository
     public Task<ProductEntity?> GetById(long key, CancellationToken cancellationToken)
     {
         return this.context.Products
+            .Include(x => x.PrimaryPhoto)
+            .Include(x => x.Category)
             .AsActive()
             .FirstOrDefaultAsync(x => x.Id == key, cancellationToken: cancellationToken);
     }
@@ -47,9 +49,6 @@ public class ProductRepository : IProductRepository
 
         if (model.Id.HasValue)
         {
-            // var product = await this.context.Products.AsActive()
-            //     .FirstOrDefaultAsync(x => x.Id == model.Id && x.SupplierId == supplierId, cancellationToken: cancellationToken);
-
             await this.context.Products
                 .Where(x => x.Id == model.Id && x.SupplierId == supplierId)
                 .ExecuteUpdateAsync(x => x
@@ -58,6 +57,15 @@ public class ProductRepository : IProductRepository
                         .SetProperty(e => e.Description, model.Description)
                         .SetProperty(e => e.ShortDescription, model.ShortDescription)
                         .SetProperty(e => e.AvailabilityType, model.AvailabilityType)
+                        .SetProperty(e => e.PriceUnit, model.PriceUnit)
+                        .SetProperty(e => e.Price, e => model.Price ?? e.Price)
+                        .SetProperty(e => e.MinQuantity, (double?)model.MinQuantity)
+                        .SetProperty(e => e.MaxQuantity, (double?)model.MaxQuantity)
+                        .SetProperty(e => e.Sku, model.Sku)
+                        .SetProperty(e => e.DiscountPrice, model.DiscountPrice)
+                        .SetProperty(e => e.HasCurrentDiscount, e => model.HasCurrentDiscount ?? e.HasCurrentDiscount)
+                        .SetProperty(e => e.DiscountStartDate, model.DiscountStartDate)
+                        .SetProperty(e => e.DiscountEndDate, model.DiscountEndDate)
                         .SetProperty(e => e.Tags, model.Tags ?? []),
                     cancellationToken: cancellationToken);
 
@@ -73,6 +81,15 @@ public class ProductRepository : IProductRepository
                 Description = model.Description,
                 ShortDescription = model.ShortDescription,
                 AvailabilityType = model.AvailabilityType,
+                PriceUnit = model.PriceUnit,
+                Price = model.Price ?? 0,
+                MinQuantity = (double?)model.MinQuantity,
+                MaxQuantity = (double?)model.MaxQuantity,
+                Sku = model.Sku,
+                DiscountPrice = model.DiscountPrice,
+                HasCurrentDiscount = model.HasCurrentDiscount ?? false,
+                DiscountStartDate = model.DiscountStartDate,
+                DiscountEndDate = model.DiscountEndDate,
                 Tags = model.Tags ?? []
             };
 
@@ -82,7 +99,33 @@ public class ProductRepository : IProductRepository
             productId = product.Id;
         }
 
+        await this.SetPrimaryPhoto(productId, model.PrimaryPhotoId, cancellationToken);
+
         return Result.Ok(productId);
+    }
+
+    private async Task SetPrimaryPhoto(long productId, long? photoId, CancellationToken cancellationToken)
+    {
+        if (!photoId.HasValue)
+        {
+            return;
+        }
+
+        var value = photoId.Value;
+
+        // The primary photo must be one of the photos that belong to the product
+        var belongsToProduct = await this.context.ProductsPhotos
+            .AsActive()
+            .AnyAsync(x => x.ProductId == productId && x.PhotoId == value, cancellationToken);
+
+        if (!belongsToProduct)
+        {
+            return;
+        }
+
+        await this.context.Products
+            .Where(x => x.Id == productId)
+            .ExecuteUpdateAsync(x => x.SetProperty(e => e.PrimaryPhotoId, photoId), cancellationToken: cancellationToken);
     }
 
     public async Task<Result<(int Enabled, int Disabled)>> EnablePendingDiscounts(DateTimeOffset now, CancellationToken cancellationToken)
@@ -123,6 +166,19 @@ public class ProductRepository : IProductRepository
         return products;
     }
 
+    public async Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, int count = 3, CancellationToken cancellationToken = default)
+    {
+        var products = await this.context.Products
+            .AsActive()
+            .Where(x => x.CategoryId == categoryId)
+            .Select(x => new LightProductModel(x.Id, x.Title!, x.Price))
+            .OrderBy(x => Guid.NewGuid())
+            .Take(count)
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return products;
+    }
+
     public Task Delete(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
@@ -139,7 +195,7 @@ public class ProductRepository : IProductRepository
             .Where(x => x.IsVisible && x.Supplier.IsActive && x.Supplier.Status == SupplierStatus.Active)
             .OrderByDescending(x => x.Id);
 
-        throw new NotImplementedException();
+        return query.ToPagedListEx(filterModel, cancellationToken);
     }
 
     public async Task<IPagedList<ProductEntity>> GetSupplierProducts(long id, PagingInfoModel? pagingInfoModel = null,

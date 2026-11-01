@@ -38,7 +38,7 @@ public class ProductPhotoRepository : IProductPhotoRepository
         await this.context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<PhotoEntity>> GetProductPhotos(long productId, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<PhotoEntity>> GetProductPhotos(long productId, CancellationToken cancellationToken)
     {
         var query = this.context.ProductsPhotos
             .AsActive()
@@ -47,5 +47,33 @@ public class ProductPhotoRepository : IProductPhotoRepository
             .Select(x => x.Photo);
 
         return await query.ToListAsync(cancellationToken: cancellationToken);
+    }
+
+    public async Task<int> DeleteProductPhotos(long productId, IEnumerable<long> photoIds, CancellationToken cancellationToken)
+    {
+        var ids = photoIds.Distinct().ToArray();
+
+        if (ids.Length == 0)
+        {
+            return 0;
+        }
+
+        var deletedCount = await this.context.ProductsPhotos
+            .AsActive()
+            .Where(x => x.ProductId == productId && ids.Contains(x.PhotoId))
+            .ExecuteUpdateAsync(x => x.SetProperty(e => e.IsActive, false), cancellationToken: cancellationToken);
+
+        if (deletedCount == 0)
+        {
+            return 0;
+        }
+
+        // The primary photo cannot point to a photo that is not attached to the product anymore
+        await this.context.Products
+            .AsActive()
+            .Where(x => x.Id == productId && x.PrimaryPhotoId != null && ids.Contains(x.PrimaryPhotoId.Value))
+            .ExecuteUpdateAsync(x => x.SetProperty(e => e.PrimaryPhotoId, (long?)null), cancellationToken: cancellationToken);
+
+        return deletedCount;
     }
 }

@@ -71,11 +71,74 @@ namespace Lidemia.Resources.App {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Availability.
+        /// </summary>
+        public static string CreateProductAvailabilityType {
+            get {
+                return ResourceManager.GetString("CreateProductAvailabilityType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discount end date and time.
+        /// </summary>
+        public static string CreateProductDiscountEndDate {
+            get {
+                return ResourceManager.GetString("CreateProductDiscountEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discount price.
+        /// </summary>
+        public static string CreateProductDiscountPrice {
+            get {
+                return ResourceManager.GetString("CreateProductDiscountPrice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discount start date and time.
+        /// </summary>
+        public static string CreateProductDiscountStartDate {
+            get {
+                return ResourceManager.GetString("CreateProductDiscountStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discount.
+        /// </summary>
+        public static string CreateProductHasDiscount {
+            get {
+                return ResourceManager.GetString("CreateProductHasDiscount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable this option to set a discount price and the period when the discount is active..
+        /// </summary>
+        public static string CreateProductHasDiscountHint {
+            get {
+                return ResourceManager.GetString("CreateProductHasDiscountHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string CreateProductImagePreviewClose {
             get {
                 return ResourceManager.GetString("CreateProductImagePreviewClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Primary photo.
+        /// </summary>
+        public static string CreateProductImagePrimary {
+            get {
+                return ResourceManager.GetString("CreateProductImagePrimary", resourceCulture);
             }
         }
         
@@ -98,7 +161,16 @@ namespace Lidemia.Resources.App {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select one or more image files. You can remove selected images before saving..
+        ///   Looks up a localized string similar to Set as the primary photo.
+        /// </summary>
+        public static string CreateProductImageSetPrimary {
+            get {
+                return ResourceManager.GetString("CreateProductImageSetPrimary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select one or more image files. You can remove selected images before saving. Click a saved photo to make it the primary one..
         /// </summary>
         public static string CreateProductImagesHint {
             get {
@@ -112,6 +184,159 @@ namespace Lidemia.Resources.App {
         public static string CreateProductImageView {
             get {
                 return ResourceManager.GetString("CreateProductImageView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum quantity.
+        /// </summary>
+        public static string CreateProductMaxQuantity {
+            get {
+                return ResourceManager.GetString("CreateProductMaxQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum quantity.
+        /// </summary>
+        public static string CreateProductMinQuantity {
+            get {
+                return ResourceManager.GetString("CreateProductMinQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parent product.
+        /// </summary>
+        public static string CreateProductParentId {
+            get {
+                return ResourceManager.GetString("CreateProductParentId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identifier of the parent product if this one is a variant. Leave empty for a standalone product..
+        /// </summary>
+        public static string CreateProductParentIdHint {
+            get {
+                return ResourceManager.GetString("CreateProductParentIdHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Price.
+        /// </summary>
+        public static string CreateProductPrice {
+            get {
+                return ResourceManager.GetString("CreateProductPrice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Price unit.
+        /// </summary>
+        public static string CreateProductPriceUnit {
+            get {
+                return ResourceManager.GetString("CreateProductPriceUnit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Short description.
+        /// </summary>
+        public static string CreateProductShortDescription {
+            get {
+                return ResourceManager.GetString("CreateProductShortDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SKU.
+        /// </summary>
+        public static string CreateProductSku {
+            get {
+                return ResourceManager.GetString("CreateProductSku", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In stock.
+        /// </summary>
+        public static string EnumsProductAvailabilityTypeInStock {
+            get {
+                return ResourceManager.GetString("EnumsProductAvailabilityTypeInStock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Out of stock.
+        /// </summary>
+        public static string EnumsProductAvailabilityTypeOutOfStock {
+            get {
+                return ResourceManager.GetString("EnumsProductAvailabilityTypeOutOfStock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pre-order.
+        /// </summary>
+        public static string EnumsProductAvailabilityTypePreOrder {
+            get {
+                return ResourceManager.GetString("EnumsProductAvailabilityTypePreOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Per item.
+        /// </summary>
+        public static string EnumsProductPriceUnitItem {
+            get {
+                return ResourceManager.GetString("EnumsProductPriceUnitItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Per volume.
+        /// </summary>
+        public static string EnumsProductPriceUnitItemVolume {
+            get {
+                return ResourceManager.GetString("EnumsProductPriceUnitItemVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Per weight.
+        /// </summary>
+        public static string EnumsProductPriceUnitItemWeight {
+            get {
+                return ResourceManager.GetString("EnumsProductPriceUnitItemWeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reviews.
+        /// </summary>
+        public static string ProductDetailsFeedback {
+            get {
+                return ResourceManager.GetString("ProductDetailsFeedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spec.
+        /// </summary>
+        public static string ProductDetailsSpec {
+            get {
+                return ResourceManager.GetString("ProductDetailsSpec", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string ProductsDetailsDescription {
+            get {
+                return ResourceManager.GetString("ProductsDetailsDescription", resourceCulture);
             }
         }
         
