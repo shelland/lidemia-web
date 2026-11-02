@@ -27,7 +27,7 @@ public static class ServiceAuthExtensions
                 opts.Cookie.Domain = configuration.GetValue<string>("Application:CookieDomain");
                 opts.Events = new CookieAuthenticationEvents
                 {
-                    OnRedirectToLogin = (ctx) =>
+                    OnRedirectToLogin = ctx =>
                     {
                         var generator = ctx.HttpContext.RequestServices.GetRequiredService<LinkGenerator>();
 

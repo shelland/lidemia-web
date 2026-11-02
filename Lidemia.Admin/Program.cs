@@ -1,3 +1,7 @@
+using Lidemia.Common;
+using Lidemia.Common.BusinessLogic;
+using Lidemia.DataAccess;
+using Lidemia.Search;
 using Lidemia.ServiceDefaults;
 
 namespace Lidemia.Admin;
@@ -11,6 +15,12 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
+
+        builder.Services.AddAdminModule();
+        builder.Services.AddDataAccessModule(builder.Configuration);
+        builder.Services.AddCommonBusinessLogicModule(builder.Configuration);
+        builder.Services.AddCommonModule();
+        builder.Services.AddSearchModule(builder.Configuration);
 
         var app = builder.Build();
 

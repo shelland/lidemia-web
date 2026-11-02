@@ -1,3 +1,5 @@
+using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
+using Lidemia.Core.Models.Dto;
 using Lidemia.Search.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +8,7 @@ namespace Lidemia.Controllers;
 public class HomeController : BaseController
 {
     [HttpGet]
-    public IActionResult Index([FromServices] ISearchService searchService, [FromServices] ILogger<HomeController> logger)
+    public IActionResult Index([FromServices] ISearchService searchService, [FromServices] IProductService productService, [FromServices] ILogger<HomeController> logger)
     {
         /*var products = new List<ProductMainInfoModel>
         {
@@ -15,7 +17,7 @@ public class HomeController : BaseController
             new(3, "Шоколад белый", 200, 1, "Супер белый шоколад", 1, ["шоколад", "белый"], true)
         };
 
-        // searchService.RebuildIndex(products);
+        searchService.RebuildIndex(products);
 
         // searchService.UpdateInIndex(new ProductMainInfoModel(1, "Шоколад молочный", 250)).Wait();
         logger.LogInformation("Hello, {Guid}", Guid.NewGuid());
@@ -24,6 +26,18 @@ public class HomeController : BaseController
         {
             Title = "белы"
         }).Result; */
+
+        //var pro
+
+        //searchService.RebuildIndex(products);
+        var prods = productService.GetProductsForSearchIndex(CancellationToken.None).Result;
+        // searchService.RebuildIndex(prods).Wait();
+
+
+        var results = searchService.Search(new ProductsListFilterModel
+        {
+            Title = "шоко"
+        }).Result;
 
         return View();
     }

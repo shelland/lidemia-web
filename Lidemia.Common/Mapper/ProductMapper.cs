@@ -2,6 +2,7 @@
 
 using Lidemia.Common.Mapper.Abstract;
 using Lidemia.Core.Models.Domain;
+using Lidemia.Core.Models.Misc;
 using Lidemia.DataAccess.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
@@ -9,6 +10,8 @@ using Scrutor;
 namespace Lidemia.Common.Mapper;
 
 public interface IProductMapper : IMapper<ProductEntity, ProductModel>;
+
+public interface IProductMainInfoMapper : IMapper<ProductEntity, ProductMainInfoModel>;
 
 [ServiceDescriptor<IProductMapper>(ServiceLifetime.Scoped)]
 public class ProductMapper : IProductMapper
@@ -52,5 +55,23 @@ public class ProductMapper : IProductMapper
             CreateDate = entity.CreateDate,
             UpdateDate = entity.UpdateDate
         };
+    }
+}
+
+[ServiceDescriptor<IProductMainInfoMapper>(ServiceLifetime.Scoped)]
+public class ProductMainInfoMapper : IProductMainInfoMapper
+{
+    public ProductMainInfoModel Map(ProductEntity source)
+    {
+        return new ProductMainInfoModel(
+            Id: source.Id,
+            Title: source.Title,
+            Price: source.Price,
+            SupplierId: source.SupplierId,
+            Description: source.Description,
+            CategoryId: source.CategoryId.GetValueOrDefault(),
+            Tags: source.Tags,
+            IsVisible: source.IsVisible
+        );
     }
 }

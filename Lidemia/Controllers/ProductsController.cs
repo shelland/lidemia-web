@@ -1,4 +1,5 @@
 ﻿using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
+using Lidemia.Common.BusinessLogic.Services.Providers.Abstract;
 using Lidemia.Core.Models.Dto;
 using Lidemia.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ public class ProductsController : BaseController
     private readonly IProductCategoryService productCategoryService;
     private readonly IProductReviewService productReviewService;
     private readonly IOrderService orderService;
+    private readonly IProductsProvider productsProvider;
 
     public ProductsController(
         IProductService productService,
@@ -21,7 +23,8 @@ public class ProductsController : BaseController
         IShoppingCartService shoppingCartService,
         IProductCategoryService productCategoryService,
         IProductReviewService productReviewService,
-        IOrderService orderService)
+        IOrderService orderService, 
+        IProductsProvider productsProvider)
     {
         this.productService = productService;
         this.productPhotoService = productPhotoService;
@@ -29,6 +32,7 @@ public class ProductsController : BaseController
         this.productCategoryService = productCategoryService;
         this.productReviewService = productReviewService;
         this.orderService = orderService;
+        this.productsProvider = productsProvider;
     }
 
     [HttpGet]
@@ -68,7 +72,7 @@ public class ProductsController : BaseController
 
     private async Task<ProductsListViewModel> PrepareViewModel(ProductsListFilterModel filter, CancellationToken cancellationToken)
     {
-        var products = await this.productService.GetPublicList(filter, cancellationToken);
+        var products = await this.productsProvider.GetPublicList(filter, cancellationToken);
         var categories = (await this.productCategoryService.GetCategories(cancellationToken)).ToList();
 
         var newCategories = categories.ToLookup(x => x.Parent?.Id);

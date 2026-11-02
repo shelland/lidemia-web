@@ -11,7 +11,7 @@ public interface IProductService
 {
     Task<ProductModel?> GetById(long id, CancellationToken cancellationToken);
 
-    Task<BasePagedListModel<ProductModel>> GetPublicList(ProductsListFilterModel filter, CancellationToken cancellationToken);
+    Task<BasePagedListModel<ProductModel>> GetPublicList(ProductsListFilterModel filter, long[] searchIds, CancellationToken cancellationToken);
 
     Task<BasePagedListModel<ProductModel>> GetSupplierProducts(long id, PagingInfoModel pagingInfo, CancellationToken cancellationToken);
 
@@ -24,4 +24,6 @@ public interface IProductService
     Task<IEnumerable<ProductModel>> GetProducts(IEnumerable<long> ids, CancellationToken cancellationToken);
 
     Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, int count = 3, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<ProductMainInfoModel>> GetProductsForSearchIndex(CancellationToken cancellationToken);
 }

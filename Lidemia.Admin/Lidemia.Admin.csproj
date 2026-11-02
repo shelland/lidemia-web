@@ -7,6 +7,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Lidemia.Common.BusinessLogic\Lidemia.Common.BusinessLogic.csproj" />
+		<ProjectReference Include="..\Lidemia.Common\Lidemia.Common.csproj" />
+		<ProjectReference Include="..\Lidemia.Core\Lidemia.Core.csproj" />
+		<ProjectReference Include="..\Lidemia.DataAccess\Lidemia.DataAccess.csproj" />
+		<ProjectReference Include="..\Lidemia.Search\Lidemia.Search.csproj" />
 		<ProjectReference Include="..\Lidemia.ServiceDefaults\Lidemia.ServiceDefaults.csproj" />
 	</ItemGroup>
 

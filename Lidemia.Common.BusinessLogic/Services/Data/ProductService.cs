@@ -5,12 +5,14 @@ using Lidemia.Common.BusinessLogic.Services.App.Abstract;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.Logic;
 using Lidemia.Common.Mapper;
+using Lidemia.Common.Mapper.Abstract;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Bus;
 using Lidemia.Core.Models.Domain;
 using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Misc;
 using Lidemia.Core.Models.Service;
+using Lidemia.DataAccess.Entities;
 using Lidemia.DataAccess.Repository.Abstract;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +29,7 @@ public class ProductService : BaseDataService, IProductService
     private readonly IPublishEndpoint publishEndpoint;
     private readonly ISanitizerService sanitizerService;
     private readonly IProductMapper productMapper;
+    private readonly IProductMainInfoMapper productMainInfoMapper;
     private readonly ILogger<ProductService> logger;
 
     public ProductService(
@@ -35,6 +38,7 @@ public class ProductService : BaseDataService, IProductService
         IPublishEndpoint publishEndpoint,
         ISanitizerService sanitizerService,
         IProductMapper productMapper,
+        IProductMainInfoMapper productMainInfoMapper,
         ILogger<ProductService> logger)
     {
         this.productRepository = productRepository;
@@ -42,6 +46,7 @@ public class ProductService : BaseDataService, IProductService
         this.publishEndpoint = publishEndpoint;
         this.sanitizerService = sanitizerService;
         this.productMapper = productMapper;
+        this.productMainInfoMapper = productMainInfoMapper;
         this.logger = logger;
     }
 
@@ -51,9 +56,10 @@ public class ProductService : BaseDataService, IProductService
         return product != null ? this.productMapper.Map(product) : null;
     }
 
-    public async Task<BasePagedListModel<ProductModel>> GetPublicList(ProductsListFilterModel filter, CancellationToken cancellationToken)
+    public async Task<BasePagedListModel<ProductModel>> GetPublicList(ProductsListFilterModel filter, long[] searchIds,
+        CancellationToken cancellationToken)
     {
-        var products = await this.productRepository.GetPublicList(filter, cancellationToken);
+        var products = await this.productRepository.GetPublicList(filter, searchIds, cancellationToken);
 
         return new BasePagedListModel<ProductModel>
         {
@@ -134,6 +140,12 @@ public class ProductService : BaseDataService, IProductService
     public Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, int count = 3, CancellationToken cancellationToken = default)
     {
         return this.productRepository.GetRelatedProducts(categoryId, count, cancellationToken);
+    }
+
+    public async Task<IEnumerable<ProductMainInfoModel>> GetProductsForSearchIndex(CancellationToken cancellationToken)
+    {
+        var products = await this.productRepository.GetProductsForSearchIndex(cancellationToken);
+        return this.productMainInfoMapper.MapList(products);
     }
 
     private async Task EnsureOwnership(long productId, long supplierId, CancellationToken cancellationToken)

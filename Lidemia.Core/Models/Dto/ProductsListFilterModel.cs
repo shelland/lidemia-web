@@ -16,5 +16,13 @@ public class ProductsListFilterModel : PagingInfoModel
 
     public string? Title { get; set; }
 
-    public string[]? Tags { get; set; }
+    public string? Tag { get; set; }
+
+    public bool HasSearchParams() =>
+        CategoryId.HasValue ||
+        Suppliers?.Count > 0 ||
+        PriceFrom > 0 ||
+        PriceTo > 0 ||
+        !string.IsNullOrEmpty(Title) ||
+        !string.IsNullOrEmpty(Tag);
 }

@@ -12,7 +12,7 @@ namespace Lidemia.DataAccess.Repository.Abstract;
 
 public interface IProductRepository : IRepository<ProductEntity, long>
 {
-    Task<IPagedList<ProductEntity>> GetPublicList(ProductsListFilterModel filterModel, CancellationToken cancellationToken = default);
+    Task<IPagedList<ProductEntity>> GetPublicList(ProductsListFilterModel filterModel, long[] searchIds, CancellationToken cancellationToken = default);
 
     Task<IPagedList<ProductEntity>> GetSupplierProducts(long id, PagingInfoModel? pagingInfoModel = null, CancellationToken cancellationToken = default);
 
@@ -27,4 +27,6 @@ public interface IProductRepository : IRepository<ProductEntity, long>
     Task<IEnumerable<ProductEntity>> GetProducts(IEnumerable<long> ids, CancellationToken cancellationToken);
 
     Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, int count = 3, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<ProductEntity>> GetProductsForSearchIndex(CancellationToken cancellationToken);
 }

@@ -179,12 +179,18 @@ public class ProductRepository : IProductRepository
         return products;
     }
 
+    public async Task<IEnumerable<ProductEntity>> GetProductsForSearchIndex(CancellationToken cancellationToken)
+    {
+        return await this.context.Products.AsActive().Where(x => x.Supplier.Status == SupplierStatus.Active).ToListAsync(cancellationToken);
+    }
+
     public Task Delete(long key, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IPagedList<ProductEntity>> GetPublicList(ProductsListFilterModel filterModel, CancellationToken cancellationToken = default)
+    public Task<IPagedList<ProductEntity>> GetPublicList(ProductsListFilterModel filterModel, long[] searchIds,
+        CancellationToken cancellationToken)
     {
         IQueryable<ProductEntity> query = this.context
             .Products
@@ -194,6 +200,11 @@ public class ProductRepository : IProductRepository
             .AsActive()
             .Where(x => x.IsVisible && x.Supplier.IsActive && x.Supplier.Status == SupplierStatus.Active)
             .OrderByDescending(x => x.Id);
+
+        if (searchIds.Length > 0)
+        {
+            query = query.Where(x => searchIds.Contains(x.Id));
+        }
 
         return query.ToPagedListEx(filterModel, cancellationToken);
     }

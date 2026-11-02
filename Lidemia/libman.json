@@ -27,6 +27,14 @@
             "files": [
                 "lodash.js"
             ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@algolia/autocomplete-js@1.19.12",
+            "destination": "wwwroot/lib/algolia/autocomplete-js/",
+            "files": [
+                "dist/umd/index.production.js"
+            ]
         }
     ]
 }
