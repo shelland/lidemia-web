@@ -55,7 +55,9 @@ public class ProductReviewRepository : IProductReviewRepository
                         .SetProperty(e => e.PositiveReview, model.PositiveReview)
                         .SetProperty(e => e.NegativeReview, model.NegativeReview)
                         .SetProperty(e => e.Rate, model.Rate)
-                        .SetProperty(e => e.IsAnonymous, model.IsAnonymous),
+                        .SetProperty(e => e.IsAnonymous, model.IsAnonymous)
+                        .SetProperty(e => e.UpdateDate, DateTime.UtcNow)
+                        .SetProperty(e => e.RowVersion, e => e.RowVersion + 1),
                     cancellationToken: cancellationToken);
 
             return Result.Ok(model.Id.Value);

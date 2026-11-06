@@ -1,0 +1,48 @@
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
+@model Lidemia.ViewModels.CheckoutViewModel
+
+@inject IStringLocalizer<AppResources> localizer
+
+@if (Model.Items.Any())
+{
+    @foreach (var supplierProducts in Model.Items)
+    {
+        <h2>@supplierProducts.Key.SupplierName</h2>
+
+        @foreach (var product in supplierProducts.Value)
+        {
+            <div class="row product-row">
+                <strong>@product.Product.Title</strong>
+                
+            </div>
+        }
+
+        <hr class="hr"/>
+    }
+}
+else
+{
+    <h1>@localizer["CheckoutNoItems"]</h1>
+}
+
+@section Scripts
+{
+    <script src="~/Pages/Scripts/Checkout.js"></script>
+    
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            Checkout.init({
+                urls: {
+                    checkoutUrl: '@Url.Action("Post", "CustomerCheckout")',
+                    verifyCartUrl: '@Url.Action("VerifyCart", "CustomerCheckout")'
+                }
+            })
+
+        });
+
+    </script>
+}

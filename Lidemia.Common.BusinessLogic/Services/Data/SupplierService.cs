@@ -3,6 +3,7 @@
 using FluentResults;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.Mapper;
+using Lidemia.Common.Mapper.Abstract;
 using Lidemia.Core.Enums;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Domain;
@@ -50,5 +51,11 @@ public class SupplierService : ISupplierService
     {
         var entity = await this.supplierRepository.GetById(id, cancellationToken);
         return entity != null ? this.supplierMapper.Map(entity) : null;
+    }
+
+    public async Task<IEnumerable<SupplierModel>> GetSuppliers(IEnumerable<long> ids, CancellationToken cancellationToken)
+    {
+        var suppliers = await this.supplierRepository.GetSuppliers(ids, cancellationToken);
+        return this.supplierMapper.MapList(suppliers);
     }
 }

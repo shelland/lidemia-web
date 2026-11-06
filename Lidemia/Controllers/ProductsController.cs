@@ -1,5 +1,7 @@
 ﻿using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.BusinessLogic.Services.Providers.Abstract;
+using Lidemia.Core.Enums;
+using Lidemia.Core.Models.Domain;
 using Lidemia.Core.Models.Dto;
 using Lidemia.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +25,7 @@ public class ProductsController : BaseController
         IShoppingCartService shoppingCartService,
         IProductCategoryService productCategoryService,
         IProductReviewService productReviewService,
-        IOrderService orderService, 
+        IOrderService orderService,
         IProductsProvider productsProvider)
     {
         this.productService = productService;
@@ -39,7 +41,7 @@ public class ProductsController : BaseController
     public async Task<IActionResult> Index([FromQuery] ProductsListFilterModel? filter, CancellationToken cancellationToken)
     {
         filter ??= new ProductsListFilterModel();
-        var viewModel = await PrepareViewModel(filter, cancellationToken);
+        var viewModel = await GetListViewModel(filter, cancellationToken);
 
         return View(viewModel);
     }
@@ -54,23 +56,40 @@ public class ProductsController : BaseController
             return NotFoundView;
         }
 
-        var photos = await this.productPhotoService.GetProductPhotos(id, cancellationToken);
-        var relatedProducts = await this.productService.GetRelatedProducts(product.Category!.Id, cancellationToken: cancellationToken);
-        var reviews = await this.productReviewService.GetRecentReviews(id, cancellationToken: cancellationToken);
+        var viewModel = await GetDetailsViewModel(product, cancellationToken);
+        return View(viewModel);
+    }
+
+    private async Task<ProductDetailsViewModel> GetDetailsViewModel(ProductModel product, CancellationToken cancellationToken)
+    {
+        var photos = await this.productPhotoService.GetProductPhotos(product.Id, cancellationToken);
+        var relatedProducts = await this.productService.GetRelatedProducts(product.Category!.Id, product.Id, cancellationToken: cancellationToken);
+        var reviews = await this.productReviewService.GetRecentReviews(product.Id, cancellationToken: cancellationToken);
+
+        var isAbleToPurchase = EntityId != null && EntityType == EntityType.Customer;
+        int? itemsInCart = null;
+
+        if (isAbleToPurchase)
+        {
+            var userCart = await this.shoppingCartService.GetCustomerShoppingCart(RequireEntityId, cancellationToken);
+            itemsInCart = userCart?.FirstOrDefault(x => x.Product.Id == product.Id)?.Qty;
+        }
 
         var viewModel = new ProductDetailsViewModel(
+            IsAbleToPurchase: isAbleToPurchase,
+            ItemsInCart: itemsInCart,
             Product: product,
-            CurrentUserOrder: EntityId != null ? await this.orderService.GetUserProductLastOrder(RequireEntityId, id, cancellationToken) : null,
-            CurrentUserReview: EntityId != null ? await this.productReviewService.GetUserReview(RequireEntityId, id, cancellationToken) : null,
+            CurrentUserOrder: EntityId != null ? await this.orderService.GetUserProductLastOrder(RequireEntityId, product.Id, cancellationToken) : null,
+            CurrentUserReview: EntityId != null ? await this.productReviewService.GetUserReview(RequireEntityId, product.Id, cancellationToken) : null,
             Photos: photos,
             RelatedProducts: relatedProducts,
             RecentReviews: reviews
         );
 
-        return View(viewModel);
+        return viewModel;
     }
 
-    private async Task<ProductsListViewModel> PrepareViewModel(ProductsListFilterModel filter, CancellationToken cancellationToken)
+    private async Task<ProductsListViewModel> GetListViewModel(ProductsListFilterModel filter, CancellationToken cancellationToken)
     {
         var products = await this.productsProvider.GetPublicList(filter, cancellationToken);
         var categories = (await this.productCategoryService.GetCategories(cancellationToken)).ToList();

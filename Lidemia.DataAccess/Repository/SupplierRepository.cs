@@ -70,4 +70,9 @@ public class SupplierRepository : ISupplierRepository
             .Include(x => x.User)
             .FirstOrDefaultAsync(x => x.UserId == userId, cancellationToken);
     }
+
+    public async Task<IEnumerable<SupplierEntity>> GetSuppliers(IEnumerable<long> ids, CancellationToken cancellationToken)
+    {
+        return await this.context.Suppliers.AsActive().Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
+    }
 }

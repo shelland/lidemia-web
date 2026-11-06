@@ -5,5 +5,5 @@ namespace Lidemia.DataAccess.Entities.Misc;
 public record ShoppingCartItemDbModel
 (
     long ProductId,
-    decimal Qty
+    int Qty
 );

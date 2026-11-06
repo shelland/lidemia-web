@@ -48,6 +48,7 @@ public static class BusExtensions
         {
             busConfig.AddConsumer<SupplierSignUpEventConsumer>();
             busConfig.AddConsumer<ProductSavedEventConsumer>();
+            busConfig.AddConsumer<OrderCreatedEventConsumer>();
 
             busConfig.UsingRabbitMq((ctx, rabbitConf) =>
             {
@@ -58,8 +59,10 @@ public static class BusExtensions
                 });
 
                 rabbitConf.UseJsonSerializer();
+
                 rabbitConf.ReceiveEndpoint("supplier-signup", x => x.ConfigureConsumer<SupplierSignUpEventConsumer>(ctx));
                 rabbitConf.ReceiveEndpoint("product-saved", x => x.ConfigureConsumer<ProductSavedEventConsumer>(ctx));
+                rabbitConf.ReceiveEndpoint("order-created", x => x.ConfigureConsumer<OrderCreatedEventConsumer>(ctx));
 
                 rabbitConf.ConfigureEndpoints(ctx);
             });

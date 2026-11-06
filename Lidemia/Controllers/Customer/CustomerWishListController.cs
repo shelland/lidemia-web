@@ -1,13 +1,15 @@
 ﻿// Created on 19/10/2026 22:10 by Laserson
 
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
+using Lidemia.Core.Attributes;
 using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lidemia.Controllers.Customer;
 
-[Microsoft.AspNetCore.Components.Route("Customer/WishList")]
+[CustomerAuthorize]
+[Route("Customer/WishList")]
 public class CustomerWishListController : BaseController
 {
     private readonly IWishListService wishListService;

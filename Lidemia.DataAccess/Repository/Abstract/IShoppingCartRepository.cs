@@ -9,7 +9,7 @@ public interface IShoppingCartRepository : IRepository<ShoppingCartEntity, long>
 {
     Task<ShoppingCartEntity?> GetCustomerShoppingCart(long customerId, CancellationToken cancellationToken);
 
-    Task AddProduct(long customerId, long productId, decimal qty, CancellationToken cancellationToken);
+    Task AddProduct(long customerId, long productId, int qty, CancellationToken cancellationToken);
 
-    Task<Dictionary<long, decimal>?> GetListItems(long customerId, CancellationToken cancellationToken);
+    Task<Dictionary<long, int>?> GetListItems(long customerId, CancellationToken cancellationToken);
 }

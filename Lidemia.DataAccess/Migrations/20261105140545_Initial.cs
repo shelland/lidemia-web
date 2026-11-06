@@ -79,7 +79,7 @@ namespace Lidemia.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "suppliers_stats",
+                name: "supplier_stats",
                 columns: table => new
                 {
                     supplier_id = table.Column<long>(type: "bigint", nullable: false),
@@ -146,9 +146,8 @@ namespace Lidemia.DataAccess.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     user_id = table.Column<long>(type: "bigint", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    logo_url = table.Column<string>(type: "text", nullable: true),
-                    tin = table.Column<string>(type: "text", nullable: false),
+                    first_name = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
+                    last_name = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     metadata = table.Column<CustomerMetadata>(type: "jsonb", nullable: false),
                     row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
                     is_active = table.Column<bool>(type: "boolean", nullable: false),
@@ -479,6 +478,37 @@ namespace Lidemia.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "product_photos",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    photo_id = table.Column<long>(type: "bigint", nullable: false),
+                    product_id = table.Column<long>(type: "bigint", nullable: false),
+                    is_primary = table.Column<bool>(type: "boolean", nullable: false),
+                    row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false),
+                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_product_photos", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_product_photos_photos_photo_id",
+                        column: x => x.photo_id,
+                        principalTable: "photos",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_product_photos_products_product_id",
+                        column: x => x.product_id,
+                        principalTable: "products",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "product_reviews",
                 columns: table => new
                 {
@@ -510,37 +540,6 @@ namespace Lidemia.DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "fk_product_reviews_products_product_id",
-                        column: x => x.product_id,
-                        principalTable: "products",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "products_photos",
-                columns: table => new
-                {
-                    id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
-                    photo_id = table.Column<long>(type: "bigint", nullable: false),
-                    product_id = table.Column<long>(type: "bigint", nullable: false),
-                    is_primary = table.Column<bool>(type: "boolean", nullable: false),
-                    row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
-                    is_active = table.Column<bool>(type: "boolean", nullable: false),
-                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
-                    update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_products_photos", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_products_photos_photos_photo_id",
-                        column: x => x.photo_id,
-                        principalTable: "photos",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_products_photos_products_product_id",
                         column: x => x.product_id,
                         principalTable: "products",
                         principalColumn: "id",
@@ -609,7 +608,7 @@ namespace Lidemia.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "suppliers_addresses",
+                name: "supplier_addresses",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
@@ -625,15 +624,15 @@ namespace Lidemia.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_suppliers_addresses", x => x.id);
+                    table.PrimaryKey("pk_supplier_addresses", x => x.id);
                     table.ForeignKey(
-                        name: "fk_suppliers_addresses_addresses_address_id",
+                        name: "fk_supplier_addresses_addresses_address_id",
                         column: x => x.address_id,
                         principalTable: "addresses",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_suppliers_addresses_suppliers_supplier_id",
+                        name: "fk_supplier_addresses_suppliers_supplier_id",
                         column: x => x.supplier_id,
                         principalTable: "suppliers",
                         principalColumn: "id",
@@ -648,15 +647,9 @@ namespace Lidemia.DataAccess.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     number = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     customer_id = table.Column<long>(type: "bigint", nullable: false),
-                    status = table.Column<int>(type: "integer", nullable: false),
                     comment = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     is_finish_confirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    last_status_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     metadata = table.Column<OrderMetadata>(type: "jsonb", nullable: false),
-                    promo_code_id = table.Column<long>(type: "bigint", nullable: true),
-                    delivery_type = table.Column<int>(type: "integer", nullable: false),
-                    supplier_address_id1 = table.Column<long>(type: "bigint", nullable: true),
-                    supplier_address_id = table.Column<Guid>(type: "uuid", nullable: true),
                     customer_address_id1 = table.Column<long>(type: "bigint", nullable: true),
                     customer_address_id = table.Column<Guid>(type: "uuid", nullable: true),
                     row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
@@ -678,16 +671,6 @@ namespace Lidemia.DataAccess.Migrations
                         principalTable: "customers",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_orders_promo_codes_promo_code_id",
-                        column: x => x.promo_code_id,
-                        principalTable: "promo_codes",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "fk_orders_suppliers_addresses_supplier_address_id1",
-                        column: x => x.supplier_address_id1,
-                        principalTable: "suppliers_addresses",
-                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -715,6 +698,60 @@ namespace Lidemia.DataAccess.Migrations
                         name: "fk_order_items_products_product_id",
                         column: x => x.product_id,
                         principalTable: "products",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "supplier_orders",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    supplier_id = table.Column<long>(type: "bigint", nullable: false),
+                    product_id = table.Column<long>(type: "bigint", nullable: false),
+                    order_id = table.Column<long>(type: "bigint", nullable: false),
+                    qty = table.Column<double>(type: "double precision", nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false),
+                    supplier_address_id1 = table.Column<long>(type: "bigint", nullable: true),
+                    supplier_address_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    last_status_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    promo_code_id = table.Column<long>(type: "bigint", nullable: true),
+                    delivery_type = table.Column<int>(type: "integer", nullable: false),
+                    row_version = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false),
+                    create_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    update_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_supplier_orders", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_supplier_orders_orders_order_id",
+                        column: x => x.order_id,
+                        principalTable: "orders",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_supplier_orders_products_product_id",
+                        column: x => x.product_id,
+                        principalTable: "products",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_supplier_orders_promo_codes_promo_code_id",
+                        column: x => x.promo_code_id,
+                        principalTable: "promo_codes",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "fk_supplier_orders_supplier_addresses_supplier_address_id1",
+                        column: x => x.supplier_address_id1,
+                        principalTable: "supplier_addresses",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "fk_supplier_orders_suppliers_supplier_id",
+                        column: x => x.supplier_id,
+                        principalTable: "suppliers",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -821,16 +858,6 @@ namespace Lidemia.DataAccess.Migrations
                 column: "is_active");
 
             migrationBuilder.CreateIndex(
-                name: "ix_orders_promo_code_id",
-                table: "orders",
-                column: "promo_code_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_orders_supplier_address_id1",
-                table: "orders",
-                column: "supplier_address_id1");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_password_resets_code",
                 table: "password_resets",
                 column: "code",
@@ -860,6 +887,21 @@ namespace Lidemia.DataAccess.Migrations
                 name: "ix_product_categories_parent_id",
                 table: "product_categories",
                 column: "parent_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_product_photos_is_active",
+                table: "product_photos",
+                column: "is_active");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_product_photos_photo_id",
+                table: "product_photos",
+                column: "photo_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_product_photos_product_id",
+                table: "product_photos",
+                column: "product_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_product_reviews_customer_id_is_active",
@@ -917,21 +959,6 @@ namespace Lidemia.DataAccess.Migrations
                 column: "supplier_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_products_photos_is_active",
-                table: "products_photos",
-                column: "is_active");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_products_photos_photo_id",
-                table: "products_photos",
-                column: "photo_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_products_photos_product_id",
-                table: "products_photos",
-                column: "product_id");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_promo_codes_is_active",
                 table: "promo_codes",
                 column: "is_active");
@@ -958,6 +985,56 @@ namespace Lidemia.DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "ix_supplier_addresses_address_id",
+                table: "supplier_addresses",
+                column: "address_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_supplier_addresses_is_active",
+                table: "supplier_addresses",
+                column: "is_active");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_supplier_addresses_supplier_id_is_active",
+                table: "supplier_addresses",
+                columns: new[] { "supplier_id", "is_active" });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_supplier_orders_is_active",
+                table: "supplier_orders",
+                column: "is_active");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_supplier_orders_order_id",
+                table: "supplier_orders",
+                column: "order_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_supplier_orders_product_id",
+                table: "supplier_orders",
+                column: "product_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_supplier_orders_promo_code_id",
+                table: "supplier_orders",
+                column: "promo_code_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_supplier_orders_status_supplier_id_is_active",
+                table: "supplier_orders",
+                columns: new[] { "status", "supplier_id", "is_active" });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_supplier_orders_supplier_address_id1",
+                table: "supplier_orders",
+                column: "supplier_address_id1");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_supplier_orders_supplier_id_is_active",
+                table: "supplier_orders",
+                columns: new[] { "supplier_id", "is_active" });
+
+            migrationBuilder.CreateIndex(
                 name: "ix_suppliers_is_active",
                 table: "suppliers",
                 column: "is_active");
@@ -967,21 +1044,6 @@ namespace Lidemia.DataAccess.Migrations
                 table: "suppliers",
                 column: "user_id",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "ix_suppliers_addresses_address_id",
-                table: "suppliers_addresses",
-                column: "address_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_suppliers_addresses_is_active",
-                table: "suppliers_addresses",
-                column: "is_active");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_suppliers_addresses_supplier_id_is_active",
-                table: "suppliers_addresses",
-                columns: new[] { "supplier_id", "is_active" });
 
             migrationBuilder.CreateIndex(
                 name: "ix_users_email",
@@ -1046,22 +1108,31 @@ namespace Lidemia.DataAccess.Migrations
                 name: "password_resets");
 
             migrationBuilder.DropTable(
-                name: "product_reviews");
+                name: "product_photos");
 
             migrationBuilder.DropTable(
-                name: "products_photos");
+                name: "product_reviews");
 
             migrationBuilder.DropTable(
                 name: "shopping_carts");
 
             migrationBuilder.DropTable(
-                name: "suppliers_stats");
+                name: "supplier_orders");
+
+            migrationBuilder.DropTable(
+                name: "supplier_stats");
 
             migrationBuilder.DropTable(
                 name: "wish_list_items");
 
             migrationBuilder.DropTable(
                 name: "orders");
+
+            migrationBuilder.DropTable(
+                name: "promo_codes");
+
+            migrationBuilder.DropTable(
+                name: "supplier_addresses");
 
             migrationBuilder.DropTable(
                 name: "products");
@@ -1073,25 +1144,19 @@ namespace Lidemia.DataAccess.Migrations
                 name: "customer_addresses");
 
             migrationBuilder.DropTable(
-                name: "promo_codes");
-
-            migrationBuilder.DropTable(
-                name: "suppliers_addresses");
-
-            migrationBuilder.DropTable(
                 name: "photos");
 
             migrationBuilder.DropTable(
                 name: "product_categories");
 
             migrationBuilder.DropTable(
-                name: "customers");
+                name: "suppliers");
 
             migrationBuilder.DropTable(
                 name: "addresses");
 
             migrationBuilder.DropTable(
-                name: "suppliers");
+                name: "customers");
 
             migrationBuilder.DropTable(
                 name: "cities");

@@ -10,4 +10,6 @@ public static class Errors
     public static ErrorResultInfo InvalidCredentials { get; } = new(["errors.signin.invalidCredentials"]);
 
     public static IError UnauthorizedError { get; } = new Error("errors.unauthorized");
+
+    public static IError NotFoundError { get; } = new Error("errors.not_found");
 }

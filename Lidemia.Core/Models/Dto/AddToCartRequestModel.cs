@@ -5,5 +5,5 @@ namespace Lidemia.Core.Models.Dto;
 public record AddToCartRequestModel
 (
     long ProductId,
-    decimal Qty
+    int Qty
 );

@@ -35,12 +35,12 @@ public class ShoppingCartService : IShoppingCartService
         return cart.Items.Select(x => new ShoppingCartItem(Product: products[x.ProductId], Qty: x.Qty));
     }
 
-    public Task AddProduct(long customerId, long productId, decimal qty, CancellationToken cancellationToken)
+    public Task AddProduct(long customerId, long productId, int qty, CancellationToken cancellationToken)
     {
         return this.shoppingCartRepository.AddProduct(customerId, productId, qty, cancellationToken);
     }
 
-    public Task<Dictionary<long, decimal>?> GetListItems(long customerId, CancellationToken cancellationToken)
+    public Task<Dictionary<long, int>?> GetListItems(long customerId, CancellationToken cancellationToken)
     {
         return this.shoppingCartRepository.GetListItems(customerId, cancellationToken);
     }

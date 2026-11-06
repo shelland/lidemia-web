@@ -1,14 +1,42 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Lidemia.Core.Extensions
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<AppResources> localizer
+
 @{
+    var referrerUrl = Context.Request.GetReferrer();
+    var returnUrl = Url.IsLocalUrl(referrerUrl) ? referrerUrl : Url.Action("Index", "Home");
 }
 
-<div class="mb-3">
-    <label for="formGroupExampleInput" class="form-label">Example label</label>
-    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder">
-</div>
-<div class="mb-3">
-    <label for="formGroupExampleInput2" class="form-label">Another label</label>
-    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input placeholder">
-</div>
+<form id="mainForm">
+    <div class="mb-3">
+        <label for="email" class="form-label">@localizer["CustomerSignInEmail"]</label>
+        <input type="text" class="form-control" id="email" />
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">@localizer["CustomerSignInPassword"]</label>
+        <input type="password" class="form-control" id="password" />
+    </div>
+    <div class="mb-3">
+        <a class="btn btn-primary" href="javascript:;" id="signInBtn">@localizer["CustomerSignInBtn"]</a>
+    </div>
+</form>
+
+@section Scripts
+{
+    <script src="~/Pages/Scripts/CustomerSignIn.js"></script>
+    
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            CustomerSignIn.init({
+                urls: {
+                    signInUrl: '@Url.Action("Post", "CustomerSignIn")',
+                    returnUrl: '@returnUrl'
+                }
+            })
+        });
+
+    </script>
+}

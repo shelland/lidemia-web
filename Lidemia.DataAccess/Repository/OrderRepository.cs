@@ -1,7 +1,6 @@
 ﻿// Created on 01/09/2026 15:46 by Laserson
 
 using FluentResults;
-using Lidemia.Core.Enums;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Misc;
 using Lidemia.Core.Models.Service;
@@ -57,8 +56,6 @@ public class OrderRepository : IOrderRepository
                 ProductId = item.ProductId,
                 Quantity = item.Qty
             }),
-            PromoCodeId = model.PromoCodeId,
-            Status = OrderStatus.New,
         };
 
         this.context.Orders.Add(entity);

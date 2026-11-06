@@ -26,7 +26,6 @@ public class OrderMapper : IOrderMapper
             Id = source.Id,
             Number = source.Number,
             CreateDate = source.CreateDate,
-            DeliveryType = source.DeliveryType,
             Customer = this.customerMapper.Map(source.Customer)
         };
     }

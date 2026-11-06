@@ -7,5 +7,5 @@ namespace Lidemia.Core.Models.Misc;
 public record ShoppingCartItem
 (
     ProductModel Product,
-    decimal Qty
+    int Qty
 );

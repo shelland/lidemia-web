@@ -12,4 +12,6 @@ public interface ICustomerService
     Task<Result<long>> Create(CreateCustomerModel model, CancellationToken cancellationToken);
 
     Task<SignInResult<CustomerModel?>> SignIn(CustomerSignInRequestDto request, CancellationToken cancellationToken);
+
+    Task<CustomerModel?> FindById(long id, CancellationToken cancellationToken);
 }

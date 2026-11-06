@@ -6,12 +6,12 @@ public record CreateOrderModel
 (
     long CustomerId,
     string? Comment,
-    long? PromoCodeId,
     IEnumerable<CreateOrderItemModel> Items
 );
 
 public record CreateOrderItemModel
 (
     long ProductId,
-    double Qty
+    double Qty,
+    long? PromoCodeId
 );

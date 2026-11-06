@@ -7,6 +7,7 @@ using Lidemia.DataAccess.Entities;
 using Lidemia.DataAccess.Repository.Abstract;
 using LinqToDB;
 using LinqToDB.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
 
@@ -50,12 +51,12 @@ public class AuthTokenRepository : IAuthTokenRepository
                 IsActive = true,
                 RowVersion = 1
             }, token: cancellationToken);
-        
+
         return Result.Ok();
     }
 
     public Task Delete(string accessToken, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return this.context.AuthTokens.Where(x => x.AccessToken.Equals(accessToken)).ExecuteDeleteAsync(cancellationToken);
     }
 }

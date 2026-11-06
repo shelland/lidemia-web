@@ -1,0 +1,64 @@
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
+@model IEnumerable<Lidemia.Core.Models.Misc.ShoppingCartItem>
+
+@{
+}
+
+@inject IStringLocalizer<AppResources> localizer
+
+<div class="shopping-cart">
+    
+    @foreach (var item in Model)
+    {
+        <div class="shopping-cart-item d-flex justify-content-between mb-4">
+            <div class="d-flex flex-row">
+                <figure class="rounded w-17">
+                    <a href="@Url.Action("Details", "Products", new { id = item.Product.Id })">
+                        <img src="./assets/img/photos/sth1.jpg" srcset="./assets/img/photos/sth1@2x.jpg 2x" alt=""/>
+                    </a>
+                </figure>
+                <div class="w-100 ms-4">
+                    <h3 class="post-title fs-16 lh-xs mb-1">
+                        <a href="@Url.Action("Details", "Products", new { id = item.Product.Id })" class="link-dark">@item.Product.Title</a>
+                    </h3>
+                    <p class="price fs-sm">
+                        <del>
+                            <span class="amount">$55.00</span>
+                        </del>
+                        <ins>
+                            <span class="amount">$45.99</span>
+                        </ins>
+                    </p>
+                    <div class="form-select-wrapper">
+                        <select class="form-select form-select-sm">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <!--/.form-select-wrapper -->
+                </div>
+            </div>
+            <div class="ms-2">
+                <a href="#" class="link-dark">
+                    <i class="uil uil-trash-alt"></i>
+                </a>
+            </div>
+        </div>
+    }
+
+</div>
+<!-- /.shopping-cart-->
+<div class="offcanvas-footer flex-column text-center">
+    <div class="d-flex w-100 justify-content-between mb-4">
+        <span>Subtotal:</span>
+        <span class="h6 mb-0">$135.99</span>
+    </div>
+    <a href="@Url.Action("Index", "CustomerCheckout")" class="btn btn-primary btn-icon btn-icon-start rounded w-100 mb-4"><i class="uil uil-credit-card fs-18"></i> @localizer["TopMenuCartCheckout"]</a>
+    <p class="fs-14 mb-0">Free shipping on all orders over $50</p>
+</div>
+

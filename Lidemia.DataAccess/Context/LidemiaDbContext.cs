@@ -20,7 +20,7 @@ public partial class LidemiaDbContext : DbContext
 
     public DbSet<ProductEntity> Products => Set<ProductEntity>();
 
-    public DbSet<ProductPhotoEntity> ProductsPhotos => Set<ProductPhotoEntity>();
+    public DbSet<ProductPhotoEntity> ProductPhotos => Set<ProductPhotoEntity>();
 
     public DbSet<PhotoEntity> Photos => Set<PhotoEntity>();
 
@@ -42,13 +42,13 @@ public partial class LidemiaDbContext : DbContext
 
     public DbSet<ProductCategoryEntity> ProductCategories => Set<ProductCategoryEntity>();
 
-    public DbSet<SupplierStatsEntity> SuppliersStats => Set<SupplierStatsEntity>();
+    public DbSet<SupplierStatsEntity> SupplierStats => Set<SupplierStatsEntity>();
 
     public DbSet<AddressEntity> Addresses => Set<AddressEntity>();
 
     public DbSet<CustomerAddressEntity> CustomerAddresses => Set<CustomerAddressEntity>();
 
-    public DbSet<SupplierAddressEntity> SuppliersAddresses => Set<SupplierAddressEntity>();
+    public DbSet<SupplierAddressEntity> SupplierAddresses => Set<SupplierAddressEntity>();
 
     public DbSet<PasswordResetEntity> PasswordResets => Set<PasswordResetEntity>();
 
@@ -57,6 +57,8 @@ public partial class LidemiaDbContext : DbContext
     public DbSet<RegionEntity> Regions => Set<RegionEntity>();
 
     public DbSet<CityEntity> Cities => Set<CityEntity>();
+
+    public DbSet<SupplierOrderEntity> SupplierOrders => Set<SupplierOrderEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

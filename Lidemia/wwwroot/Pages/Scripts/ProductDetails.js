@@ -4,6 +4,8 @@
 
         init: function (data) {
             ProductDetails.urls = data.urls;
+            ProductDetails.values = data.values;
+
             this.bindEvents();
             this.initPlugins();
         },
@@ -12,7 +14,29 @@
 
         },
 
-        addToCart: function () {
+        addToCart: async function () {
+
+            var qty = document.querySelector("#qty").value;
+
+            var payload = {
+                productId: ProductDetails.values.id,
+                qty: qty
+            }
+
+            const response = await window.appFetch(ProductDetails.urls.addToCartUrl, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+
+            }
+
+            var result = await response.json();
+
+        },
+
+        addToWishList: function () {
 
         },
 

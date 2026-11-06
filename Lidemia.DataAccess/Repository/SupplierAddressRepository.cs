@@ -24,7 +24,7 @@ public class SupplierAddressRepository : ISupplierAddressRepository
 
     public Task<SupplierAddressEntity?> GetById(long key, CancellationToken cancellationToken)
     {
-        return this.context.SuppliersAddresses
+        return this.context.SupplierAddresses
             .Include(x => x.Address)
             .AsActive()
             .FirstOrDefaultAsync(x => x.Id == key, cancellationToken: cancellationToken);
@@ -43,7 +43,7 @@ public class SupplierAddressRepository : ISupplierAddressRepository
         {
             id = model.Id.Value;
 
-            await this.context.SuppliersAddresses
+            await this.context.SupplierAddresses
                 .Where(x => x.Id == model.Id)
                 .ExecuteUpdateAsync(x => x
                     .SetProperty(e => e.Comment, model.Comment)
@@ -72,7 +72,7 @@ public class SupplierAddressRepository : ISupplierAddressRepository
                 }
             };
 
-            this.context.SuppliersAddresses.Add(entity);
+            this.context.SupplierAddresses.Add(entity);
             id = entity.Id;
         }
 

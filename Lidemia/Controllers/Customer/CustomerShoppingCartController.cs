@@ -35,4 +35,11 @@ public class CustomerShoppingCartController : BaseController
         await this.shoppingCartService.AddProduct(RequireEntityId, request.ProductId, request.Qty, cancellationToken);
         return ResultInfo.Ok;
     }
+
+    [HttpGet("CartPreview")]
+    public async Task<IActionResult> LoadCartPreview(CancellationToken cancellationToken)
+    {
+        var items = await this.shoppingCartService.GetCustomerShoppingCart(RequireEntityId, cancellationToken);
+        return PartialView(items);
+    }
 }

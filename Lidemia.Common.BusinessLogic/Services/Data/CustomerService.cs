@@ -19,7 +19,6 @@ public class CustomerService : ICustomerService
 {
     private readonly ICustomerRepository customerRepository;
     private readonly IUserService userService;
-
     private readonly ICustomerMapper customerMapper;
 
     public CustomerService(ICustomerRepository customerRepository, IUserService userService, ICustomerMapper customerMapper)
@@ -31,7 +30,7 @@ public class CustomerService : ICustomerService
 
     public Task<Result<long>> Create(CreateCustomerModel model, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return this.customerRepository.Create(model, cancellationToken);
     }
 
     public async Task<SignInResult<CustomerModel?>> SignIn(CustomerSignInRequestDto request, CancellationToken cancellationToken)
@@ -45,5 +44,11 @@ public class CustomerService : ICustomerService
 
         var customer = (await this.customerRepository.FindCustomerByUserId(user.Id, cancellationToken)).NotNull();
         return new SignInResult<CustomerModel?>(LoginResultStatus.Success, this.customerMapper.Map(customer));
+    }
+
+    public async Task<CustomerModel?> FindById(long id, CancellationToken cancellationToken)
+    {
+        var customer = await this.customerRepository.GetById(id, cancellationToken);
+        return customer != null ? this.customerMapper.Map(customer) : null;
     }
 }

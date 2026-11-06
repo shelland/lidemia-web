@@ -137,9 +137,9 @@ public class ProductService : BaseDataService, IProductService
         return products.Select(this.productMapper.Map);
     }
 
-    public Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, int count = 3, CancellationToken cancellationToken = default)
+    public Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, long currentProductId, int count = 3, CancellationToken cancellationToken = default)
     {
-        return this.productRepository.GetRelatedProducts(categoryId, count, cancellationToken);
+        return this.productRepository.GetRelatedProducts(categoryId, currentProductId, count, cancellationToken);
     }
 
     public async Task<IEnumerable<ProductMainInfoModel>> GetProductsForSearchIndex(CancellationToken cancellationToken)

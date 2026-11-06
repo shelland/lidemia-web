@@ -38,6 +38,6 @@ public class LightCustomerMapper : ILightCustomerMapper
 {
     public LightCustomerModel Map(CustomerEntity source)
     {
-        return new LightCustomerModel(Id: source.Id, Name: source.Name);
+        return new LightCustomerModel(Id: source.Id, FirstName: source.FirstName, LastName: source.LastName);
     }
 }

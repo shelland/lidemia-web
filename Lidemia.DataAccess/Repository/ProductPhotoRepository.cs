@@ -34,13 +34,13 @@ public class ProductPhotoRepository : IProductPhotoRepository
             }
         };
 
-        this.context.ProductsPhotos.Add(productPhoto);
+        this.context.ProductPhotos.Add(productPhoto);
         await this.context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<IReadOnlyList<PhotoEntity>> GetProductPhotos(long productId, CancellationToken cancellationToken)
     {
-        var query = this.context.ProductsPhotos
+        var query = this.context.ProductPhotos
             .AsActive()
             .Include(x => x.Photo)
             .Where(x => x.ProductId == productId)
@@ -58,7 +58,7 @@ public class ProductPhotoRepository : IProductPhotoRepository
             return 0;
         }
 
-        var deletedCount = await this.context.ProductsPhotos
+        var deletedCount = await this.context.ProductPhotos
             .AsActive()
             .Where(x => x.ProductId == productId && ids.Contains(x.PhotoId))
             .ExecuteUpdateAsync(x => x.SetProperty(e => e.IsActive, false), cancellationToken: cancellationToken);

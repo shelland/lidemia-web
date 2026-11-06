@@ -14,17 +14,11 @@ public class CustomerEntity : IDbEntity, IHasId<long>, IHasMetadata<CustomerMeta
 
     public UserEntity User { get; set; } = null!;
 
-    public string Name { get; set; } = null!;
+    public string FirstName { get; set; } = null!;
 
-    public string? LogoUrl { get; set; }
-
-    public string Tin { get; set; } = null!;
+    public string LastName { get; set; } = null!;
 
     public CustomerMetadata Metadata { get; set; } = null!;
-
-    //public WishListEntity? WishList { get; set; }
-
-    //public ShoppingCartEntity? ShoppingCart { get; set; }
 
     public int RowVersion { get; set; }
 

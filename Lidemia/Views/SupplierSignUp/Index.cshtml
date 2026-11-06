@@ -63,7 +63,7 @@
         <label for="exampleFormControlInput1" class="form-label">@localizer["SupplierSignUpOrgType"]</label>
         <input type="text" class="form-control" id="exampleFormControlInput1">
     </div> *@
-</form> 
+</form>
 
 @section Scripts
 {
@@ -75,7 +75,7 @@
             SupplierSignUp.init({
                 urls: {
                     saveUrl: "@Url.Action("Post")",
-                    welcomeUrl: "@Url.Action("Index", "SupplierDashboard", new {welcome=1})"
+                    welcomeUrl: "@Url.Action("Index", "SupplierDashboard", new { welcome = 1 })"
                 }
             })
         });

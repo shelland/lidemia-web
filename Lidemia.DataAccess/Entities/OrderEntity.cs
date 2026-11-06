@@ -1,6 +1,5 @@
 ﻿// Created on 20/11/2021 12:43 by Andrey Laserson
 
-using Lidemia.Core.Enums;
 using Lidemia.Core.Models.Base;
 using Lidemia.DataAccess.Abstract;
 using Lidemia.DataAccess.Entities.Meta;
@@ -17,27 +16,13 @@ public class OrderEntity : IDbEntity, IHasId<long>, IHasMetadata<OrderMetadata>
 
     public CustomerEntity Customer { get; set; } = null!;
 
-    public OrderStatus Status { get; set; }
-
     public string? Comment { get; set; }
 
     public bool IsFinishConfirmed { get; set; }
-
-    public DateTime? LastStatusUpdate { get; set; }
-
+    
     public OrderMetadata Metadata { get; set; } = null!;
-
-    public long? PromoCodeId { get; set; }
-
-    public PromoCodeEntity? PromoCode { get; set; }
-
+    
     public IEnumerable<OrderItemEntity> Items { get; set; } = null!;
-
-    public OrderDeliveryType DeliveryType { get; set; }
-
-    public SupplierAddressEntity? SupplierAddress { get; set; }
-
-    public Guid? SupplierAddressId { get; set; }
 
     public CustomerAddressEntity? CustomerAddress { get; set; }
 

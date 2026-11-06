@@ -114,7 +114,7 @@ public class ProductRepository : IProductRepository
         var value = photoId.Value;
 
         // The primary photo must be one of the photos that belong to the product
-        var belongsToProduct = await this.context.ProductsPhotos
+        var belongsToProduct = await this.context.ProductPhotos
             .AsActive()
             .AnyAsync(x => x.ProductId == productId && x.PhotoId == value, cancellationToken);
 
@@ -166,11 +166,12 @@ public class ProductRepository : IProductRepository
         return products;
     }
 
-    public async Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, int count = 3, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, long currentProductId, int count = 3,
+        CancellationToken cancellationToken = default)
     {
         var products = await this.context.Products
             .AsActive()
-            .Where(x => x.CategoryId == categoryId)
+            .Where(x => x.CategoryId == categoryId && x.Id != currentProductId)
             .Select(x => new LightProductModel(x.Id, x.Title!, x.Price))
             .OrderBy(x => Guid.NewGuid())
             .Take(count)

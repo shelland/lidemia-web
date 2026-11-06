@@ -36,9 +36,10 @@ public class ShoppingCartRepository : IShoppingCartRepository
         return this.context.ShoppingCarts.AsActive().FirstOrDefaultAsync(x => x.CustomerId == customerId, cancellationToken);
     }
 
-    public async Task AddProduct(long customerId, long productId, decimal qty, CancellationToken cancellationToken)
+    public async Task AddProduct(long customerId, long productId, int qty, CancellationToken cancellationToken)
     {
-        var cart = await this.context.ShoppingCarts.AsActive().Include(shoppingCartEntity => shoppingCartEntity.Items)
+        var cart = await this.context.ShoppingCarts
+            .AsActive()
             .FirstOrDefaultAsync(x => x.CustomerId == customerId, cancellationToken);
 
         if (cart == null)
@@ -56,24 +57,28 @@ public class ShoppingCartRepository : IShoppingCartRepository
         {
             var currentItems = cart.Items.ToDictionary(x => x.ProductId, x => x.Qty);
 
-            if (currentItems.TryGetValue(productId, out var existingItem))
-            {
-                currentItems[productId] = existingItem + qty;
-            }
-            else
-            {
-                currentItems[productId] = qty;
-            }
+            //if (currentItems.TryGetValue(productId, out var existingItem))
+            //{
+            //    currentItems[productId] = qty;
+            //}
+            //else
+            //{
+            //    currentItems[productId] = qty;
+            //}
+
+            currentItems[productId] = qty;
 
             var newDbItems = currentItems.Select(x => new ShoppingCartItemDbModel(ProductId: x.Key, Qty: x.Value));
 
             await this.context.ShoppingCarts.AsActive()
                 .Where(x => x.CustomerId == customerId)
-                .ExecuteUpdateAsync(x => x.SetProperty(e => e.Items, newDbItems), cancellationToken: cancellationToken);
+                .ExecuteUpdateAsync(x => x.SetProperty(e => e.Items, newDbItems)
+                        .SetProperty(e => e.UpdateDate, DateTimeOffset.UtcNow),
+                    cancellationToken: cancellationToken);
         }
     }
 
-    public async Task<Dictionary<long, decimal>?> GetListItems(long customerId, CancellationToken cancellationToken)
+    public async Task<Dictionary<long, int>?> GetListItems(long customerId, CancellationToken cancellationToken)
     {
         var items = await this.context.ShoppingCarts.AsActive().FirstOrDefaultAsync(x => x.CustomerId == customerId, cancellationToken: cancellationToken);
         return items?.Items.ToDictionary(x => x.ProductId, x => x.Qty);

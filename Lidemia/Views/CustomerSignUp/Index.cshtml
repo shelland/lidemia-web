@@ -1,5 +1,50 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<AppResources> localizer
+
+<form id="mainForm">
+
+    <div class="mb-3">
+        <label for="firstName">@localizer["CustomerSignUpFirstName"]</label>
+        <input type="text" class="form-control" id="firstName"/>
+    </div>
+
+    <div class="mb-3">
+        <label for="lastName">@localizer["CustomerSignUpLastName"]</label>
+        <input type="text" class="form-control" id="lastName"/>
+    </div>
+    
+    <div class="mb-3">
+        <label for="email">@localizer["CustomerSignUpEmail"]</label>
+        <input type="text" class="form-control" id="email"/>
+    </div>
+    
+    <div class="mb-3">
+        <label for="password">@localizer["CustomerSignUpPassword"]</label>
+        <input type="password" class="form-control" id="password"/>
+    </div>
+
+    <div class="mb-3">
+        <a class="btn btn-primary" href="javascript:;" id="saveBtn">@localizer["CustomerSignUpSaveBtn"]</a>
+    </div>
+
+</form>
+
+@section Scripts
+{
+    <script src="~/Pages/Scripts/CustomerSignUp.js"></script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            CustomerSignUp.init({
+                urls: {
+                    signUpUrl: '@Url.Action("Post", "CustomerSignUp")',
+                    welcomeUrl: '@Url.Action("Index", "CustomerDashboard", new { welcome = true })'
+                }
+            })
+        })
+
+    </script>
 }

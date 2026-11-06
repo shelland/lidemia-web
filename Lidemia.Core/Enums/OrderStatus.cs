@@ -8,20 +8,23 @@ namespace Lidemia.Core.Enums;
 public enum OrderStatus
 {
     [Display(Name = "EnumOrderStatusCancelled", ResourceType = typeof(AppResources))]
-    Cancelled,
+    Cancelled = -1,
 
     [Display(Name = "EnumOrderStatusNew", ResourceType = typeof(AppResources))]
-    New,
+    New = 1,
 
     [Display(Name = "EnumOrderStatusConfirmed", ResourceType = typeof(AppResources))]
-    Confirmed,
+    Confirmed = 2,
 
     [Display(Name = "EnumOrderStatusInProgress", ResourceType = typeof(AppResources))]
-    InProgress,
+    InProgress = 3,
 
     [Display(Name = "EnumOrderStatusShipping", ResourceType = typeof(AppResources))]
-    Shipping,
+    Shipping = 4,
+
+    [Display(Name = "EnumOrderStatusWaitingForPickup", ResourceType = typeof(AppResources))]
+    WaitingForPickup = 5,
 
     [Display(Name = "EnumOrderStatusFinished", ResourceType = typeof(AppResources))]
-    Finished
+    Finished = 6
 }

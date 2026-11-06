@@ -5,5 +5,12 @@ namespace Lidemia.Core.Models.Misc;
 public record LightCustomerModel
 (
     long Id,
-    string Name
-);
+    string FirstName,
+    string LastName
+)
+{
+    public override string ToString()
+    {
+        return $"{FirstName} {LastName}";
+    }
+};

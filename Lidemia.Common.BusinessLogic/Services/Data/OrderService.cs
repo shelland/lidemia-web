@@ -6,6 +6,7 @@ using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.Mapper;
 using Lidemia.Common.Metrics;
 using Lidemia.Core.Extensions;
+using Lidemia.Core.Models.Bus;
 using Lidemia.Core.Models.Domain;
 using Lidemia.Core.Models.Misc;
 using Lidemia.Core.Models.Service;
@@ -22,18 +23,19 @@ public class OrderService : IOrderService
 {
     private readonly IOrderRepository orderRepository;
     private readonly IOrderNumberGenerator orderNumberGenerator;
-    private readonly OrderMetrics metrics;
     private readonly IOrderMapper orderMapper;
     private readonly ILogger<OrderService> logger;
 
     private static readonly ActivitySource Source = new("Lidemia.Orders");
 
-    public OrderService(IOrderRepository orderRepository, IOrderNumberGenerator orderNumberGenerator, OrderMetrics metrics, IOrderMapper orderMapper,
+    public OrderService(
+        IOrderRepository orderRepository,
+        IOrderNumberGenerator orderNumberGenerator,
+        IOrderMapper orderMapper,
         ILogger<OrderService> logger)
     {
         this.orderRepository = orderRepository;
         this.orderNumberGenerator = orderNumberGenerator;
-        this.metrics = metrics;
         this.orderMapper = orderMapper;
         this.logger = logger;
     }
@@ -45,8 +47,6 @@ public class OrderService : IOrderService
         activity.SetTag("order.id", number);
 
         var result = await this.orderRepository.Create(number, model, cancellationToken);
-
-        this.metrics.OnNewOrder();
         this.logger.LogInformation("A new order {Number} was created by {CustomerId}", number, model.CustomerId);
 
         activity.AddEvent(new ActivityEvent("OrderProcessed"));

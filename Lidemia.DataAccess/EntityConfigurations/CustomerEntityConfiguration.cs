@@ -11,8 +11,12 @@ public class CustomerEntityConfiguration : IEntityTypeConfiguration<CustomerEnti
 {
     public void Configure(EntityTypeBuilder<CustomerEntity> builder)
     {
+        builder.Property(x => x.FirstName).HasMaxLength(250);
+        builder.Property(x => x.LastName).HasMaxLength(250);
+
         builder.HasIndex(x => x.UserId).IsUnique();
         builder.Property(x => x.Metadata).AsJsonb();
+
         builder.AddBaseColumns<CustomerEntity, long>();
     }
 }

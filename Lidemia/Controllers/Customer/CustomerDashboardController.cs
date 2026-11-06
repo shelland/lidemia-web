@@ -7,7 +7,7 @@ namespace Lidemia.Controllers.Customer;
 
 [CustomerAuthorize]
 [Route("Customer/Dashboard")]
-public class CustomerDashboardController : Controller
+public class CustomerDashboardController : BaseController
 {
-    
+    public IActionResult Index() => View();
 }

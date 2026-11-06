@@ -1,5 +1,6 @@
 ﻿@using Lidemia.Resources.App
 @using Microsoft.Extensions.Localization
+
 @model Lidemia.ViewModels.ProductDetailsViewModel
 
 @inject IStringLocalizer<AppResources> localizer
@@ -51,18 +52,49 @@
                     @Model.Product.Title
                 </a>
                 <p class="price fs-20 mb-2">
-                    <span class="amount">@Model.Product.Price</span>
+                    <span class="amount">@Model.Product.Price &#8381;</span>
                 </p>
                 <a href="#" class="link-body ratings-wrapper">
                     <span class="ratings four"></span><span>(3 Reviews)</span>
                 </a>
             </h2>
         </div>
+
+        @if (Model.IsAbleToPurchase)
+        {
+            <div class="row">
+                <div class="col-lg-9 d-flex flex-row pt-2">
+                    <div>
+                        <div class="form-select-wrapper">
+                            @* <select class="form-select" id="qty">
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select> *@
+                            <input type="number" value="@Model.ItemsInCart" id="qty" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 mx-2">
+                        <button class="btn btn-primary btn-icon btn-icon-start rounded w-100 flex-grow-1" onclick="ProductDetails.addToCart()">
+                            <i class="uil uil-shopping-bag"></i> @localizer["ProductDetailsAddToCart"]
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-block btn-red btn-icon rounded px-3 w-100 h-100" onclick="ProductDetails.addToWishList()">
+                            <i class="uil uil-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+        
     </div>
 
 </div>
 
-<div class="card mt-3">
+<div class="card mt-3 mb-3">
     <div class="card-body">
         <ul class="nav nav-tabs nav-tabs-basic">
             <li class="nav-item">
@@ -107,7 +139,7 @@
             </div>
             <!--/.tab-pane -->
             <div class="tab-pane fade" id="tab3-3">
-@*                 <p>Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                @*                 <p>Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
                 <p class="mb-0">Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam id dolor id nibh ultricies vehicula ut id elit. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
  *@
                 @if (Model.CurrentUserReview != null)
@@ -122,21 +154,27 @@
                         </div>
                     }
                 }
-                
+
                 @if (Model.RecentReviews.Count > 0)
                 {
                     <ol class="commentlist">
-                        
+
                         @foreach (var review in Model.RecentReviews)
                         {
                             <li class="comment">
                                 <div class="comment-header d-md-flex align-items-center">
                                     <div class="d-flex align-items-center">
-                                        <figure class="user-avatar"><img class="rounded-circle" alt="" src="./assets/img/avatars/u1.jpg" /></figure>
+                                        <figure class="user-avatar">
+                                            <img class="rounded-circle" alt="" src="./assets/img/avatars/u1.jpg"/>
+                                        </figure>
                                         <div>
-                                            <h6 class="comment-author"><a href="#" class="link-dark">@review.Customer.Name</a></h6>
+                                            <h6 class="comment-author">
+                                                <a href="#" class="link-dark">@review.Customer.ToString()</a>
+                                            </h6>
                                             <ul class="post-meta">
-                                                <li><i class="uil uil-calendar-alt"></i>@review.CreateDate</li>
+                                                <li>
+                                                    <i class="uil uil-calendar-alt"></i>@review.CreateDate
+                                                </li>
                                             </ul>
                                             <!-- /.post-meta -->
                                         </div>
@@ -243,6 +281,11 @@
 </div>
 <!-- /.tab-content -->
  *@
+ 
+@if (Model.RelatedProducts.Any())
+{
+
+}
 
 <section class="wrapper bg-gray wider-child">
     <div class="container py-14 py-md-16">
@@ -725,11 +768,11 @@
 
             ProductDetails.init({
                 values: {
-
+                    id: '@Model.Product.Id'
                 },
                 urls: {
                     addToCartUrl: '@Url.Action("Post", "CustomerShoppingCart")',
-
+                    addToWishListUrl: '@Url.Action("Post", "CustomerWishList")'
                 }
             })
 

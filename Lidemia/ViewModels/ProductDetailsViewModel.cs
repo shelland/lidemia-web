@@ -7,6 +7,8 @@ namespace Lidemia.ViewModels;
 
 public record ProductDetailsViewModel
 (
+    bool IsAbleToPurchase,
+    int? ItemsInCart,
     ProductModel Product,
     OrderModel? CurrentUserOrder,
     ProductReviewModel? CurrentUserReview,

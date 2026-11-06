@@ -7,7 +7,7 @@
 
 @functions
 {
-    decimal? GetCartQty(long id)
+    double? GetCartQty(long id)
     {
         return Model.CartItems?.TryGetValue(id, out var qty) == true ? qty : null;
     }
@@ -87,16 +87,16 @@
                                 @if (product.HasCurrentDiscount)
                                 {
                                     <del>
-                                        <span class="amount">@product.Price</span>
+                                        <span class="amount">@product.Price &#8381;</span>
                                     </del>
                                     <ins>
-                                        <span class="amount">@product.DiscountPrice</span>
+                                        <span class="amount">@product.DiscountPrice &#8381;</span>
                                     </ins>
                                 }
                                 else
                                 {
                                     <p class="price">
-                                        <span class="amount">@product.Price</span>
+                                        <span class="amount">@product.Price &#8381;</span>
                                     </p>
                                 }
 

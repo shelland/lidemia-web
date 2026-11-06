@@ -12,4 +12,6 @@ public interface ISupplierRepository : IRepository<SupplierEntity, long>
     Task<Result<long>> Create(CreateSupplierModel model, CancellationToken cancellationToken);
 
     Task<SupplierEntity?> FindSupplierByUserId(long userId, CancellationToken cancellationToken);
+
+    Task<IEnumerable<SupplierEntity>> GetSuppliers(IEnumerable<long> ids, CancellationToken cancellationToken);
 }

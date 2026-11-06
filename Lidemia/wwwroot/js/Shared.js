@@ -13,6 +13,19 @@
             else {
                 document.querySelector(".page-loader").classList.add("d-none");
             }
+        },
+
+        setElementLoading: function (element, state) {
+
+            if (state) {
+                Shared.loadingOverlay = new LoadingOverlay(document.querySelector(element));
+                Shared.loadingOverlay.show();
+            }
+            else {
+                Shared.loadingOverlay.destroy();
+            }
+
+            
         }
 
     }

@@ -4,7 +4,30 @@
 
         init: function (data) {
             ProductsSearch.urls = data.urls;
+
             this.initSearch();
+            this.bindEvents();
+        },
+
+        bindEvents: function () {
+            document.querySelector("#offcanvas-cart").addEventListener("shown.bs.offcanvas", function () {
+                Shared.setElementLoading("#offcanvas-cart", true);
+                ProductsSearch.loadCartPreview();
+            });
+        },
+
+        loadCartPreview: async function () {
+
+            const response = await fetch(ProductsSearch.urls.cartPreviewUrl);
+
+            if (!response.ok) {
+                return;
+            }
+
+            const htmlText = await response.text();
+            document.getElementById('cartContainer').innerHTML = htmlText;
+
+            Shared.setElementLoading(null, false);
         },
 
         initSearch: function () {

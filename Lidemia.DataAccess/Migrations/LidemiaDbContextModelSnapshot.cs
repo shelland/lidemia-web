@@ -364,34 +364,32 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnName("create_date")
                         .HasDefaultValueSql("now()");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("first_name");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
                         .HasColumnName("is_active");
 
-                    b.Property<string>("LogoUrl")
-                        .HasColumnType("text")
-                        .HasColumnName("logo_url");
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("last_name");
 
                     b.Property<CustomerMetadata>("Metadata")
                         .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("metadata");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
                     b.Property<int>("RowVersion")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasDefaultValue(1)
                         .HasColumnName("row_version");
-
-                    b.Property<string>("Tin")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("tin");
 
                     b.Property<DateTimeOffset?>("UpdateDate")
                         .HasColumnType("timestamp with time zone")
@@ -446,10 +444,6 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("customer_id");
 
-                    b.Property<int>("DeliveryType")
-                        .HasColumnType("integer")
-                        .HasColumnName("delivery_type");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
                         .HasColumnName("is_active");
@@ -457,10 +451,6 @@ namespace Lidemia.DataAccess.Migrations
                     b.Property<bool>("IsFinishConfirmed")
                         .HasColumnType("boolean")
                         .HasColumnName("is_finish_confirmed");
-
-                    b.Property<DateTime?>("LastStatusUpdate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_status_update");
 
                     b.Property<OrderMetadata>("Metadata")
                         .IsRequired()
@@ -473,27 +463,11 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("character varying(32)")
                         .HasColumnName("number");
 
-                    b.Property<long?>("PromoCodeId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("promo_code_id");
-
                     b.Property<int>("RowVersion")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasDefaultValue(1)
                         .HasColumnName("row_version");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer")
-                        .HasColumnName("status");
-
-                    b.Property<Guid?>("SupplierAddressId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("supplier_address_id");
-
-                    b.Property<long?>("SupplierAddressId1")
-                        .HasColumnType("bigint")
-                        .HasColumnName("supplier_address_id1");
 
                     b.Property<DateTimeOffset?>("UpdateDate")
                         .HasColumnType("timestamp with time zone")
@@ -507,12 +481,6 @@ namespace Lidemia.DataAccess.Migrations
 
                     b.HasIndex("IsActive")
                         .HasDatabaseName("ix_orders_is_active");
-
-                    b.HasIndex("PromoCodeId")
-                        .HasDatabaseName("ix_orders_promo_code_id");
-
-                    b.HasIndex("SupplierAddressId1")
-                        .HasDatabaseName("ix_orders_supplier_address_id1");
 
                     b.HasIndex("CustomerId", "IsActive")
                         .HasDatabaseName("ix_orders_customer_id_is_active");
@@ -947,18 +915,18 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnName("update_date");
 
                     b.HasKey("Id")
-                        .HasName("pk_products_photos");
+                        .HasName("pk_product_photos");
 
                     b.HasIndex("IsActive")
-                        .HasDatabaseName("ix_products_photos_is_active");
+                        .HasDatabaseName("ix_product_photos_is_active");
 
                     b.HasIndex("PhotoId")
-                        .HasDatabaseName("ix_products_photos_photo_id");
+                        .HasDatabaseName("ix_product_photos_photo_id");
 
                     b.HasIndex("ProductId")
-                        .HasDatabaseName("ix_products_photos_product_id");
+                        .HasDatabaseName("ix_product_photos_product_id");
 
-                    b.ToTable("products_photos", (string)null);
+                    b.ToTable("product_photos", (string)null);
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.ProductReviewEntity", b =>
@@ -1304,18 +1272,18 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnName("update_date");
 
                     b.HasKey("Id")
-                        .HasName("pk_suppliers_addresses");
+                        .HasName("pk_supplier_addresses");
 
                     b.HasIndex("AddressId")
-                        .HasDatabaseName("ix_suppliers_addresses_address_id");
+                        .HasDatabaseName("ix_supplier_addresses_address_id");
 
                     b.HasIndex("IsActive")
-                        .HasDatabaseName("ix_suppliers_addresses_is_active");
+                        .HasDatabaseName("ix_supplier_addresses_is_active");
 
                     b.HasIndex("SupplierId", "IsActive")
-                        .HasDatabaseName("ix_suppliers_addresses_supplier_id_is_active");
+                        .HasDatabaseName("ix_supplier_addresses_supplier_id_is_active");
 
-                    b.ToTable("suppliers_addresses", (string)null);
+                    b.ToTable("supplier_addresses", (string)null);
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.SupplierEntity", b =>
@@ -1431,6 +1399,102 @@ namespace Lidemia.DataAccess.Migrations
                     b.ToTable("suppliers", (string)null);
                 });
 
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.SupplierOrderEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("CreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int>("DeliveryType")
+                        .HasColumnType("integer")
+                        .HasColumnName("delivery_type");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<DateTime?>("LastStatusUpdate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_status_update");
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("order_id");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("product_id");
+
+                    b.Property<long?>("PromoCodeId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("promo_code_id");
+
+                    b.Property<double>("Qty")
+                        .HasColumnType("double precision")
+                        .HasColumnName("qty");
+
+                    b.Property<int>("RowVersion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1)
+                        .HasColumnName("row_version");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<Guid?>("SupplierAddressId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("supplier_address_id");
+
+                    b.Property<long?>("SupplierAddressId1")
+                        .HasColumnType("bigint")
+                        .HasColumnName("supplier_address_id1");
+
+                    b.Property<long>("SupplierId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("supplier_id");
+
+                    b.Property<DateTimeOffset?>("UpdateDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_date");
+
+                    b.HasKey("Id")
+                        .HasName("pk_supplier_orders");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("ix_supplier_orders_is_active");
+
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_supplier_orders_order_id");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_supplier_orders_product_id");
+
+                    b.HasIndex("PromoCodeId")
+                        .HasDatabaseName("ix_supplier_orders_promo_code_id");
+
+                    b.HasIndex("SupplierAddressId1")
+                        .HasDatabaseName("ix_supplier_orders_supplier_address_id1");
+
+                    b.HasIndex("SupplierId", "IsActive")
+                        .HasDatabaseName("ix_supplier_orders_supplier_id_is_active");
+
+                    b.HasIndex("Status", "SupplierId", "IsActive")
+                        .HasDatabaseName("ix_supplier_orders_status_supplier_id_is_active");
+
+                    b.ToTable("supplier_orders", (string)null);
+                });
+
             modelBuilder.Entity("Lidemia.DataAccess.Entities.SupplierStatsEntity", b =>
                 {
                     b.Property<double>("AverageRating")
@@ -1449,7 +1513,7 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("total_products");
 
-                    b.ToTable("suppliers_stats", (string)null);
+                    b.ToTable("supplier_stats", (string)null);
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.UserEntity", b =>
@@ -1731,23 +1795,9 @@ namespace Lidemia.DataAccess.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_orders_customers_customer_id");
 
-                    b.HasOne("Lidemia.DataAccess.Entities.PromoCodeEntity", "PromoCode")
-                        .WithMany()
-                        .HasForeignKey("PromoCodeId")
-                        .HasConstraintName("fk_orders_promo_codes_promo_code_id");
-
-                    b.HasOne("Lidemia.DataAccess.Entities.SupplierAddressEntity", "SupplierAddress")
-                        .WithMany()
-                        .HasForeignKey("SupplierAddressId1")
-                        .HasConstraintName("fk_orders_suppliers_addresses_supplier_address_id1");
-
                     b.Navigation("Customer");
 
                     b.Navigation("CustomerAddress");
-
-                    b.Navigation("PromoCode");
-
-                    b.Navigation("SupplierAddress");
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.OrderItemEntity", b =>
@@ -1845,14 +1895,14 @@ namespace Lidemia.DataAccess.Migrations
                         .HasForeignKey("PhotoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_products_photos_photos_photo_id");
+                        .HasConstraintName("fk_product_photos_photos_photo_id");
 
                     b.HasOne("Lidemia.DataAccess.Entities.ProductEntity", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_products_photos_products_product_id");
+                        .HasConstraintName("fk_product_photos_products_product_id");
 
                     b.Navigation("Photo");
 
@@ -1923,14 +1973,14 @@ namespace Lidemia.DataAccess.Migrations
                         .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_suppliers_addresses_addresses_address_id");
+                        .HasConstraintName("fk_supplier_addresses_addresses_address_id");
 
                     b.HasOne("Lidemia.DataAccess.Entities.SupplierEntity", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_suppliers_addresses_suppliers_supplier_id");
+                        .HasConstraintName("fk_supplier_addresses_suppliers_supplier_id");
 
                     b.Navigation("Address");
 
@@ -1947,6 +1997,50 @@ namespace Lidemia.DataAccess.Migrations
                         .HasConstraintName("fk_suppliers_users_user_id");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.SupplierOrderEntity", b =>
+                {
+                    b.HasOne("Lidemia.DataAccess.Entities.OrderEntity", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_supplier_orders_orders_order_id");
+
+                    b.HasOne("Lidemia.DataAccess.Entities.ProductEntity", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_supplier_orders_products_product_id");
+
+                    b.HasOne("Lidemia.DataAccess.Entities.PromoCodeEntity", "PromoCode")
+                        .WithMany()
+                        .HasForeignKey("PromoCodeId")
+                        .HasConstraintName("fk_supplier_orders_promo_codes_promo_code_id");
+
+                    b.HasOne("Lidemia.DataAccess.Entities.SupplierAddressEntity", "SupplierAddress")
+                        .WithMany()
+                        .HasForeignKey("SupplierAddressId1")
+                        .HasConstraintName("fk_supplier_orders_supplier_addresses_supplier_address_id1");
+
+                    b.HasOne("Lidemia.DataAccess.Entities.SupplierEntity", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_supplier_orders_suppliers_supplier_id");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("PromoCode");
+
+                    b.Navigation("Supplier");
+
+                    b.Navigation("SupplierAddress");
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.WishListEntity", b =>

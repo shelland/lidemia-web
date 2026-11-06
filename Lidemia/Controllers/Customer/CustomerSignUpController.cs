@@ -2,9 +2,12 @@
 
 using FluentValidation;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
+using Lidemia.Core.Enums;
 using Lidemia.Core.Extensions;
+using Lidemia.Core.Models.Domain;
 using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Service;
+using Lidemia.Web.BusinessLogic.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lidemia.Controllers.Customer;
@@ -13,19 +16,24 @@ namespace Lidemia.Controllers.Customer;
 public class CustomerSignUpController : BaseController
 {
     private readonly ICustomerSignUpService signUpService;
+    private readonly IWebAuthService webAuthService;
+    private readonly ICustomerService customerService;
     private readonly IValidator<CustomerSignUpRequestDto> validator;
 
-    public CustomerSignUpController(ICustomerSignUpService signUpService, IValidator<CustomerSignUpRequestDto> validator)
+    public CustomerSignUpController(
+        ICustomerSignUpService signUpService,
+        IWebAuthService webAuthService,
+        ICustomerService customerService,
+        IValidator<CustomerSignUpRequestDto> validator)
     {
         this.signUpService = signUpService;
+        this.webAuthService = webAuthService;
+        this.customerService = customerService;
         this.validator = validator;
     }
 
     [HttpGet]
-    public IActionResult Index()
-    {
-        return View();
-    }
+    public IActionResult Index() => View();
 
     [HttpPost]
     public async Task<ResultInfo> Post([FromBody] CustomerSignUpRequestDto request, CancellationToken cancellationToken)
@@ -37,7 +45,10 @@ public class CustomerSignUpController : BaseController
             return new ErrorResultInfo(validationResult.GetErrors());
         }
 
-        await this.signUpService.SignUp(request, cancellationToken);
+        var signUpResult = await this.signUpService.SignUp(request, cancellationToken);
+        var customer = await this.customerService.FindById(signUpResult.Value, cancellationToken);
+        
+        await this.webAuthService.AuthCustomer(new SignInResult<CustomerModel>(Status: LoginResultStatus.Success, Entity: customer), cancellationToken);
         return ResultInfo.Ok;
     }
 }

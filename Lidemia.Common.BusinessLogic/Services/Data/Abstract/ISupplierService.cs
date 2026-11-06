@@ -14,4 +14,6 @@ public interface ISupplierService
     Task<SignInResult<SupplierModel?>> SignIn(SupplierSignInRequestDto request, CancellationToken cancellationToken);
 
     Task<SupplierModel?> FindById(long id, CancellationToken cancellationToken);
+
+    Task<IEnumerable<SupplierModel>> GetSuppliers(IEnumerable<long> ids, CancellationToken cancellationToken);
 }
