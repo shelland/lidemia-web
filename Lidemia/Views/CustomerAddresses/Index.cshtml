@@ -1,2 +1,48 @@
+@using Lidemia.Logic.Extensions
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
+@model Lidemia.Core.Models.Misc.BasePagedListModel<Lidemia.Core.Models.Domain.CustomerAddressModel>
+
+@inject IStringLocalizer<AppResources> localizer
+
 @{
+    ViewData.SetTitle(localizer["CustomerAddressesPageTitle"]);
+    ViewData.SetBigTitle(localizer["CustomerAddressesPageTitle"]);
+}
+
+<a class="btn btn-primary" href="@Url.Action("Create", "CustomerAddresses")">@localizer["CustomerAddressesCreate"]</a>
+
+@if (Model.Items.Any())
+{
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th>@localizer["CustomerAddressesStreetName"]</th>
+                <th>@localizer["CustomerAddressesActions"]</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var address in Model.Items)
+            {
+                <tr>
+                    <td>
+                        @address.StreetName
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" href="@Url.Action("Edit", "CustomerAddresses", new { id = address.Id })">@localizer["CustomerAddressesEdit"]</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}
+else
+{
+    <h2>@localizer["CustomerAddressesEmpty"]</h2>
 }

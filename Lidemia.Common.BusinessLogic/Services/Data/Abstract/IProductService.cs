@@ -26,4 +26,8 @@ public interface IProductService
     Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, long currentProductId, int count = 3, CancellationToken cancellationToken = default);
 
     Task<IEnumerable<ProductMainInfoModel>> GetProductsForSearchIndex(CancellationToken cancellationToken);
+
+    Task<IReadOnlyCollection<long>> ReduceQty(IDictionary<long, int> items, CancellationToken cancellationToken);
+
+    Task<long> GetProductSupplier(long productId, CancellationToken cancellationToken);
 }

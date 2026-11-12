@@ -3,9 +3,9 @@
 using FluentResults;
 using Lidemia.Core.Models.Service;
 
-namespace Lidemia.Core;
+namespace Lidemia.Core.Errors;
 
-public static class Errors
+public static class CommonErrors
 {
     public static ErrorResultInfo InvalidCredentials { get; } = new(["errors.signin.invalidCredentials"]);
 

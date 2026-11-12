@@ -3,7 +3,9 @@
 using FluentResults;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.Mapper;
+using Lidemia.Common.Mapper.Abstract;
 using Lidemia.Core.Models.Domain;
+using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Misc;
 using Lidemia.Core.Models.Service;
 using Lidemia.DataAccess.Repository.Abstract;
@@ -24,9 +26,17 @@ public class SupplierAddressService : BaseDataService, ISupplierAddressService
         this.supplierAddressMapper = supplierAddressMapper;
     }
 
-    public Task<BasePagedListModel<SupplierAddressModel>> GetAddresses()
+    public async Task<BasePagedListModel<SupplierAddressModel>> GetSupplierAddresses(long supplierId, PagingInfoModel pagingInfo, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var addresses = await this.supplierAddressRepository.GetSupplierAddresses(supplierId, pagingInfo, cancellationToken);
+
+        return new BasePagedListModel<SupplierAddressModel>
+        {
+            CurrentPage = pagingInfo.Page,
+            TotalCount = addresses.TotalItemCount,
+            TotalPages = addresses.PageCount,
+            Items = this.supplierAddressMapper.MapList(addresses)
+        };
     }
 
     public async Task<SupplierAddressModel?> GetById(long id, CancellationToken cancellationToken)
@@ -61,5 +71,11 @@ public class SupplierAddressService : BaseDataService, ISupplierAddressService
         ), cancellationToken);
 
         return result;
+    }
+
+    public async Task<IEnumerable<SupplierAddressModel>> GetAddresses(IEnumerable<long> supplierIds, CancellationToken cancellationToken)
+    {
+        var addresses = await this.supplierAddressRepository.GetAddresses(supplierIds, cancellationToken);
+        return this.supplierAddressMapper.MapList(addresses);
     }
 }

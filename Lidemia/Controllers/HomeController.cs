@@ -30,14 +30,14 @@ public class HomeController : BaseController
         //var pro
 
         //searchService.RebuildIndex(products);
-        var prods = productService.GetProductsForSearchIndex(CancellationToken.None).Result;
+        // var prods = productService.GetProductsForSearchIndex(CancellationToken.None).Result;
         // searchService.RebuildIndex(prods).Wait();
 
 
-        var results = searchService.Search(new ProductsListFilterModel
-        {
-            Title = "шоко"
-        }).Result;
+        //var results = searchService.Search(new ProductsListFilterModel
+        //{
+        //    Title = "шоко"
+        //}).Result;
 
         return View();
     }

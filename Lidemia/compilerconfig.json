@@ -10,5 +10,9 @@
   {
     "outputFile": "wwwroot/Pages/Styles/ProductDetails.css",
     "inputFile": "wwwroot/Pages/Styles/ProductDetails.less"
+  },
+  {
+    "outputFile": "wwwroot/Pages/Styles/Checkout.css",
+    "inputFile": "wwwroot/Pages/Styles/Checkout.less"
   }
 ]

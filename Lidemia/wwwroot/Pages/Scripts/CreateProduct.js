@@ -455,6 +455,13 @@
                 formData.append("removedPhotoIds", photoId);
             });
 
+            const checkedDeliveryTypes = document.querySelectorAll("input[name=delivery-type]:checked");
+            const checkedDeliveryTypesValues = [...checkedDeliveryTypes].map(checkbox => checkbox.value);
+
+            checkedDeliveryTypesValues.forEach(function (type) {
+                formData.append("deliveryTypes", type);
+            })
+
             const response = await window.appFetch(CreateProduct.urls.saveProductUrl, {
                 method: "POST",
                 body: formData

@@ -4,5 +4,5 @@ namespace Lidemia.DataAccess.Entities.Meta;
 
 public class OrderMetadata
 {
-    
+    public static OrderMetadata Default => new OrderMetadata();
 }

@@ -45,7 +45,7 @@ public class WebAuthService : IWebAuthService
             new(Core.Constants.Claims.EntityIdClaimName, customer.Id.ToString()),
             new(Core.Constants.Claims.UserIdClaimName, customer.User.Id.ToString()),
             new(Core.Constants.Claims.SessionAccessTokenClaimName, sessionToken),
-
+            new(Core.Constants.Claims.UserNameClaimName, $"{customer.FirstName} {customer.LastName}"),
             // This claim is required for SignalR hubs to identify a user
             new(ClaimTypes.NameIdentifier, customer.Id.ToString()),
             new(Core.Constants.Claims.RoleClaimName, nameof(EntityType.Customer))
@@ -82,7 +82,7 @@ public class WebAuthService : IWebAuthService
             new(Core.Constants.Claims.EntityIdClaimName, supplier.Id.ToString()),
             new(Core.Constants.Claims.UserIdClaimName, supplier.User.Id.ToString()),
             new(Core.Constants.Claims.SessionAccessTokenClaimName, sessionToken),
-
+            new(Core.Constants.Claims.UserNameClaimName, supplier.Name),
             // This claim is required for SignalR hubs to identify a user
             new(ClaimTypes.NameIdentifier, supplier.Id.ToString()),
             new(Core.Constants.Claims.RoleClaimName, nameof(EntityType.Supplier))

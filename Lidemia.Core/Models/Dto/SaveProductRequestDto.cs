@@ -23,5 +23,6 @@ public record SaveProductRequestDto
     string[]? Tags,
     string? Sku,
     long? PrimaryPhotoId,
-    long[]? RemovedPhotoIds
+    long[]? RemovedPhotoIds,
+    DeliveryType[]? DeliveryTypes
 );

@@ -107,7 +107,8 @@ public class ImportController : Controller
     }
 }
 
-public class Town
+[CsvRecord]
+public partial class Town
 {
     [CsvColumn("city")] public string City { get; set; }
 

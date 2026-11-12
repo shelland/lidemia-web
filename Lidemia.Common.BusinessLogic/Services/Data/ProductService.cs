@@ -108,12 +108,18 @@ public class ProductService : BaseDataService, IProductService
             MaxQuantity: request.MaxQuantity,
             Sku: request.Sku,
             PrimaryPhotoId: request.PrimaryPhotoId,
-            Slug: SlugHelper.CreateTransliteratedSlug(request.Title)
+            Slug: SlugHelper.CreateTransliteratedSlug(request.Title),
+            DeliveryTypes: request.DeliveryTypes
         );
 
         var result = await this.productRepository.Save(supplierId, model, cancellationToken);
-        await this.publishEndpoint.Publish(new ProductSavedBusEventModel(Id: result.Value), cancellationToken);
 
+        if (!result.IsSuccess)
+        {
+            return result;
+        }
+
+        await this.publishEndpoint.Publish(new ProductSavedBusEventModel(Id: result.Value), cancellationToken);
         return result;
     }
 
@@ -137,7 +143,8 @@ public class ProductService : BaseDataService, IProductService
         return products.Select(this.productMapper.Map);
     }
 
-    public Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, long currentProductId, int count = 3, CancellationToken cancellationToken = default)
+    public Task<IReadOnlyList<LightProductModel>> GetRelatedProducts(long categoryId, long currentProductId, int count = 3,
+        CancellationToken cancellationToken = default)
     {
         return this.productRepository.GetRelatedProducts(categoryId, currentProductId, count, cancellationToken);
     }
@@ -146,6 +153,16 @@ public class ProductService : BaseDataService, IProductService
     {
         var products = await this.productRepository.GetProductsForSearchIndex(cancellationToken);
         return this.productMainInfoMapper.MapList(products);
+    }
+
+    public Task<IReadOnlyCollection<long>> ReduceQty(IDictionary<long, int> items, CancellationToken cancellationToken)
+    {
+        return this.productRepository.ReduceQty(items, cancellationToken);
+    }
+
+    public Task<long> GetProductSupplier(long productId, CancellationToken cancellationToken)
+    {
+        return this.productRepository.GetProductSupplier(productId, cancellationToken);
     }
 
     private async Task EnsureOwnership(long productId, long supplierId, CancellationToken cancellationToken)

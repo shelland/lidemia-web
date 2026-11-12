@@ -1,7 +1,16 @@
-﻿@using Lidemia.Resources.App
+﻿@using Lidemia.Core.Enums
+@using Lidemia.Resources.App
+@using Lidemia.Web.BusinessLogic.Services.Abstract
 @using Microsoft.Extensions.Localization
 
 @inject IStringLocalizer<AppResources> localizer
+@inject ICurrentUserService currentUserService
+
+@{
+    var currentEntity = await currentUserService.GetUser();
+
+    var showCartIcon = currentEntity?.Role == EntityType.Customer;
+}
 
 <header class="wrapper bg-light">
     <nav class="navbar navbar-expand-lg center-nav navbar-light navbar-bg-light">
@@ -830,12 +839,17 @@
                             <i class="uil uil-search"></i>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    
+                    @if (showCartIcon)
+                    {
+                        <li class="nav-item">
                         <a class="nav-link position-relative d-flex flex-row align-items-center" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-cart">
                             <i class="uil uil-shopping-cart"></i>
                             <span class="badge badge-cart bg-primary">3</span>
                         </a>
                     </li>
+                    }
+
                     <li class="nav-item d-lg-none">
                         <button class="hamburger offcanvas-nav-btn">
                             <span></span>

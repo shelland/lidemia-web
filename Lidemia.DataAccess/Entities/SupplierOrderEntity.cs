@@ -2,6 +2,7 @@
 
 using Lidemia.Core.Enums;
 using Lidemia.Core.Models.Base;
+using Lidemia.Core.Models.Misc;
 using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
@@ -14,29 +15,29 @@ public class SupplierOrderEntity : IDbEntity, IHasId<long>
 
     public SupplierEntity Supplier { get; set; } = null!;
 
-    public long ProductId { get; set; }
-
-    public ProductEntity Product { get; set; } = null!;
+    public SupplierOrderItems Items { get; set; } = null!;
 
     public long OrderId { get; set; }
 
     public OrderEntity Order { get; set; } = null!;
 
-    public double Qty { get; set; }
-
     public OrderStatus Status { get; set; }
 
     public SupplierAddressEntity? SupplierAddress { get; set; }
 
-    public Guid? SupplierAddressId { get; set; }
+    public long? SupplierAddressId { get; set; }
 
-    public DateTime? LastStatusUpdate { get; set; }
+    public CustomerAddressEntity? CustomerAddress { get; set; }
+
+    public long? CustomerAddressId { get; set; }
+
+    public DateTimeOffset? LastStatusUpdate { get; set; }
 
     public long? PromoCodeId { get; set; }
 
     public PromoCodeEntity? PromoCode { get; set; }
 
-    public OrderDeliveryType DeliveryType { get; set; }
+    public DeliveryType DeliveryType { get; set; }
 
     public int RowVersion { get; set; }
 

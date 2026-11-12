@@ -51,6 +51,7 @@ public class ProductMapper : IProductMapper
             Category = entity.Category != null ? this.productCategoryMapper.Map(entity.Category) : null,
             AverageRate = entity.AverageRatingOverall ?? 0,
             AverageRecentRate = entity.AverageRatingRecent ?? 0,
+            DeliveryTypes = entity.DeliveryTypes,
             TotalRates = entity.TotalRates,
             CreateDate = entity.CreateDate,
             UpdateDate = entity.UpdateDate

@@ -4,23 +4,28 @@
     "Projects": [
       {
         "Path": "Lidemia\\Lidemia.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "http"
       },
       {
         "Path": "Lidemia.Admin\\Lidemia.Admin.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "http"
       },
       {
         "Path": "Lidemia.Processor\\Lidemia.Processor.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "Lidemia.Processor"
       },
       {
         "Path": "Lidemia.Scheduler\\Lidemia.Scheduler.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "Lidemia.Scheduler"
       },
       {
         "Path": "Lidemia.Storage\\Lidemia.Storage.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "http"
       }
     ]
   }

@@ -1,0 +1,106 @@
+@using Lidemia.Core.Extensions
+@using Lidemia.Logic.Extensions
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
+@model Lidemia.ViewModels.CreateCustomerAddressViewModel
+
+@inject IStringLocalizer<AppResources> localizer
+
+@{
+    var regionsItems = Model.Regions.Select(x => new SelectListItem(x.Name, x.Id.ToString(), x.Id == Model.Address?.Region.Id));
+    var pageTitle = Model.Address != null ? localizer["EditCustomerAddressPageTitle"] : localizer["CreateCustomerAddressPageTitle"];
+
+    ViewData.SetTitle(pageTitle);
+    ViewData.SetBigTitle(pageTitle);
+}
+
+<form id="mainForm" autocomplete="false">
+    
+    <div class="mb-3">
+        <label class="form-label" for="country">
+            @localizer["CreateCustomerAddressCountry"]
+        </label>
+
+        <select class="form-control" id="country" name="country">
+
+            @foreach (var item in Model.Countries)
+            {
+                <!option value="@item.Id">@item.Name</!option>
+            }
+
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="region">
+            @localizer["CreateCustomerAddressRegion"]
+        </label>
+
+        @Html.DropDownList("region", regionsItems, new { @class = "form-control" })
+
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="city">
+            @localizer["CreateCustomerAddressCity"]
+        </label>
+
+        <select class="form-control" id="city" name="city">
+        </select>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label class="form-label" for="streetName">@localizer["CreateCustomerAddressStreetName"]</label>
+            <input type="text" class="form-control" value="@Model.Address?.StreetName" id="streetName" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="houseNumber">@localizer["CreateCustomerAddressHouseNumber"]</label>
+            <input type="text" class="form-control" value="@Model.Address?.HouseNumber" id="houseNumber" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="flatNumber">@localizer["CreateCustomerAddressFlatNumber"]</label>
+            <input type="text" class="form-control" value="@Model.Address?.FlatNumber" id="flatNumber" />
+        </div>
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label" for="comment">@localizer["CreateCustomerAddressComment"]</label>
+        <input type="text" class="form-control" value="@Model.Address?.Comment" id="comment" />
+    </div>
+
+    <div class="mb-3">
+        <a class="btn btn-primary" href="javascript:;" id="saveBtn">@localizer["CreateCustomerAddressSaveBtn"]</a>
+        <a class="btn btn-secondary" href="@Url.Action("Index", "CustomerAddresses")">@localizer["GenericCancel"]</a>
+    </div>
+
+</form>
+
+@section Scripts
+{
+    <script src="~/Pages/Scripts/CreateCustomerAddress.js"></script>
+    
+    <script>
+
+        var cities = @Html.Raw(Model.Cities.Serialize());
+        var address = @Html.Raw(Model.Address != null ? $"'{Model.Address.Id}'" : "null");
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            CreateCustomerAddress.init({
+                urls: {
+                    saveUrl: '@Url.Action("Post", "CustomerAddresses")',
+                    returnUrl: '@Url.Action("Index", "CustomerAddresses")'
+                },
+                values: {
+                    cities: cities,
+                    currentCity: @(Model.Address?.City.Id.ToString() ?? "null"),
+                    address: address,
+                }
+            })
+
+        });
+
+    </script>
+}

@@ -6,11 +6,12 @@ public record CreateOrderRequestDto
 (
     IEnumerable<OrderItem> Items,
     string? Comment,
-    long? PromoCodeId
+    long? CustomerAddressId
 );
 
 public record OrderItem
 (
-    long ProductId,
-    double Qty
+    long SupplierId,
+    long? SupplierAddressId,
+    string? PromoCode
 );

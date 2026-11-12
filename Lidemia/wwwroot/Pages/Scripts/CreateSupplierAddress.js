@@ -39,27 +39,6 @@
         },
 
         save: async function () {
-            // var id = CreateSupplierAddress.values.address.id;
-
-            /* var payload = {
-                title: title,
-                description: description,
-                tags: tags
-            };
-
-            if (CreateProduct.values.product) {
-                payload.id = CreateProduct.values.product.id;
-            }
-
-            const response = await window.appFetch(CreateProduct.urls.saveProductUrl, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) {
-
-            }
-*/
 
             var payload = {
                 countryId: document.getElementById("country").value,
@@ -72,7 +51,7 @@
             };
 
             if (CreateSupplierAddress.values.address) {
-                payload.id = CreateSupplierAddress.values.address.id;
+                payload.id = CreateSupplierAddress.values.address;
             }
 
             const response = await window.appFetch(CreateSupplierAddress.urls.saveUrl, {
@@ -84,7 +63,7 @@
 
             }
 
-
+            window.location = CreateSupplierAddress.urls.returnUrl;
         }
 
     }

@@ -7,29 +7,57 @@
 
 @{
     ViewData.SetTitle(localizer["ShoppingCartPageTitle"]);
+    ViewData.SetBigTitle(localizer["ShoppingCartPageTitle"]);
 }
+
+Total: @Model.Total
+<br/>
+DiscountTotal: @Model.DiscountTotal
 
 @if (Model.Items != null)
 {
     <div class="row">
-        
+
         @foreach (var item in Model.Items)
         {
-            <div class="col-md-12">
+            <div class="col-lg-12 mt-2">
                 <div class="row">
                     <div class="col-md-4">
-                        <a href="@Url.Action("Details", "Products", new { id = item.Product.Id })">@item.Product.Title</a>
+                        <a href="@Url.Action("Details", "Products", new { id = item.Product.Id })" target="_blank">@item.Product.Title</a>
                     </div>
                     <div class="col-md-4">
-                        COL 2
+
+                        @if (item.Product.HasCurrentDiscount)
+                        {
+                            <p class="price">
+                                <del>
+                                    <span class="amount">@item.Product.Price &#8381;</span>
+                                </del>
+                                <ins>
+                                    <span class="amount">@item.Product.DiscountPrice &#8381;</span>
+                                </ins>
+                            </p>
+                        }
+                        else
+                        {
+                            <p class="price">
+                                <span class="amount">@item.Product.Price &#8381;</span>
+                            </p>
+                        }
+
                     </div>
                     <div class="col-md-4">
-                        <input type="text" value="@item.Qty"/>
+                        <input type="number" class="form-control item-quantity" value="@item.Qty" data-product="@item.Product.Id" max="@item.Product.MaxQuantity"/>
                     </div>
                 </div>
             </div>
         }
 
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <a class="btn btn-primary" href="@Url.Action("Index", "CustomerCheckout")">@localizer["ShoppingCartCheckout"]</a>
+        </div>
     </div>
 }
 else
@@ -46,8 +74,8 @@ else
         document.addEventListener("DOMContentLoaded", function() {
             ShoppingCart.init({
                 urls: {
-                    addToCartUrl: '@Url.Action("Post")'
-                },
+                    addToCartUrl: '@Url.Action("Post", "CustomerShoppingCart")'
+                    
                 values: {
 
                 }
@@ -55,4 +83,5 @@ else
         });
 
     </script>
-}
+    }
+

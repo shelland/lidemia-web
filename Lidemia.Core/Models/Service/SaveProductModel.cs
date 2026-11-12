@@ -23,5 +23,6 @@ public record SaveProductModel
     decimal? MaxQuantity,
     string? Sku,
     long? PrimaryPhotoId,
-    string? Slug
+    string? Slug,
+    DeliveryType[]? DeliveryTypes
 );

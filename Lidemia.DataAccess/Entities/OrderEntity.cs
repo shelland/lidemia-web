@@ -22,11 +22,11 @@ public class OrderEntity : IDbEntity, IHasId<long>, IHasMetadata<OrderMetadata>
     
     public OrderMetadata Metadata { get; set; } = null!;
     
-    public IEnumerable<OrderItemEntity> Items { get; set; } = null!;
+    public ICollection<OrderItemEntity> Items { get; set; } = null!;
 
     public CustomerAddressEntity? CustomerAddress { get; set; }
 
-    public Guid? CustomerAddressId { get; set; }
+    public long? CustomerAddressId { get; set; }
 
     public int RowVersion { get; set; }
 

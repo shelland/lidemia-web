@@ -6,6 +6,8 @@ namespace Lidemia.ViewModels;
 
 public record CheckoutViewModel
 (
-    decimal CartTotal,
-    IDictionary<(long SupplierId, string SupplierName), IEnumerable<(ProductModel Product, int Qty)>> Items
+    decimal Total,
+    decimal DiscountTotal,
+    IDictionary<(long SupplierId, string SupplierName, IEnumerable<SupplierAddressModel> Addresses), IEnumerable<(ProductModel Product, int Qty)>> Items,
+    IEnumerable<CustomerAddressModel> CustomerAddresses
 );

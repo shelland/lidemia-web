@@ -14,17 +14,36 @@ namespace Lidemia.Controllers.Customer;
 public class CustomerShoppingCartController : BaseController
 {
     private readonly IShoppingCartService shoppingCartService;
+    private readonly IProductService productService;
 
-    public CustomerShoppingCartController(IShoppingCartService shoppingCartService)
+    public CustomerShoppingCartController(IShoppingCartService shoppingCartService, IProductService productService)
     {
         this.shoppingCartService = shoppingCartService;
+        this.productService = productService;
     }
 
     [HttpGet]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var items = await this.shoppingCartService.GetCustomerShoppingCart(RequireEntityId, cancellationToken);
-        var viewModel = new ShoppingCartViewModel(Items: items);
+        decimal totalSum = 0, totalDiscountSum = 0;
+
+        foreach (var product in items ?? [])
+        {
+            if (product.Product.HasCurrentDiscount)
+            {
+                totalDiscountSum += (product.Product.DiscountPrice ?? 0) * product.Qty;
+            }
+            else
+            {
+                totalDiscountSum += product.Product.Price * product.Qty;
+            }
+
+            totalSum += product.Product.Price * product.Qty;
+        }
+
+
+        var viewModel = new ShoppingCartViewModel(Items: items, Total: totalSum, DiscountTotal: totalDiscountSum);
 
         return View(viewModel);
     }

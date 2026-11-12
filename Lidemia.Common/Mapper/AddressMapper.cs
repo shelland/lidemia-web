@@ -5,6 +5,7 @@ using Lidemia.Core.Models.Domain;
 using Lidemia.DataAccess.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
+using System.Net;
 
 namespace Lidemia.Common.Mapper;
 
@@ -23,11 +24,32 @@ public interface ICityMapper : IMapper<CityEntity, CityModel>;
 [ServiceDescriptor<IAddressMapper>(ServiceLifetime.Scoped)]
 public class AddressMapper : IAddressMapper
 {
+    private readonly ICountryMapper countryMapper;
+    private readonly IRegionMapper regionMapper;
+    private readonly ICityMapper cityMapper;
+
+    public AddressMapper(ICountryMapper countryMapper, IRegionMapper regionMapper, ICityMapper cityMapper)
+    {
+        this.countryMapper = countryMapper;
+        this.regionMapper = regionMapper;
+        this.cityMapper = cityMapper;
+    }
+
     public AddressModel Map(AddressEntity source)
     {
         return new AddressModel
         {
-            Id = source.Id
+            Id = source.Id,
+            CreateDate = source.CreateDate,
+            Region = this.regionMapper.Map(source.Region),
+            City = this.cityMapper.Map(source.City),
+            Country = this.countryMapper.Map(source.Country),
+            StreetName = source.StreetName,
+            HouseNumber = source.HouseNumber,
+            HouseAdd1 = source.HouseAdd1,
+            HouseAdd2 = source.HouseAdd2,
+            AddressLine1 = source.AddressLine1,
+            AddressLine2 = source.AddressLine2
         };
     }
 }
@@ -35,11 +57,31 @@ public class AddressMapper : IAddressMapper
 [ServiceDescriptor<ICustomerAddressMapper>(ServiceLifetime.Scoped)]
 public class CustomerAddressMapper : ICustomerAddressMapper
 {
+    private readonly IAddressMapper addressMapper;
+
+    public CustomerAddressMapper(IAddressMapper addressMapper)
+    {
+        this.addressMapper = addressMapper;
+    }
+
     public CustomerAddressModel Map(CustomerAddressEntity source)
     {
+        var address = this.addressMapper.Map(source.Address);
+
         return new CustomerAddressModel
         {
-            Id = source.Id
+            Id = source.Id,
+            CreateDate = source.CreateDate,
+            AddressLine1 = address.AddressLine1,
+            AddressLine2 = address.AddressLine2,
+            City = address.City,
+            Comment = source.Comment,
+            Region = address.Region,
+            Country = address.Country,
+            FlatNumber = address.FlatNumber,
+            HouseNumber = address.HouseNumber,
+            StreetName = address.StreetName,
+            CustomerId = source.CustomerId
         };
     }
 }
@@ -47,11 +89,31 @@ public class CustomerAddressMapper : ICustomerAddressMapper
 [ServiceDescriptor<ISupplierAddressMapper>(ServiceLifetime.Scoped)]
 public class SupplierAddressMapper : ISupplierAddressMapper
 {
+    private readonly IAddressMapper addressMapper;
+
+    public SupplierAddressMapper(IAddressMapper addressMapper)
+    {
+        this.addressMapper = addressMapper;
+    }
+
     public SupplierAddressModel Map(SupplierAddressEntity source)
     {
+        var address = this.addressMapper.Map(source.Address);
+
         return new SupplierAddressModel
         {
-            Id = source.Id
+            Id = source.Id,
+            CreateDate = source.CreateDate,
+            AddressLine1 = address.AddressLine1,
+            AddressLine2 = address.AddressLine2,
+            City = address.City,
+            Comment = source.Comment,
+            Region = address.Region,
+            Country = address.Country,
+            FlatNumber = address.FlatNumber,
+            HouseNumber = address.HouseNumber,
+            StreetName = address.StreetName,
+            SupplierId = source.SupplierId
         };
     }
 }

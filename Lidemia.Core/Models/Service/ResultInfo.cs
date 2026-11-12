@@ -41,6 +41,15 @@ public class ErrorResultInfo<T> : ResultInfo
         };
     }
 
+    public ErrorResultInfo(T error)
+    {
+        this.IsSuccess = false;
+        this.Data = new ErrorResponseBody<T>
+        {
+            Errors = [error]
+        };
+    }
+
     public ErrorResponseBody<T> Data { get; set; }
 }
 

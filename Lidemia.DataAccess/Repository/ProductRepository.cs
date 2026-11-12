@@ -2,6 +2,7 @@
 
 using FluentResults;
 using Lidemia.Core.Enums;
+using Lidemia.Core.Errors;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Misc;
@@ -49,7 +50,7 @@ public class ProductRepository : IProductRepository
 
         if (model.Id.HasValue)
         {
-            await this.context.Products
+            var affectedRows = await this.context.Products
                 .Where(x => x.Id == model.Id && x.SupplierId == supplierId)
                 .ExecuteUpdateAsync(x => x
                         .SetProperty(e => e.Title, model.Title)
@@ -66,8 +67,14 @@ public class ProductRepository : IProductRepository
                         .SetProperty(e => e.HasCurrentDiscount, e => model.HasCurrentDiscount ?? e.HasCurrentDiscount)
                         .SetProperty(e => e.DiscountStartDate, model.DiscountStartDate)
                         .SetProperty(e => e.DiscountEndDate, model.DiscountEndDate)
-                        .SetProperty(e => e.Tags, model.Tags ?? []),
+                        .SetProperty(e => e.Tags, model.Tags ?? [])
+                        .SetProperty(e => e.DeliveryTypes, model.DeliveryTypes),
                     cancellationToken: cancellationToken);
+
+            if (affectedRows == 0)
+            {
+                return Result.Fail(CommonErrors.NotFoundError);
+            }
 
             productId = model.Id.Value;
         }
@@ -90,7 +97,8 @@ public class ProductRepository : IProductRepository
                 HasCurrentDiscount = model.HasCurrentDiscount ?? false,
                 DiscountStartDate = model.DiscountStartDate,
                 DiscountEndDate = model.DiscountEndDate,
-                Tags = model.Tags ?? []
+                Tags = model.Tags ?? [],
+                DeliveryTypes = model.DeliveryTypes
             };
 
             this.context.Products.Add(product);
@@ -183,6 +191,43 @@ public class ProductRepository : IProductRepository
     public async Task<IEnumerable<ProductEntity>> GetProductsForSearchIndex(CancellationToken cancellationToken)
     {
         return await this.context.Products.AsActive().Where(x => x.Supplier.Status == SupplierStatus.Active).ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyCollection<long>> ReduceQty(IDictionary<long, int> items, CancellationToken cancellationToken)
+    {
+        var ids = items.Select(x => x.Key);
+
+        var products = this.context.Products.AsTracking().Where(x => ids.Contains(x.Id));
+        var failedProducts = new List<long>();
+
+        foreach (var product in products)
+        {
+            if (product.AvailableUnits == null)
+            {
+                continue;
+            }
+
+            var newQty = product.AvailableUnits - (items[product.Id] * (product.QuantityReducing ?? 1));
+
+            if (newQty < 0)
+            {
+                failedProducts.Add(product.Id);
+                continue;
+            }
+
+            product.AvailableUnits = newQty;
+        }
+
+        await this.context.SaveChangesAsync(cancellationToken);
+        return failedProducts;
+    }
+
+    public async Task<long> GetProductSupplier(long productId, CancellationToken cancellationToken)
+    {
+        return await this.context.Products
+            .Where(x => x.Id == productId)
+            .Select(x => x.SupplierId)
+            .FirstAsync(cancellationToken: cancellationToken);
     }
 
     public Task Delete(long key, CancellationToken cancellationToken)

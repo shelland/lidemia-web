@@ -13,7 +13,9 @@ public interface IOrderRepository : IRepository<OrderEntity, long>
 {
     Task<IPagedList<OrderEntity>> GetCustomerOrders(long customerId, PagingInfoModel pagingInfo, CancellationToken cancellationToken);
 
-    Task<Result<long>> Create(string number, CreateOrderModel model, CancellationToken cancellationToken);
+    Task<Result<long>> Create(long customerId, string number, CreateOrderModel model, CancellationToken cancellationToken);
 
     Task<OrderEntity?> GetUserProductLastOrder(long customerId, long productId, CancellationToken cancellationToken);
+
+    Task<OrderEntity?> GetCustomerOrder(long orderId, long customerId, CancellationToken cancellationToken);
 }

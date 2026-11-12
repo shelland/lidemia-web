@@ -9,9 +9,11 @@ namespace Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 
 public interface IOrderService
 {
-    Task<Result<long>> Create(CreateOrderModel model, CancellationToken cancellationToken);
+    Task<Result<long>> Create(long customerId, CreateOrderModel model, CancellationToken cancellationToken);
 
     Task<BasePagedListModel<OrderModel>> GetCustomerOrders(PagingInfoModel pagingInfo, long customerId, CancellationToken cancellationToken);
 
     Task<OrderModel?> GetUserProductLastOrder(long customerId, long productId, CancellationToken cancellationToken);
+
+    Task<OrderModel?> GetCustomerOrder(long orderId, long customerId, CancellationToken cancellationToken);
 }

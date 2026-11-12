@@ -2,7 +2,7 @@
 
 using Lidemia.Core.Enums;
 
-namespace Lidemia.Core.Models.Domain;
+namespace Lidemia.Core.Models.Dto;
 
 public record SaveSupplierAddressRequestDto
 (

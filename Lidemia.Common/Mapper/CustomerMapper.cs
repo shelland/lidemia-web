@@ -28,7 +28,11 @@ public class CustomerMapper : ICustomerMapper
         return new CustomerModel
         {
             Id = source.Id,
-            User = this.userMapper.Map(source.User)
+            User = this.userMapper.Map(source.User),
+            FirstName = source.FirstName,
+            LastName = source.LastName,
+            CreateDate = source.CreateDate,
+            UpdateDate = source.UpdateDate
         };
     }
 }

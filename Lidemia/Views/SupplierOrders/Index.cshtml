@@ -1,0 +1,61 @@
+@using Lidemia.Core.Extensions
+@using Lidemia.Logic.Extensions
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
+@model Lidemia.Core.Models.Misc.BasePagedListModel<Lidemia.Core.Models.Domain.SupplierOrderModel>
+
+@inject IStringLocalizer<AppResources> localizer
+
+@{
+    ViewData.SetTitle(localizer["SupplierOrdersPageTitle"]);
+    ViewData.SetBigTitle(localizer["SupplierOrdersPageTitle"]);
+}
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>@localizer["SupplierOrdersNumber"]</th>
+            <th>@localizer["SupplierOrdersDate"]</th>
+            <th>@localizer["SupplierOrdersProductsCount"]</th>
+            <th>@localizer["SupplierOrdersSum"]</th>
+            <th>@localizer["SupplierOrdersStatus"]</th>
+            <th>@localizer["SupplierOrdersActions"]</th>
+        </tr>
+    </thead>
+
+    @foreach (var order in Model.Items)
+    {
+        <tr>
+            <td>
+                <a href="@Url.Action("Details", "SupplierOrders", new { id = order.Id })">
+                    @order.Order.Number
+                </a>
+            </td>
+            <td>@order.Order.CreateDate</td>
+            <td>@order.Items.Items.Count</td>
+            <td>@order.Items.TotalSum()</td>
+            <td>@order.Status.GetLocalizedDisplayName()</td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown button
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="#">@localizer["SupplierOrdersSetStatus"]</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Another action</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>

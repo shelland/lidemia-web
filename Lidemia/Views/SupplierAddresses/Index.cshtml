@@ -1,2 +1,53 @@
-@{
-}
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
+@model Lidemia.Core.Models.Misc.BasePagedListModel<Lidemia.Core.Models.Domain.SupplierAddressModel>
+
+@inject IStringLocalizer<AppResources> localizer
+
+<a class="btn btn-primary" href="@Url.Action("Create", "SupplierAddresses")">@localizer["SupplierAddressesCreate"]</a>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th scope="col">
+                @localizer["SupplierAddressesRegion"]
+            </th>
+            <th scope="col">
+                @localizer["SupplierAddressesCity"]
+            </th>
+            <th scope="col">
+                @localizer["SupplierAddressStreet"]
+            </th>
+            <th scope="col">
+                @localizer["SupplierAddressesActions"]
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var address in Model.Items)
+        {
+            <tr>
+                <td>
+                    @address.Region.Name
+                </td>
+                <td>
+                    @address.City.Name
+                </td>
+                <td>
+                    @address.StreetName
+                </td>
+                <td>
+                    <a class="btn btn-secondary" href="@Url.Action("Edit", "SupplierAddresses", new { id = address.Id })">
+                        @localizer["SupplierAddressesEdit"]
+                    </a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>

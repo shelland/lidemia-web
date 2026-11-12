@@ -4,9 +4,7 @@ using FluentResults;
 using Lidemia.Common.BusinessLogic.Services.App.Abstract;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.Mapper;
-using Lidemia.Common.Metrics;
 using Lidemia.Core.Extensions;
-using Lidemia.Core.Models.Bus;
 using Lidemia.Core.Models.Domain;
 using Lidemia.Core.Models.Misc;
 using Lidemia.Core.Models.Service;
@@ -40,14 +38,14 @@ public class OrderService : IOrderService
         this.logger = logger;
     }
 
-    public async Task<Result<long>> Create(CreateOrderModel model, CancellationToken cancellationToken)
+    public async Task<Result<long>> Create(long customerId, CreateOrderModel model, CancellationToken cancellationToken)
     {
         using var activity = Source.StartActivity().NotNull();
         var number = this.orderNumberGenerator.Generate();
         activity.SetTag("order.id", number);
 
-        var result = await this.orderRepository.Create(number, model, cancellationToken);
-        this.logger.LogInformation("A new order {Number} was created by {CustomerId}", number, model.CustomerId);
+        var result = await this.orderRepository.Create(customerId, number, model, cancellationToken);
+        this.logger.LogInformation("A new order {Number} was created by {CustomerId}", number, customerId);
 
         activity.AddEvent(new ActivityEvent("OrderProcessed"));
 
@@ -70,6 +68,12 @@ public class OrderService : IOrderService
     public async Task<OrderModel?> GetUserProductLastOrder(long customerId, long productId, CancellationToken cancellationToken)
     {
         var order = await this.orderRepository.GetUserProductLastOrder(customerId, productId, cancellationToken);
+        return order != null ? this.orderMapper.Map(order) : null;
+    }
+
+    public async Task<OrderModel?> GetCustomerOrder(long orderId, long customerId, CancellationToken cancellationToken)
+    {
+        var order = await this.orderRepository.GetCustomerOrder(orderId, customerId, cancellationToken);
         return order != null ? this.orderMapper.Map(order) : null;
     }
 }

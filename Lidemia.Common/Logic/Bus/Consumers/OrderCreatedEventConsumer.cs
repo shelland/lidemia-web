@@ -9,6 +9,6 @@ public class OrderCreatedEventConsumer : IConsumer<OrderCreatedBusEventModel>
 {
     public Task Consume(ConsumeContext<OrderCreatedBusEventModel> context)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 }

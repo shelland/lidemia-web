@@ -4,5 +4,6 @@ namespace Lidemia.Core.Models.Dto;
 
 public record VerifyCartRequestDto
 (
-    decimal TotalSum
+    decimal TotalSum,
+    IEnumerable<long> Products
 );

@@ -14,7 +14,7 @@
         <script type="importmap"></script>
 
         <partial name="StaticIncludesHead"/>
-        
+
         @await RenderSectionAsync("Styles", false)
 
         <script src="https://www.google.com/recaptcha/enterprise.js?render=KEY_ID"></script>
@@ -58,7 +58,7 @@
         <partial name="StaticIncludesBody"/>
 
         @await RenderSectionAsync("Scripts", false)
-    
+        <div class="page-loader d-none"></div>
     </body>
-<div class="page-loader d-none"></div>
+
 </html>

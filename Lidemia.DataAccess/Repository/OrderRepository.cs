@@ -6,6 +6,7 @@ using Lidemia.Core.Models.Misc;
 using Lidemia.Core.Models.Service;
 using Lidemia.DataAccess.Context;
 using Lidemia.DataAccess.Entities;
+using Lidemia.DataAccess.Entities.Meta;
 using Lidemia.DataAccess.Extensions;
 using Lidemia.DataAccess.Repository.Abstract;
 using Microsoft.EntityFrameworkCore;
@@ -39,23 +40,26 @@ public class OrderRepository : IOrderRepository
     {
         return this.context.Orders
             .AsActive()
+            .Include(x => x.Customer)
+            .ThenInclude(x => x.User)
             .Where(x => x.CustomerId == customerId)
             .OrderByDescending(x => x.Id)
             .ToPagedListEx(pagingInfo, cancellationToken);
     }
 
-    public async Task<Result<long>> Create(string number, CreateOrderModel model, CancellationToken cancellationToken)
+    public async Task<Result<long>> Create(long customerId, string number, CreateOrderModel model, CancellationToken cancellationToken)
     {
         var entity = new OrderEntity
         {
-            CustomerId = model.CustomerId,
+            CustomerId = customerId,
             Comment = model.Comment,
             Number = number,
+            Metadata = OrderMetadata.Default,
             Items = model.Items.Select(item => new OrderItemEntity
             {
                 ProductId = item.ProductId,
                 Quantity = item.Qty
-            }),
+            }).ToList(),
         };
 
         this.context.Orders.Add(entity);
@@ -74,5 +78,14 @@ public class OrderRepository : IOrderRepository
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
         return order;
+    }
+
+    public Task<OrderEntity?> GetCustomerOrder(long orderId, long customerId, CancellationToken cancellationToken)
+    {
+        return this.context.Orders
+            .AsActive()
+            .Include(x => x.Customer)
+            .ThenInclude(x => x.User)
+            .FirstOrDefaultAsync(x => x.Id == orderId && x.CustomerId == customerId, cancellationToken);
     }
 }

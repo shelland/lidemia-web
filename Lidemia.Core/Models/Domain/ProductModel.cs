@@ -54,4 +54,6 @@ public class ProductModel : AbstractEntity<long>
     public PhotoModel PrimaryPhoto { get; set; } = null!;
 
     public string? Slug { get; set; }
+
+    public DeliveryType[]? DeliveryTypes { get; set; }
 }

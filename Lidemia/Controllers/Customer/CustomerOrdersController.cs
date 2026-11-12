@@ -24,4 +24,17 @@ public class CustomerOrdersController : BaseController
         var orders = await this.orderService.GetCustomerOrders(pagingInfo, RequireEntityId, cancellationToken);
         return View(orders);
     }
+
+    [HttpGet("Details/{id:long}")]
+    public async Task<IActionResult> Details([FromRoute] long id, CancellationToken cancellationToken)
+    {
+        var order = await this.orderService.GetCustomerOrder(id, RequireEntityId, cancellationToken);
+
+        if (order == null)
+        {
+            return RedirectToAction("Index", "CustomerOrders");
+        }
+
+        return View(order);
+    }
 }

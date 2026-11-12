@@ -19,6 +19,14 @@
     var availabilityTypeItems = EnumExtensions.GetValues<ProductAvailabilityType>(Model.Product?.AvailabilityType)
         .Prepend(new SelectListItem(string.Empty, string.Empty));
 
+    var deliveryTypes = new List<(string Text, int Value, bool IsSelected)>();
+
+    foreach (var productDeliveryType in Enum.GetValues<DeliveryType>())
+    {
+        var contains = Model.Product?.DeliveryTypes?.Contains(productDeliveryType) == true;
+        deliveryTypes.Add((productDeliveryType.GetLocalizedDisplayName(), (int)productDeliveryType, contains));
+    }
+
     long? primaryPhotoId = Model.Product?.PrimaryPhoto?.Id;
 }
 
@@ -129,6 +137,18 @@
 
         <div class="row g-2 mt-1" id="imagesPreview">
         </div>
+    </div>
+    
+    <div class="mb-3">
+        
+        @foreach (var type in deliveryTypes)
+        {
+            <div class="form-check">
+                <input name="delivery-type" type="radio" id="delivery_@(type.Value)" value="@type.Value" @(type.IsSelected ? "checked" : null) class="form-check-input" />
+                <label class="form-check-label" for="delivery_@(type.Value)">@type.Text</label>
+            </div>
+        }
+
     </div>
 
     <div class="mb-3">

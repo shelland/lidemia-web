@@ -4,7 +4,8 @@ using FluentValidation;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Core.Attributes;
 using Lidemia.Core.Extensions;
-using Lidemia.Core.Models.Domain;
+using Lidemia.Core.Models.Dto;
+using Lidemia.Core.Models.Misc;
 using Lidemia.Core.Models.Service;
 using Lidemia.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -35,9 +36,11 @@ public class SupplierAddressesController : BaseController
         this.validator = validator;
     }
 
-    public async Task<IActionResult> Index()
+    [HttpGet]
+    public async Task<IActionResult> Index([FromQuery] PagingInfoModel pagingInfo, CancellationToken cancellationToken)
     {
-        return View();
+        var addresses = await this.supplierAddressService.GetSupplierAddresses(RequireEntityId, pagingInfo, cancellationToken);
+        return View(addresses);
     }
 
     [HttpGet("Create")]

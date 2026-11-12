@@ -1,0 +1,13 @@
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+@model Lidemia.Core.Models.Domain.OrderModel
+
+@inject IStringLocalizer<AppResources> localizer
+
+@{
+}
+
+<h1>@Model.Number</h1>
+
+<a class="btn btn-primary" href="@Url.Action("Index", "Products")">@localizer["CheckoutFinishedBackToProducts"]</a>
+<a class="btn btn-primary" href="@Url.Action("Index", "CustomerDashboard")">@localizer["CheckoutFinishedToUserDashboard"]</a>

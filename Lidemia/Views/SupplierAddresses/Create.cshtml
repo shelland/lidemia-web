@@ -48,21 +48,21 @@
     <div class="row mb-3">
         <div class="col-md-4">
             <label class="form-label" for="streetName">@localizer["CreateSupplierAddressStreetName"]</label>
-            <input type="text" class="form-control" value="@Model.Address?.StreetName" id="streetName"/>
+            <input type="text" class="form-control" value="@Model.Address?.StreetName" id="streetName" />
         </div>
         <div class="col-md-4">
             <label class="form-label" for="houseNumber">@localizer["CreateSupplierAddressHouseNumber"]</label>
-            <input type="text" class="form-control" value="@Model.Address?.HouseNumber" id="houseNumber"/>
+            <input type="text" class="form-control" value="@Model.Address?.HouseNumber" id="houseNumber" />
         </div>
         <div class="col-md-4">
             <label class="form-label" for="flatNumber">@localizer["CreateSupplierAddressFlatNumber"]</label>
-            <input type="text" class="form-control" value="@Model.Address?.FlatNumber" id="flatNumber"/>
+            <input type="text" class="form-control" value="@Model.Address?.FlatNumber" id="flatNumber" />
         </div>
     </div>
     
     <div class="mb-3">
         <label class="form-label" for="comment">@localizer["CreateSupplierAddressComment"]</label>
-        <input type="text" class="form-control" value="@Model.Address?.Comment" id="comment"/>
+        <input type="text" class="form-control" value="@Model.Address?.Comment" id="comment" />
     </div>
 
     <div class="mb-3">
@@ -78,9 +78,9 @@
     <script>
 
         var cities = @Html.Raw(Model.Cities.Serialize());
-        var address = @(Model.Address != null ? Model.Address.Serialize() : "null");
+        var address = @Html.Raw(Model.Address != null ? $"'{Model.Address.Id}'" : "null");
 
-        window.addEventListener("DOMContentLoaded", function() {
+        window.addEventListener("DOMContentLoaded", function () {
 
             CreateSupplierAddress.init({
                 values: {
@@ -89,7 +89,8 @@
                     address: address
                 },
                 urls: {
-                    saveUrl: '@Url.Action("Post", "SupplierAddresses")'
+                    saveUrl: '@Url.Action("Post", "SupplierAddresses")',
+                    returnUrl: '@Url.Action("Index", "SupplierAddresses")'
                 }
             });
 

@@ -5,4 +5,11 @@ namespace Lidemia.Core.Models.Domain;
 public class SupplierAddressModel : AddressModel
 {
     public string? Comment { get; set; }
+
+    public long SupplierId { get; set; }
+
+    public override string ToString()
+    {
+        return $"{this.Country.Name}, {this.Region.Name}, {this.City.Name}, {this.StreetName}, {this.HouseNumber}";
+    }
 }

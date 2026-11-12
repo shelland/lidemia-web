@@ -48,6 +48,8 @@ public class ProductEntity : IHasId<long>, IDbEntity
 
     public double? MaxQuantity { get; set; }
 
+    public double? QuantityReducing { get; set; }
+
     public bool IsVisible { get; set; }
 
     public string? Slug { get; set; }
@@ -63,6 +65,10 @@ public class ProductEntity : IHasId<long>, IDbEntity
     public ProductPriceUnit? PriceUnit { get; set; }
 
     public ProductAvailabilityType? AvailabilityType { get; set; }
+
+    public DeliveryType[]? DeliveryTypes { get; set; }
+
+    public long[]? SupplierAddresses { get; set; }
 
     public double? AvailableUnits { get; set; }
 

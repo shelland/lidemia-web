@@ -12,6 +12,7 @@ public class SupplierOrderEntityConfiguration : IEntityTypeConfiguration<Supplie
     public void Configure(EntityTypeBuilder<SupplierOrderEntity> builder)
     {
         builder.AddBaseColumns<SupplierOrderEntity, long>();
+        builder.Property(x => x.Items).AsJsonb();
 
         builder.HasIndex(x => new
         {
@@ -22,6 +23,13 @@ public class SupplierOrderEntityConfiguration : IEntityTypeConfiguration<Supplie
         builder.HasIndex(x => new
         {
             x.Status,
+            x.SupplierId,
+            x.IsActive
+        });
+
+        builder.HasIndex(x => new
+        {
+            x.Id,
             x.SupplierId,
             x.IsActive
         });

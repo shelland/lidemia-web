@@ -7,5 +7,5 @@ namespace Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 
 public interface ICreateOrderService
 {
-    Task<Result> Create(CreateOrderModel model, CancellationToken cancellationToken);
+    Task<Result<CreateOrderResult>> Create(long customerId, CreateOrderServiceModel model, CancellationToken cancellationToken);
 }

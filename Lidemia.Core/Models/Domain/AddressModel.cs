@@ -18,7 +18,11 @@ public class AddressModel : AbstractEntity<long>
 
     public string FlatNumber { get; set; } = string.Empty;
 
-    public string AddressLine1 { get; set; } = string.Empty;
+    public string? HouseAdd1 { get; set; }
+
+    public string? HouseAdd2 { get; set; }
+
+    public string? AddressLine1 { get; set; }
 
     public string? AddressLine2 { get; set; }
 

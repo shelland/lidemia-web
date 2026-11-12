@@ -6,5 +6,7 @@ namespace Lidemia.ViewModels;
 
 public record ShoppingCartViewModel
 (
+    decimal Total,
+    decimal DiscountTotal,
     IEnumerable<ShoppingCartItem>? Items
 );

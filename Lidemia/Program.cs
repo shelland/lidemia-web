@@ -61,7 +61,7 @@ public class Program
         builder.Services.AddOpenTelemetry()
             .ConfigureResource(resource => resource.AddService("lidemia-web-ui"))
             .WithTracing(tracing => tracing
-                    .AddAspNetCoreInstrumentation()
+                    .AddAspNetCoreInstrumentation().AddSource("Lidemia.Orders")
                 /*.AddConsoleExporter()*/)
             .WithMetrics(metrics =>
             {
@@ -94,7 +94,7 @@ public class Program
 
         app.MapDefaultEndpoints();
         app.UseStaticFiles();
-        app.UseWhen(x => !x.Request.Path.StartsWithSegments("/metrics"), x => x.UseMiddleware<CorrelationIdMiddleware>());
+        //app.UseWhen(x => !x.Request.Path.StartsWithSegments("/metrics"), x => x.UseMiddleware<CorrelationIdMiddleware>());
         app.UseRateLimiter();
         app.MapControllers();
         app.UseRouting();

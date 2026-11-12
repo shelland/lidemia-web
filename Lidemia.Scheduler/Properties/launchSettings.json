@@ -1,10 +1,13 @@
 {
-    "profiles": {
-        "Lidemia.Scheduler": {
-            "commandName": "Project",
-            "environmentVariables": {
-                "DOTNET_ENVIRONMENT": "Local"
-            }
-        }
+  "profiles": {
+    "Lidemia.Scheduler": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Local"
+      }
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
     }
+  }
 }

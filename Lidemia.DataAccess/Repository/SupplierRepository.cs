@@ -73,6 +73,6 @@ public class SupplierRepository : ISupplierRepository
 
     public async Task<IEnumerable<SupplierEntity>> GetSuppliers(IEnumerable<long> ids, CancellationToken cancellationToken)
     {
-        return await this.context.Suppliers.AsActive().Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
+        return await this.context.Suppliers.Include(x => x.User).AsActive().Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
     }
 }

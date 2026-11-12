@@ -2,8 +2,8 @@
 
 using FluentValidation;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
-using Lidemia.Core;
 using Lidemia.Core.Enums;
+using Lidemia.Core.Errors;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Service;
@@ -43,7 +43,7 @@ public class CustomerSignInController : BaseController
 
         if (signInResult.Status != LoginResultStatus.Success)
         {
-            return Errors.InvalidCredentials;
+            return CommonErrors.InvalidCredentials;
         }
 
         await this.webAuthService.AuthCustomer(signInResult!, cancellationToken);

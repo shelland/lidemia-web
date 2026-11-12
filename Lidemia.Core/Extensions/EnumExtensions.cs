@@ -9,7 +9,7 @@ namespace Lidemia.Core.Extensions;
 
 public static class EnumExtensions
 {
-    public static string GetDescription(this Enum enumValue)
+    public static string GetLocalizedDisplayName(this Enum enumValue)
     {
         var fi = enumValue.GetType().GetField(enumValue.ToString());
 
@@ -31,6 +31,6 @@ public static class EnumExtensions
 
     public static IEnumerable<SelectListItem> GetValues<TEnum>(Enum? selected = null) where TEnum : struct, Enum
     {
-        return Enum.GetValues<TEnum>().Select(item => new SelectListItem(item.GetDescription(), Convert.ToInt32(item).ToString(), selected?.Equals(item) == true));
+        return Enum.GetValues<TEnum>().Select(item => new SelectListItem(item.GetLocalizedDisplayName(), Convert.ToInt32(item).ToString(), selected?.Equals(item) == true));
     }
 }

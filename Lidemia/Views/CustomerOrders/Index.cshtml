@@ -1,1 +1,44 @@
-﻿@model Lidemia.Core.Models.Misc.BasePagedListModel<Lidemia.Core.Models.Domain.OrderModel>
+﻿@using Lidemia.Logic.Extensions
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+@model Lidemia.Core.Models.Misc.BasePagedListModel<Lidemia.Core.Models.Domain.OrderModel>
+
+@inject IStringLocalizer<AppResources> localizer
+
+@{
+    ViewData.SetTitle(localizer["CustomerOrdersPageTitle"]);
+    ViewData.SetBigTitle(localizer["CustomerOrdersPageTitle"]);
+}
+
+@if (Model.Items.Any())
+{
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th scope="col">@localizer["CustomerOrdersNumber"]</th>
+                <th scope="col">@localizer["CustomerOrdersDate"]</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var order in Model.Items)
+            {
+                <tr>
+                    <td>
+                        <a href="@Url.Action("Details", "CustomerOrders", new { id = order.Id })">@order.Number</a>
+                    </td>
+                    <td>@order.CreateDate</td>
+                </tr>
+            }
+
+        </tbody>
+
+
+    </table>
+}
+else
+{
+    <h2>@localizer["CustomerOrdersNoItems"]</h2>
+}

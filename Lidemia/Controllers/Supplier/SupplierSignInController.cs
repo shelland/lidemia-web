@@ -2,8 +2,8 @@
 
 using FluentValidation;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
-using Lidemia.Core;
 using Lidemia.Core.Enums;
+using Lidemia.Core.Errors;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Service;
@@ -46,6 +46,6 @@ public class SupplierSignInController : BaseController
             await this.webAuthService.AuthSupplier(signInResult!, cancellationToken);
         }
         
-        return signInResult.Status != LoginResultStatus.Success ? Errors.InvalidCredentials : ResultInfo.Ok;
+        return signInResult.Status != LoginResultStatus.Success ? CommonErrors.InvalidCredentials : ResultInfo.Ok;
     }
 }

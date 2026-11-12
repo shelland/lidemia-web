@@ -5,7 +5,7 @@ using Lidemia.Common.BusinessLogic.Services.App.Abstract;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.Mapper;
 using Lidemia.Common.Mapper.Abstract;
-using Lidemia.Core;
+using Lidemia.Core.Errors;
 using Lidemia.Core.Models.Domain;
 using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Service;
@@ -52,7 +52,7 @@ public class ProductReviewService : IProductReviewService
         if (lastOrder == null)
         {
             this.logger.LogWarning("Unauthorized review for product {ProductId} from {CustomerId}", request.ProductId, customerId);
-            return Result.Fail(Errors.UnauthorizedError);
+            return Result.Fail(CommonErrors.UnauthorizedError);
         }
 
         var model = new SaveProductReviewModel(
