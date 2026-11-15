@@ -72,6 +72,7 @@ public class OrderRepository : IOrderRepository
     {
         var order = this.context.OrderItems
             .AsActive()
+            .Include(x => x.Order).ThenInclude(x => x.Customer).ThenInclude(x => x.User)
             .Where(x => x.ProductId == productId && x.Order.CustomerId == customerId)
             .OrderByDescending(x => x.Order.CreateDate)
             .Select(x => x.Order)

@@ -3,10 +3,12 @@
 using Lidemia.Core.Enums;
 using Lidemia.Core.Models.Base;
 using Lidemia.DataAccess.Abstract;
+using Lidemia.DataAccess.Entities.Meta;
+using Lidemia.DataAccess.Entities.Misc;
 
 namespace Lidemia.DataAccess.Entities;
 
-public class ProductEntity : IHasId<long>, IDbEntity
+public class ProductEntity : IHasId<long>, IDbEntity, IHasMetadata<ProductMetadata>
 {
     public long Id { get; set; }
 
@@ -54,12 +56,6 @@ public class ProductEntity : IHasId<long>, IDbEntity
 
     public string? Slug { get; set; }
 
-    public double? AverageRatingRecent { get; set; }
-
-    public double? AverageRatingOverall { get; set; }
-
-    public int TotalRates { get; set; }
-
     public DateTimeOffset? FirstSeenDate { get; set; }
 
     public ProductPriceUnit? PriceUnit { get; set; }
@@ -77,6 +73,14 @@ public class ProductEntity : IHasId<long>, IDbEntity
     public string? Sku { get; set; }
 
     public string[] Tags { get; set; } = [];
+
+    public ProductMetadata Metadata { get; set; } = ProductMetadata.Default;
+
+    public ProductSpecificationDbModel Specification { get; set; } = ProductSpecificationDbModel.Default;
+
+    public long? ReviewStatsId { get; set; }
+
+    public ProductReviewStatsEntity? ReviewStats { get; set; }
 
     public int RowVersion { get; set; }
 

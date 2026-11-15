@@ -4,7 +4,7 @@ namespace Lidemia.Core.Enums;
 
 public enum ProductReviewState
 {
-    Pending,
-    Approved,
-    Declined
+    Pending = 1,
+    Approved = 2,
+    Declined = 3
 }

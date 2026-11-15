@@ -636,3 +636,6 @@ button.swiper-pagination-bullet {
   left: 50%;
   transform: translateX(-50%);
 }
+.review-card {
+  padding: 0.5rem;
+}

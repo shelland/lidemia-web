@@ -1,0 +1,34 @@
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
+@model Lidemia.Core.Models.Domain.ProductReviewModel?
+
+@inject IStringLocalizer<AppResources> localizer
+
+@{
+    var currentRate = Model?.Rate ?? 4;
+}
+
+<h2>@localizer["ProductReviewPageTitle"]</h2>
+
+<form class="fr rate-form" action="" data-review-id="@Model?.Id" id="reviewForm">
+
+    @await Html.PartialAsync($"FaceIcon{currentRate}")
+
+    <input class="fr__input" id="face-rating" type="range" value="@currentRate" min="1" max="5" step="1">
+    
+    <label class="form-label" for="reviewText">@localizer["ProductReviewText"]</label>
+    <textarea class="form-control" id="reviewText">@Model?.Review</textarea>
+    
+    <label class="form-label" for="positiveReviewText">@localizer["ProductReviewPositive"]</label>
+    <textarea class="form-control" id="positiveReviewText">@Model?.PositiveReview</textarea>
+    
+    <label class="form-label" for="negativeReviewText">@localizer["ProductReviewNegativeReview"]</label>
+    <textarea class="form-control" id="negativeReviewText">@Model?.NegativeReview</textarea>
+    
+    <label class="form-label" for="isAnonymousReview">@localizer["ProductReviewIsAnonymous"]</label>
+    <input type="checkbox" id="isAnonymousReview" class="form-check" @(Model?.IsAnonymous == true ? "checked" : null) />
+
+</form>
+
+<a class="btn btn-primary" href="javascript:;" id="saveReviewBtn" onclick="ProductReviewForm.saveReview()">@localizer["ProductReviewSave"]</a>

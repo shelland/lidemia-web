@@ -88,7 +88,10 @@ public class ProductReviewRepository : IProductReviewRepository
 
     public Task<ProductReviewEntity?> GetUserReview(long customerId, long productId, CancellationToken cancellationToken)
     {
-        return this.context.ProductReviews.AsActive()
+        return this.context.ProductReviews
+            .AsActive()
+            .Include(x => x.Customer)
+            .ThenInclude(x => x.User)
             .FirstOrDefaultAsync(x => x.ProductId == productId && x.CustomerId == customerId, cancellationToken: cancellationToken);
     }
 }

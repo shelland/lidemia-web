@@ -49,10 +49,10 @@ public class ProductMapper : IProductMapper
             PrimaryPhoto = entity.PrimaryPhoto != null ? this.photoMapper.Map(entity.PrimaryPhoto) : this.photoMapper.GetPlaceholder(),
             Slug = entity.Slug,
             Category = entity.Category != null ? this.productCategoryMapper.Map(entity.Category) : null,
-            AverageRate = entity.AverageRatingOverall ?? 0,
-            AverageRecentRate = entity.AverageRatingRecent ?? 0,
+            //AverageRate = entity.AverageRatingOverall ?? 0,
+            //AverageRecentRate = entity.AverageRatingRecent ?? 0,
             DeliveryTypes = entity.DeliveryTypes,
-            TotalRates = entity.TotalRates,
+            //TotalRates = entity.TotalRates,
             CreateDate = entity.CreateDate,
             UpdateDate = entity.UpdateDate
         };

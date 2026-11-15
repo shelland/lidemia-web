@@ -22,6 +22,14 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<ProductEntity
         builder.Property(x => x.Sku).HasMaxLength(50);
         builder.Property(x => x.Title).HasMaxLength(250);
 
+        builder.Property(x => x.Metadata).AsJsonb();
+        builder.Property(x => x.Specification).AsJsonb();
+        builder.Property(x => x.Slug).HasMaxLength(250);
+
+        builder.HasOne(x => x.ReviewStats)
+            .WithOne(x => x.Product)
+            .HasForeignKey<ProductReviewStatsEntity>(e => e.ProductId);
+
         builder.HasOne(x => x.Parent);
     }
 }

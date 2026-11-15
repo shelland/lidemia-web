@@ -13,7 +13,7 @@ public class ProductReviewModel : AbstractEntity<long>
 
     public string? PositiveReview { get; set; }
 
-    public string? NegativeRate { get; set; }
+    public string? NegativeReview { get; set; }
 
     public string? SupplierFeedback { get; set; }
 

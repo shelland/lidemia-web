@@ -28,7 +28,7 @@ public class ProductReviewsMapper : IProductReviewsMapper
             Customer = this.lightCustomerMapper.Map(source.Customer),
             Review = source.Review,
             PositiveReview = source.PositiveReview,
-            NegativeRate = source.NegativeReview,
+            NegativeReview = source.NegativeReview,
             IsAnonymous = source.IsAnonymous,
             Rate = source.Rate,
             SupplierFeedbackDate = source.SupplierFeedbackDate,

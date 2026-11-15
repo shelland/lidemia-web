@@ -21,11 +21,11 @@ public class ProductModel : AbstractEntity<long>
 
     public string? ShortDescription { get; set; }
 
-    public int TotalRates { get; set; }
+    //public int TotalRates { get; set; }
 
-    public double? AverageRate { get; set; }
+    //public double? AverageRate { get; set; }
 
-    public double? AverageRecentRate { get; set; }
+    //public double? AverageRecentRate { get; set; }
 
     public decimal Price { get; set; }
 

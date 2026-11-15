@@ -14,5 +14,9 @@
   {
     "outputFile": "wwwroot/Pages/Styles/Checkout.css",
     "inputFile": "wwwroot/Pages/Styles/Checkout.less"
+  },
+  {
+    "outputFile": "wwwroot/Pages/Styles/ProductReviewForm.css",
+    "inputFile": "wwwroot/Pages/Styles/ProductReviewForm.less"
   }
 ]

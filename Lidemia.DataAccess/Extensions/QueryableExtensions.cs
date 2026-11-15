@@ -6,6 +6,7 @@ using Lidemia.Core.Models.Misc;
 using Lidemia.DataAccess.Abstract;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using X.PagedList;
 
 namespace Lidemia.DataAccess.Extensions;
@@ -57,5 +58,46 @@ public static class QueryableExtensions
         where TEntity : class, IDbEntity
     {
         return query.ProjectTo(projection).ToPagedListEx(pagingInfo, cancellationToken);
+    }
+
+    public static async IAsyncEnumerable<T> StreamByKeysetAsync<T, TKey>(
+        this IQueryable<T> source,
+        Expression<Func<T, TKey>> keySelector,
+        int batchSize = 1000,
+        [EnumeratorCancellation] CancellationToken ct = default)
+        where TKey : struct, IComparable<TKey>
+    {
+        var compiledKey = keySelector.Compile();
+        TKey? lastKey = null;
+
+        while (!ct.IsCancellationRequested)
+        {
+            var query = source;
+
+            if (lastKey.HasValue)
+            {
+                // Builds: x => x.Id > lastKey.Value
+                var param = keySelector.Parameters[0];
+                var body = Expression.GreaterThan(keySelector.Body, Expression.Constant(lastKey.Value));
+                var predicate = Expression.Lambda<Func<T, bool>>(body, param);
+                query = query.Where(predicate);
+            }
+
+            var batch = await query
+                .OrderBy(keySelector)
+                .Take(batchSize)
+                .ToListAsync(ct);
+
+            if (batch.Count == 0) yield break;
+
+            foreach (var item in batch)
+            {
+                yield return item;
+            }
+
+            lastKey = compiledKey(batch[^1]);
+
+            if (batch.Count < batchSize) yield break;
+        }
     }
 }

@@ -43,5 +43,11 @@ public class ProductReviewEntityConfiguration : IEntityTypeConfiguration<Product
             x.CustomerId,
             x.IsActive
         });
+
+        builder.HasIndex(x => new
+        {
+            x.CustomerId,
+            x.ProductId
+        }).IsUnique();
     }
 }

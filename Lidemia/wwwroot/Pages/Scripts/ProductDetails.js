@@ -11,7 +11,9 @@
         },
 
         bindEvents: function () {
-
+            document.querySelector("#addReviewBtn").addEventListener("click", () => {
+                ProductDetails.loadReviewForm();
+            });
         },
 
         addToCart: async function () {
@@ -181,6 +183,39 @@
                     },
                 });
             }
+        },
+
+        loadReviewForm: async function () {
+
+            const response = await window.appFetch(ProductDetails.urls.loadReviewFormUrl, {
+                method: "GET"
+            });
+
+            if (!response.ok) {
+
+            }
+
+            const form = await response.text();
+
+
+            document.querySelector("#reviewFormWrapper").innerHTML = form;
+
+
+            const modalWindow = document.querySelector("#productRateFormModal");
+            const modal = bootstrap.Modal.getOrCreateInstance(modalWindow);
+
+            modalWindow.addEventListener("shown.bs.modal", () => {
+                ProductReviewForm.init({
+                    urls: {
+                        saveReviewUrl: ProductDetails.urls.saveReviewUrl
+                    },
+                    values: {
+                        productId: ProductDetails.values.id
+                    }
+                });
+            });           
+
+            modal.show();
         }
 
     }

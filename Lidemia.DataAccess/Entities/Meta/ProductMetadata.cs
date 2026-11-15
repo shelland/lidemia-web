@@ -4,5 +4,5 @@ namespace Lidemia.DataAccess.Entities.Meta;
 
 public class ProductMetadata
 {
-    
+    public static ProductMetadata Default { get; } = new();
 }

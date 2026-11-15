@@ -24,10 +24,18 @@ public class ProductReviewsController : BaseController
         this.validator = validator;
     }
 
+    [HttpGet("Product/{id:long}")]
+    [CustomerAuthorize]
+    public async Task<IActionResult> GetReview([FromRoute] long id, CancellationToken cancellationToken)
+    {
+        var currentUserReview = await this.productReviewService.GetUserReview(RequireEntityId, id, cancellationToken);
+        return PartialView(currentUserReview);
+    }
+
     [HttpPost]
     [EnableRateLimiting(Constants.RateLimitingPolicies.ProductReviewsPolicy)]
     [CustomerAuthorize]
-    public async Task<ResultInfo> Save(SaveProductReviewRequestDto request, CancellationToken cancellationToken)
+    public async Task<ResultInfo> Save([FromBody] SaveProductReviewRequestDto request, CancellationToken cancellationToken)
     {
         var validationResult = await this.validator.ValidateAsync(request, cancellationToken);
 

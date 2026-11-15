@@ -60,6 +60,8 @@ public partial class LidemiaDbContext : DbContext
 
     public DbSet<SupplierOrderEntity> SupplierOrders => Set<SupplierOrderEntity>();
 
+    public DbSet<ProductReviewStatsEntity> ProductReviewStats => Set<ProductReviewStatsEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

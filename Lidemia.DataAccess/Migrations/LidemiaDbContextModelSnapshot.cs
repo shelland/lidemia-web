@@ -723,14 +723,6 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("double precision")
                         .HasColumnName("available_units");
 
-                    b.Property<double?>("AverageRatingOverall")
-                        .HasColumnType("double precision")
-                        .HasColumnName("average_rating_overall");
-
-                    b.Property<double?>("AverageRatingRecent")
-                        .HasColumnType("double precision")
-                        .HasColumnName("average_rating_recent");
-
                     b.Property<long?>("CategoryId")
                         .HasColumnType("bigint")
                         .HasColumnName("category_id");
@@ -785,6 +777,11 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("double precision")
                         .HasColumnName("max_quantity");
 
+                    b.Property<ProductMetadata>("Metadata")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("metadata");
+
                     b.Property<double?>("MinQuantity")
                         .HasColumnType("double precision")
                         .HasColumnName("min_quantity");
@@ -813,6 +810,10 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnType("double precision")
                         .HasColumnName("quantity_reducing");
 
+                    b.Property<long?>("ReviewStatsId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("review_stats_id");
+
                     b.Property<int>("RowVersion")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
@@ -829,8 +830,14 @@ namespace Lidemia.DataAccess.Migrations
                         .HasColumnName("sku");
 
                     b.Property<string>("Slug")
-                        .HasColumnType("text")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
                         .HasColumnName("slug");
+
+                    b.Property<ProductSpecificationDbModel>("Specification")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("specification");
 
                     b.PrimitiveCollection<long[]>("SupplierAddresses")
                         .HasColumnType("bigint[]")
@@ -849,10 +856,6 @@ namespace Lidemia.DataAccess.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)")
                         .HasColumnName("title");
-
-                    b.Property<int>("TotalRates")
-                        .HasColumnType("integer")
-                        .HasColumnName("total_rates");
 
                     b.Property<DateTimeOffset?>("UpdateDate")
                         .HasColumnType("timestamp with time zone")
@@ -1020,6 +1023,10 @@ namespace Lidemia.DataAccess.Migrations
                     b.HasIndex("CustomerId", "IsActive")
                         .HasDatabaseName("ix_product_reviews_customer_id_is_active");
 
+                    b.HasIndex("CustomerId", "ProductId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_product_reviews_customer_id_product_id");
+
                     b.HasIndex("ProductId", "IsActive")
                         .HasDatabaseName("ix_product_reviews_product_id_is_active");
 
@@ -1030,6 +1037,58 @@ namespace Lidemia.DataAccess.Migrations
                         .HasDatabaseName("ix_product_reviews_product_id_state_is_active_create_date");
 
                     b.ToTable("product_reviews", (string)null);
+                });
+
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.ProductReviewStatsEntity", b =>
+                {
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("product_id");
+
+                    b.Property<double?>("AverageRatingOverall")
+                        .HasColumnType("double precision")
+                        .HasColumnName("average_rating_overall");
+
+                    b.Property<double?>("AverageRatingRecent")
+                        .HasColumnType("double precision")
+                        .HasColumnName("average_rating_recent");
+
+                    b.Property<DateTimeOffset>("CreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<ProductReviewRateDistributionDbModel>("Distribution")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("distribution");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<int>("RowVersion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1)
+                        .HasColumnName("row_version");
+
+                    b.Property<int>("TotalRates")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_rates");
+
+                    b.Property<DateTimeOffset?>("UpdateDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_date");
+
+                    b.HasKey("ProductId")
+                        .HasName("pk_product_review_stats");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("ix_product_review_stats_is_active");
+
+                    b.ToTable("product_review_stats", (string)null);
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.PromoCodeEntity", b =>
@@ -1939,6 +1998,18 @@ namespace Lidemia.DataAccess.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.ProductReviewStatsEntity", b =>
+                {
+                    b.HasOne("Lidemia.DataAccess.Entities.ProductEntity", "Product")
+                        .WithOne("ReviewStats")
+                        .HasForeignKey("Lidemia.DataAccess.Entities.ProductReviewStatsEntity", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_product_review_stats_products_product_id");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Lidemia.DataAccess.Entities.PromoCodeEntity", b =>
                 {
                     b.HasOne("Lidemia.DataAccess.Entities.SupplierEntity", "Supplier")
@@ -2091,6 +2162,11 @@ namespace Lidemia.DataAccess.Migrations
             modelBuilder.Entity("Lidemia.DataAccess.Entities.OrderEntity", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Lidemia.DataAccess.Entities.ProductEntity", b =>
+                {
+                    b.Navigation("ReviewStats");
                 });
 
             modelBuilder.Entity("Lidemia.DataAccess.Entities.RegionEntity", b =>
