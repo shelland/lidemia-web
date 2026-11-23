@@ -16,6 +16,8 @@ public interface IProductRepository : IRepository<ProductEntity, long>
 
     Task<IPagedList<ProductEntity>> GetSupplierProducts(long id, PagingInfoModel? pagingInfoModel = null, CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyList<ProductEntity>> GetSupplierCatalog(long supplierId, int limit, CancellationToken cancellationToken);
+
     Task<ProductEntity?> GetByIdPublic(long key, CancellationToken cancellation);
 
     Task<Result<long>> Save(long supplierId, SaveProductModel model, CancellationToken cancellationToken);

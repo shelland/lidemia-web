@@ -1,0 +1,18 @@
+@model Lidemia.Core.Models.Dto.ChatOrderDto
+
+<a class="direct-order-card" href="@(Model.Url ?? "#")">
+    <span class="direct-order-card-icon">
+        <i class="uil uil-box"></i>
+    </span>
+    <span class="direct-order-card-body">
+        <span class="direct-order-card-header">
+            <span class="direct-order-card-number">@Model.Number</span>
+            <span class="badge bg-soft-primary text-primary">@Model.Status</span>
+        </span>
+        <span class="direct-order-card-meta">
+            <span>@Model.TotalSum</span>
+            <span>@(Model.ItemCount == 1 ? "1 item" : $"{Model.ItemCount} items")</span>
+            <span>@Model.CreateDate.ToLocalTime().ToString("dd.MM.yyyy")</span>
+        </span>
+    </span>
+</a>

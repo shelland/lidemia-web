@@ -1,0 +1,15 @@
+@model Lidemia.Core.Models.Dto.ChatProductDto
+
+<a class="direct-product-card" href="@(Model.Url ?? "#")" target="_blank" rel="noopener">
+    @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+    {
+        <img class="direct-product-card-image" src="@Model.PhotoUrl" alt="@Model.Title"/>
+    }
+    <span class="direct-product-card-body">
+        <span class="direct-product-card-title">@Model.Title</span>
+        @if (!string.IsNullOrEmpty(Model.Price))
+        {
+            <span class="direct-product-card-price">@Model.Price</span>
+        }
+    </span>
+</a>

@@ -60,6 +60,8 @@ public static class ServiceAuthExtensions
             .AddPolicy(Constants.AuthValues.SupplierPolicyName,
                 cfg => cfg.RequireClaim(Constants.Claims.RoleClaimName, nameof(EntityType.Supplier), nameof(EntityType.Admin)))
             .AddPolicy(Constants.AuthValues.CustomerPolicyName,
-                cfg => cfg.RequireClaim(Constants.Claims.RoleClaimName, nameof(EntityType.Customer), nameof(EntityType.Admin)));
+                cfg => cfg.RequireClaim(Constants.Claims.RoleClaimName, nameof(EntityType.Customer), nameof(EntityType.Admin)))
+            .AddPolicy(Constants.AuthValues.CustomerOrSupplierPolicyName,
+                cfg => cfg.RequireClaim(Constants.Claims.RoleClaimName, nameof(EntityType.Customer), nameof(EntityType.Supplier)));
     }
 }

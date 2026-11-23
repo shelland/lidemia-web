@@ -62,6 +62,10 @@ public partial class LidemiaDbContext : DbContext
 
     public DbSet<ProductReviewStatsEntity> ProductReviewStats => Set<ProductReviewStatsEntity>();
 
+    public DbSet<ChatEntity> Chats => Set<ChatEntity>();
+
+    public DbSet<ChatMessageEntity> ChatMessages => Set<ChatMessageEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

@@ -50,6 +50,8 @@ public class Constants
         public const string SupplierPolicyName = "AllowSupplier";
 
         public const string CustomerPolicyName = "AllowUser";
+
+        public const string CustomerOrSupplierPolicyName = "AllowCustomerOrSupplier";
     }
 
     public static class Delays

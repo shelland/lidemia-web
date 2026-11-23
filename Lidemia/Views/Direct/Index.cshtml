@@ -1,0 +1,227 @@
+@using Lidemia.Core.Enums
+@using Lidemia.Core.Models.Domain
+@using Lidemia.Logic.Extensions
+@using Lidemia.Web.BusinessLogic.Services.Abstract
+
+@inject ICurrentUserService currentUserService
+
+@model Lidemia.ViewModels.DirectIndexViewModel
+
+@{
+    ViewData.SetBigTitle("Messages");
+
+    var currentEntity = await currentUserService.GetUser();
+    var currentEntityName = string.IsNullOrWhiteSpace(currentEntity?.Name) ? null : currentEntity.Name;
+}
+
+@functions
+{
+    private string GetCounterpartyName(ChatModel chat)
+    {
+        return this.Model.CurrentRole == EntityType.Supplier ? chat.CustomerName : chat.SupplierName;
+    }
+
+    private static string GetInitials(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return "?";
+        }
+
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2);
+        return string.Concat(parts.Select(x => char.ToUpperInvariant(x[0])));
+    }
+}
+
+<section class="wrapper bg-light">
+    <div class="py-3 py-md-3">
+        <div class="card shadow-lg overflow-hidden direct-chat-card">
+            <div class="row g-0">
+                <aside class="col-lg-4 col-xl-3 border-end direct-chat-sidebar">
+                    <div class="p-4 border-bottom">
+                        <h4 class="mb-0">Conversations</h4>
+                        @if (currentEntityName != null)
+                        {
+                            <span class="small text-muted">
+                                Signed in as <strong>@currentEntityName</strong> (@Model.CurrentRole)
+                            </span>
+                        }
+                    </div>
+                    <div class="direct-chat-list">
+                        @if (!Model.Chats.Any())
+                        {
+                            <div class="p-4 direct-chat-list-empty">
+                                <p class="mb-1 text-muted">You do not have any conversations yet.</p>
+                                @if (currentEntityName != null)
+                                {
+                                    <p class="mb-0 small text-muted">
+                                        This list only shows conversations started with <strong>@currentEntityName</strong>.
+                                    </p>
+                                }
+                            </div>
+                        }
+
+                        @foreach (var chat in Model.Chats)
+                        {
+                            var counterpartyName = this.GetCounterpartyName(chat);
+                            var isActive = Model.ActiveChat?.Id == chat.Id;
+
+                            <a href="@Url.Action("Index", "Direct", new { chatId = chat.Id })"
+                               class="direct-chat-list-item @(isActive ? "active" : "")"
+                               data-chat-id="@chat.Id">
+                                <span class="avatar bg-pink text-white w-9 h-9 fs-15">@GetInitials(counterpartyName)</span>
+                                <span class="flex-grow-1 min-w-0">
+                                    <span class="d-flex justify-content-between align-items-center gap-2">
+                                        <span class="fw-bold text-truncate">@counterpartyName</span>
+                                        <span class="small text-muted text-nowrap direct-chat-date">@(chat.LastMessageDate?.ToLocalTime().ToString("dd.MM HH:mm"))</span>
+                                    </span>
+                                    <span class="d-flex justify-content-between align-items-center gap-2">
+                                        <span class="small text-muted text-truncate direct-chat-preview">
+                                            @(string.IsNullOrEmpty(chat.LastMessageText) ? "No messages yet" : chat.LastMessageText)
+                                        </span>
+                                        <span class="badge bg-primary rounded-pill direct-chat-unread @(chat.UnreadCount == 0 ? "d-none" : "")">@chat.UnreadCount</span>
+                                    </span>
+                                </span>
+                            </a>
+                        }
+                    </div>
+                </aside>
+                <section class="col-lg-8 col-xl-9 d-flex flex-column direct-chat-main">
+                    @if (Model.ActiveChat == null)
+                    {
+                        <div class="d-flex flex-column align-items-center justify-content-center flex-grow-1 text-center text-muted p-5">
+                            <i class="uil uil-comment-dots fs-60 mb-3"></i>
+                            <p class="mb-0">Select a conversation to start messaging.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        var activeCounterpartyName = this.GetCounterpartyName(Model.ActiveChat);
+
+                        <header class="p-4 border-bottom d-flex align-items-center">
+                            <span class="avatar bg-pink text-white w-10 h-10 fs-16 me-3">@GetInitials(activeCounterpartyName)</span>
+                            <div>
+                                <h4 class="mb-0">@activeCounterpartyName</h4>
+                                <span class="small text-muted">Private conversation</span>
+                            </div>
+                        </header>
+
+                        <div class="direct-chat-messages flex-grow-1" id="directMessages">
+                            @foreach (var message in Model.Messages)
+                            {
+                                var isMine = message.SenderType == Model.CurrentRole;
+
+                                <div class="direct-message @(isMine ? "outgoing" : "incoming")" data-message-id="@message.Id">
+                                    <div class="direct-message-bubble">
+                                        @if (message.Type == ChatMessageType.Product)
+                                        {
+                                            if (message.ProductId.HasValue && Model.Products.TryGetValue(message.ProductId.Value, out var product))
+                                            {
+                                                <partial name="_DirectProductCard" model="product"/>
+                                            }
+                                            else
+                                            {
+                                                <p class="mb-0 fst-italic">This product is not available anymore.</p>
+                                            }
+                                        }
+                                        else if (message.Type == ChatMessageType.Order)
+                                        {
+                                            if (message.OrderId.HasValue && Model.Orders.TryGetValue(message.OrderId.Value, out var order))
+                                            {
+                                                <partial name="_DirectOrderCard" model="order"/>
+                                            }
+                                            else
+                                            {
+                                                <p class="mb-0 fst-italic">This order is not available anymore.</p>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p class="mb-0">@message.Text</p>
+                                        }
+
+                                        <span class="direct-message-time">@message.CreateDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</span>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="direct-chat-empty @(Model.Messages.Any() ? "d-none" : "")">
+                                <p class="mb-0">No messages yet. Say hello!</p>
+                            </div>
+                        </div>
+
+                        <form id="directMessageForm" class="direct-chat-form border-top p-3">
+                            <div class="input-group">
+                                <input type="text"
+                                       id="directMessageInput"
+                                       class="form-control"
+                                       maxlength="4000"
+                                       autocomplete="off"
+                                       placeholder="Type your message..."/>
+                                <button type="submit" class="btn btn-primary" aria-label="Send message">
+                                    <i class="uil uil-message"></i>
+                                </button>
+                            </div>
+                            <div class="small text-muted mt-2">
+                                Type <code>/products</code> to share a supplier product or <code>/orders</code> to share an order.
+                            </div>
+                        </form>
+                    }
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="directPickerModal" tabindex="-1" aria-labelledby="directPickerTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="directPickerTitle">Supplier products</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="search"
+                       id="directPickerSearch"
+                       class="form-control mb-3"
+                       autocomplete="off"
+                       placeholder="Search products..."/>
+                <div class="direct-picker-list" id="directPickerList">
+                    <p class="text-muted small mb-0">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/Pages/Styles/Direct.css"/>
+}
+
+@section Scripts
+{
+    <environment include="Development,Local">
+        <script src="~/lib/microsoft-signalr/signalr.js"></script>
+    </environment>
+    <script src="~/Pages/Scripts/Direct.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Direct.init({
+                urls: {
+                    index: '@Url.Action("Index", "Direct")',
+                    send: '@Url.Action("Send", "Direct")',
+                    read: '@Url.Action("Read", "Direct")',
+                    products: '@Url.Action("Products", "Direct")',
+                    orders: '@Url.Action("Orders", "Direct")',
+                    hub: '@Url.Content("~/hubs/direct")'
+                },
+                values: {
+                    chatId: @(Model.ActiveChat?.Id ?? 0),
+                    currentRole: '@Model.CurrentRole'
+                }
+            });
+        });
+    </script>
+}

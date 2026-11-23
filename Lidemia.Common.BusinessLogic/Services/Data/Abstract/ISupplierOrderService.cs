@@ -16,4 +16,8 @@ public interface ISupplierOrderService
     Task<BasePagedListModel<SupplierOrderModel>> GetSupplierOrders(long supplierId, SupplierOrdersFilterModel filter, CancellationToken cancellationToken);
 
     Task<SupplierOrderModel?> GetSupplierOrder(long id, long supplierId, CancellationToken cancellationToken);
+
+    Task<IReadOnlyList<SupplierOrderModel>> GetCustomerSupplierOrders(long customerId, long supplierId, CancellationToken cancellationToken);
+
+    Task<SupplierOrderModel?> GetCustomerSupplierOrder(long orderId, long customerId, long supplierId, CancellationToken cancellationToken);
 }

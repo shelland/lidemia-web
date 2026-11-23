@@ -18,5 +18,9 @@
   {
     "outputFile": "wwwroot/Pages/Styles/ProductReviewForm.css",
     "inputFile": "wwwroot/Pages/Styles/ProductReviewForm.less"
+  },
+  {
+    "outputFile": "wwwroot/Pages/Styles/Direct.css",
+    "inputFile": "wwwroot/Pages/Styles/Direct.less"
   }
 ]

@@ -16,6 +16,8 @@ namespace Lidemia.Common.BusinessLogic.Services.Data;
 [ServiceDescriptor<ISupplierOrderService>(ServiceLifetime.Scoped)]
 public class SupplierOrderService : ISupplierOrderService
 {
+    private const int CustomerOrdersLimit = 100;
+
     private readonly ISupplierOrderRepository supplierOrderRepository;
     private readonly ISupplierOrderMapper supplierOrderMapper;
 
@@ -48,6 +50,22 @@ public class SupplierOrderService : ISupplierOrderService
     public async Task<SupplierOrderModel?> GetSupplierOrder(long id, long supplierId, CancellationToken cancellationToken)
     {
         var order = await this.supplierOrderRepository.GetSupplierOrder(id, supplierId, cancellationToken);
+        return order != null ? this.supplierOrderMapper.Map(order) : null;
+    }
+
+    public async Task<IReadOnlyList<SupplierOrderModel>> GetCustomerSupplierOrders(long customerId, long supplierId,
+        CancellationToken cancellationToken)
+    {
+        var orders = await this.supplierOrderRepository.GetCustomerSupplierOrders(customerId, supplierId, CustomerOrdersLimit,
+            cancellationToken);
+
+        return this.supplierOrderMapper.MapList(orders);
+    }
+
+    public async Task<SupplierOrderModel?> GetCustomerSupplierOrder(long orderId, long customerId, long supplierId,
+        CancellationToken cancellationToken)
+    {
+        var order = await this.supplierOrderRepository.GetCustomerSupplierOrder(orderId, customerId, supplierId, cancellationToken);
         return order != null ? this.supplierOrderMapper.Map(order) : null;
     }
 }

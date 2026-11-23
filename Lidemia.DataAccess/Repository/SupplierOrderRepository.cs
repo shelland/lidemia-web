@@ -86,4 +86,32 @@ public class SupplierOrderRepository : ISupplierOrderRepository
             .ThenInclude(x => x.User)
             .FirstOrDefaultAsync(x => x.Id == id && x.SupplierId == supplierId, cancellationToken: cancellationToken);
     }
+
+    public async Task<IReadOnlyList<SupplierOrderEntity>> GetCustomerSupplierOrders(long customerId, long supplierId, int limit,
+        CancellationToken cancellationToken)
+    {
+        return await this.context.SupplierOrders.AsActive()
+            .Include(x => x.Order)
+            .ThenInclude(x => x.Customer)
+            .ThenInclude(x => x.User)
+            .Where(x => x.SupplierId == supplierId
+                        && x.Order.CustomerId == customerId
+                        && x.Status != OrderStatus.Finished
+                        && x.Status != OrderStatus.Cancelled)
+            .OrderByDescending(x => x.Id)
+            .Take(limit)
+            .ToListAsync(cancellationToken);
+    }
+
+    public Task<SupplierOrderEntity?> GetCustomerSupplierOrder(long orderId, long customerId, long supplierId,
+        CancellationToken cancellationToken)
+    {
+        return this.context.SupplierOrders.AsActive()
+            .Include(x => x.Order)
+            .ThenInclude(x => x.Customer)
+            .ThenInclude(x => x.User)
+            .FirstOrDefaultAsync(x => x.OrderId == orderId
+                                      && x.Order.CustomerId == customerId
+                                      && x.SupplierId == supplierId, cancellationToken);
+    }
 }

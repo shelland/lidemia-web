@@ -263,6 +263,20 @@ public class ProductRepository : IProductRepository
         return query.ToPagedListEx(filterModel, cancellationToken);
     }
 
+    public async Task<IReadOnlyList<ProductEntity>> GetSupplierCatalog(long supplierId, int limit, CancellationToken cancellationToken)
+    {
+        return await this.context.Products
+            .AsActive()
+            .Include(x => x.Supplier)
+            .ThenInclude(x => x.User)
+            .Include(x => x.PrimaryPhoto)
+            .Include(x => x.Category)
+            .Where(x => x.SupplierId == supplierId && x.IsVisible)
+            .OrderBy(x => x.Title)
+            .Take(limit)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<IPagedList<ProductEntity>> GetSupplierProducts(long id, PagingInfoModel? pagingInfoModel = null,
         CancellationToken cancellationToken = default)
     {

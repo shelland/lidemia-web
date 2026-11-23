@@ -23,6 +23,8 @@ namespace Lidemia.Common.BusinessLogic.Services.Data;
 [ServiceDescriptor<IProductService>(ServiceLifetime.Scoped)]
 public class ProductService : BaseDataService, IProductService
 {
+    private const int SupplierCatalogLimit = 200;
+
     private readonly IProductRepository productRepository;
     private readonly IUtc utc;
     private readonly IPublishEndpoint publishEndpoint;
@@ -80,6 +82,12 @@ public class ProductService : BaseDataService, IProductService
             TotalCount = products.TotalItemCount,
             TotalPages = products.TotalItemCount
         };
+    }
+
+    public async Task<IReadOnlyList<ProductModel>> GetSupplierCatalog(long supplierId, CancellationToken cancellationToken)
+    {
+        var products = await this.productRepository.GetSupplierCatalog(supplierId, SupplierCatalogLimit, cancellationToken);
+        return products.Select(this.productMapper.Map).ToArray();
     }
 
     public async Task<Result<long>> Save(long supplierId, SaveProductRequestDto request, CancellationToken cancellationToken)

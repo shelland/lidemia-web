@@ -17,4 +17,10 @@ public interface ISupplierOrderRepository : IRepository<SupplierOrderEntity, lon
     Task<IPagedList<SupplierOrderEntity>> GetSupplierOrders(long supplierId, SupplierOrdersFilterModel filter, CancellationToken cancellationToken);
 
     Task<SupplierOrderEntity?> GetSupplierOrder(long id, long supplierId, CancellationToken cancellationToken);
+
+    Task<IReadOnlyList<SupplierOrderEntity>> GetCustomerSupplierOrders(long customerId, long supplierId, int limit,
+        CancellationToken cancellationToken);
+
+    Task<SupplierOrderEntity?> GetCustomerSupplierOrder(long orderId, long customerId, long supplierId,
+        CancellationToken cancellationToken);
 }

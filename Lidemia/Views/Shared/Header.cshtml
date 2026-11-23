@@ -840,6 +840,15 @@
                         </a>
                     </li>
                     
+                    @if (currentEntity is { Role: EntityType.Customer or EntityType.Supplier })
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Direct")" title="Messages">
+                                <i class="uil uil-comment-dots"></i>
+                            </a>
+                        </li>
+                    }
+
                     @if (showCartIcon)
                     {
                         <li class="nav-item">

@@ -75,6 +75,8 @@ public class Program
         builder.Services.AddProfiler();
         builder.Services.RegisterModules(builder.Configuration);
 
+        builder.Services.AddSignalR();
+
         builder.Services.AddValidatorsFromAssembly(typeof(ICommonModule).Assembly);
         builder.Services.RegisterBus(builder.Configuration);
 
@@ -106,6 +108,8 @@ public class Program
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
             .WithStaticAssets();
+
+        app.MapHub<Lidemia.Hubs.DirectChatHub>("/hubs/direct");
 
         app.MapPrometheusScrapingEndpoint().DisableHttpMetrics();
         app.MapHealthChecks("/healthz").DisableHttpMetrics();

@@ -15,6 +15,8 @@ public interface IProductService
 
     Task<BasePagedListModel<ProductModel>> GetSupplierProducts(long id, PagingInfoModel pagingInfo, CancellationToken cancellationToken);
 
+    Task<IReadOnlyList<ProductModel>> GetSupplierCatalog(long supplierId, CancellationToken cancellationToken);
+
     Task<Result<long>> Save(long supplierId, SaveProductRequestDto request, CancellationToken cancellationToken);
 
     Task<Result<(int Enabled, int Disabled)>> EnablePendingDiscounts(CancellationToken cancellationToken);

@@ -1,16 +1,33 @@
+@using Lidemia.Core.Enums
 @using Lidemia.Logic.Extensions
+@using Lidemia.Web.BusinessLogic.Services.Abstract
+
+@inject ICurrentUserService currentUserService
 
 @model Lidemia.ViewModels.SupplierDetailsViewModel
 
 @{
     ViewData.SetTitle(Model.Supplier.Name);
     ViewData.SetBigTitle(Model.Supplier.Name);
+
+    var currentEntity = await currentUserService.GetUser();
+    var showDirectMessageButton = currentEntity?.Role != EntityType.Supplier;
 }
 
 <section class="wrapper bg-light">
     <div class="container py-14 py-md-16">
         <div class="row">
             <div class="col-xl-10 col-xxl-9 mx-auto">
+                @if (showDirectMessageButton)
+                {
+                    <div class="row mb-6">
+                        <div class="col-12 d-flex justify-content-end">
+                            <a href="@Url.Action("Start", "Direct", new { supplierId = Model.Supplier.Id })" class="btn btn-primary rounded-pill">
+                                <i class="uil uil-comments-alt me-2"></i>Message supplier
+                            </a>
+                        </div>
+                    </div>
+                }
                 <div class="row align-items-center justify-content-center counter-wrapper gy-6">
                     <div class="col-md-6 col-lg-4">
                         <div class="card">
