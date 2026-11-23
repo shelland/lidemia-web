@@ -12,8 +12,8 @@ public class LidemiaDbContextFactory : IDesignTimeDbContextFactory<LidemiaDbCont
     {
         var optionsBuilder = new DbContextOptionsBuilder<LidemiaDbContext>();
         const string connectionString = "Host=127.0.0.1;Port=5432;Database=lidemia-dev;Username=postgres;Password=postgres";
-
-        optionsBuilder.ConfigureDbContext(connectionString);
+        
+        optionsBuilder.ConfigureDbContext(connectionString, null);
         return new LidemiaDbContext(optionsBuilder.Options);
     }
 }

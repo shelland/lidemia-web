@@ -40,7 +40,7 @@ public class ProductReviewRepository : IProductReviewRepository
             .Include(x => x.Customer)
             .ThenInclude(x => x.User)
             .Where(x => x.ProductId == productId && x.State == ProductReviewState.Approved)
-            .OrderByDescending(x => x.CreateDate)
+            .OrderByDescending(x => x.Id)
             .Take(count)
             .ToListAsync(cancellationToken: cancellationToken);
     }

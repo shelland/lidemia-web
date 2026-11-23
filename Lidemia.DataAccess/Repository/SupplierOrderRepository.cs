@@ -37,7 +37,7 @@ public class SupplierOrderRepository : ISupplierOrderRepository
     }
 
     public async Task<Result<long>> Create(long supplierId, long? supplierAddressId, long? customerAddressId,
-        IEnumerable<(long ProductId, int Quantity, decimal PriceForSingle, decimal? DiscountPriceForSingle)> items,
+        IEnumerable<(long ProductId, int Quantity, Price PriceForSingle, Price? DiscountPriceForSingle)> items,
         long orderId,
         CancellationToken cancellationToken)
     {
@@ -51,8 +51,8 @@ public class SupplierOrderRepository : ISupplierOrderRepository
             Items = new SupplierOrderItems(items.Select(x => new SupplierOrderItem(
                 ProductId: x.ProductId,
                 Quantity: x.Quantity,
-                PriceForSingle: x.PriceForSingle,
-                DiscountPriceForSingle: x.DiscountPriceForSingle
+                PriceForSingle: x.PriceForSingle.Value,
+                DiscountPriceForSingle: x.DiscountPriceForSingle?.Value
             )).ToList()),
         };
 

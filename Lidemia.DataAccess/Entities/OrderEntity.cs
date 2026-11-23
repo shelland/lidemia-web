@@ -28,6 +28,10 @@ public class OrderEntity : IDbEntity, IHasId<long>, IHasMetadata<OrderMetadata>
 
     public long? CustomerAddressId { get; set; }
 
+    public decimal TotalSum { get; set; }
+
+    public decimal? TotalSumDiscount { get; set; }
+
     public int RowVersion { get; set; }
 
     public bool IsActive { get; set; }

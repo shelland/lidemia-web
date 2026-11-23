@@ -4,6 +4,7 @@ using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.Extensions;
 using Lidemia.Core.Attributes;
 using Lidemia.Core.Errors;
+using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Domain;
 using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Misc;
@@ -103,8 +104,8 @@ public class CustomerCheckoutController : BaseController
         }
 
         var products = (await this.productService.GetProducts(cartItems.Select(x => x.Key), cancellationToken)).ToList();
-        var groupedProducts = products.GroupBy(x => x.SupplierId);
-        var suppliers = (await this.supplierService.GetSuppliers(products.Select(x => x.SupplierId), cancellationToken)).ToDictionary(x => x.Id);
+        var groupedProducts = products.GroupBy(x => x.Supplier.Id);
+        var suppliers = (await this.supplierService.GetSuppliers(products.Select(x => x.Supplier.Id), cancellationToken)).ToDictionary(x => x.Id);
         var supplierAddresses = await this.supplierAddressService.GetAddresses(suppliers.Keys, cancellationToken);
         var groupedAddresses = supplierAddresses.GroupBy(x => x.SupplierId).ToDictionary(x => x.Key, x => x);
 
@@ -121,14 +122,14 @@ public class CustomerCheckoutController : BaseController
         {
             if (product.Product.HasCurrentDiscount)
             {
-                totalDiscountSum += (product.Product.DiscountPrice ?? 0) * product.Qty;
+                totalDiscountSum += (product.Product.DiscountPrice?.Value ?? 0) * product.Qty;
             }
             else
             {
-                totalDiscountSum += product.Product.Price * product.Qty;
+                totalDiscountSum += product.Product.Price.NotNull().Value * product.Qty;
             }
 
-            totalSum += product.Product.Price * product.Qty;
+            totalSum += product.Product.Price.NotNull().Value * product.Qty;
         }
 
         var addresses = await this.customerAddressService.GetCustomerAddresses(RequireEntityId, new PagingInfoModel(), cancellationToken);

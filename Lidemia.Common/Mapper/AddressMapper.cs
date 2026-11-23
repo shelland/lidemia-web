@@ -5,7 +5,6 @@ using Lidemia.Core.Models.Domain;
 using Lidemia.DataAccess.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
-using System.Net;
 
 namespace Lidemia.Common.Mapper;
 

@@ -1,5 +1,6 @@
 ﻿// Created on 04/09/2026 18:56 by Laserson
 
+using Lidemia.Core.Enums;
 using Lidemia.DataAccess.Abstract;
 
 namespace Lidemia.DataAccess.Entities;
@@ -14,7 +15,17 @@ public class OrderItemEntity : IDbEntity
 
     public ProductEntity Product { get; set; } = null!;
 
-    public double Quantity { get; set; }
+    public int Quantity { get; set; }
+
+    public decimal PricePerItem { get; set; }
+
+    public decimal? PricePerItemDiscount { get; set; }
+
+    public DiscountSource? DiscountSource { get; set; }
+
+    public long? PromoCodeId { get; set; }
+
+    public PromoCodeEntity? PromoCode { get; set; }
 
     public int RowVersion { get; set; }
 

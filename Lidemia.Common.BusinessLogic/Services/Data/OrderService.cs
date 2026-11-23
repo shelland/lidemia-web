@@ -22,6 +22,7 @@ public class OrderService : IOrderService
     private readonly IOrderRepository orderRepository;
     private readonly IOrderNumberGenerator orderNumberGenerator;
     private readonly IOrderMapper orderMapper;
+    private readonly IOrderItemMapper orderItemMapper;
     private readonly ILogger<OrderService> logger;
 
     private static readonly ActivitySource Source = new("Lidemia.Orders");
@@ -30,11 +31,13 @@ public class OrderService : IOrderService
         IOrderRepository orderRepository,
         IOrderNumberGenerator orderNumberGenerator,
         IOrderMapper orderMapper,
+        IOrderItemMapper orderItemMapper,
         ILogger<OrderService> logger)
     {
         this.orderRepository = orderRepository;
         this.orderNumberGenerator = orderNumberGenerator;
         this.orderMapper = orderMapper;
+        this.orderItemMapper = orderItemMapper;
         this.logger = logger;
     }
 

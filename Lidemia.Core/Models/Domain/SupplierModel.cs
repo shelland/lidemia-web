@@ -9,4 +9,6 @@ public class SupplierModel : AbstractEntity<long>
     public string Name { get; set; } = string.Empty;
     
     public UserModel User { get; set; } = null!;
+
+    public SupplierStatsModel? Stats { get; set; }
 }

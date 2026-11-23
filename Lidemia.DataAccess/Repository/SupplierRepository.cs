@@ -28,6 +28,7 @@ public class SupplierRepository : ISupplierRepository
     {
         return this.context.Suppliers
             .Include(x => x.User)
+            .Include(x => x.Stats)
             .AsActive()
             .FirstOrDefaultAsync(x => x.Id == key, cancellationToken);
     }

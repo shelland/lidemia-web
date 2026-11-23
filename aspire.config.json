@@ -1,5 +1,6 @@
 {
   "appHost": {
-    "path": "Lidemia.AppHost/Lidemia.AppHost.csproj"
+    "path": "Lidemia.AppHost/Lidemia.AppHost.csproj",
+    "language": "csharp"
   }
 }

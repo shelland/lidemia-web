@@ -260,6 +260,15 @@ namespace Lidemia.Resources.App {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ₽.
+        /// </summary>
+        public static string CurrencyRussianRoubleSign {
+            get {
+                return ResourceManager.GetString("CurrencyRussianRoubleSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In stock.
         /// </summary>
         public static string EnumsProductAvailabilityTypeInStock {

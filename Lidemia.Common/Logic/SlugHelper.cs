@@ -53,7 +53,7 @@ public partial class SlugHelper
         str = sb.ToString();
 
         str = ReplaceInvalidChars().Replace(str, "");
-        str = ConvertHyphens().Replace(str, "");
+        str = ConvertHyphens().Replace(str, "-");
 
         return str.Trim('-');
     }

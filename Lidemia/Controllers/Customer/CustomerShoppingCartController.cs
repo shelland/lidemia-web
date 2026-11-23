@@ -2,6 +2,7 @@
 
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Core.Attributes;
+using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Service;
 using Lidemia.ViewModels;
@@ -32,14 +33,14 @@ public class CustomerShoppingCartController : BaseController
         {
             if (product.Product.HasCurrentDiscount)
             {
-                totalDiscountSum += (product.Product.DiscountPrice ?? 0) * product.Qty;
+                totalDiscountSum += (product.Product.DiscountPrice?.Value ?? 0) * product.Qty;
             }
             else
             {
-                totalDiscountSum += product.Product.Price * product.Qty;
+                totalDiscountSum += product.Product.Price.NotNull().Value * product.Qty;
             }
 
-            totalSum += product.Product.Price * product.Qty;
+            totalSum += product.Product.Price.NotNull().Value * product.Qty;
         }
 
 

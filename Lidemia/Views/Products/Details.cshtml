@@ -1,9 +1,29 @@
-﻿@using Lidemia.Resources.App
+﻿@using Lidemia.Core.Extensions
+@using Lidemia.Logic.Extensions
+@using Lidemia.Resources.App
 @using Microsoft.Extensions.Localization
 
 @model Lidemia.ViewModels.ProductDetailsViewModel
 
 @inject IStringLocalizer<AppResources> localizer
+
+@{
+    ViewData.SetTitle(Model.Product.Title);
+    ViewData.SetBigTitle(Model.Product.Title);
+
+    var totalRates = Model.Product.ReviewStats?.TotalRates ?? 0;
+
+    double r1Percent = 0, r2Percent = 0, r3Percent = 0, r4Percent = 0, r5Percent = 0;
+
+    if (Model.Product.ReviewStats != null)
+    {
+        r1Percent = (Model.Product.ReviewStats.Distribution[1] / (double)totalRates) * 100;
+        r2Percent = (Model.Product.ReviewStats.Distribution[2] / (double)totalRates) * 100;
+        r3Percent = (Model.Product.ReviewStats.Distribution[3] / (double)totalRates) * 100;
+        r4Percent = (Model.Product.ReviewStats.Distribution[4] / (double)totalRates) * 100;
+        r5Percent = (Model.Product.ReviewStats.Distribution[5] / (double)totalRates) * 100;
+    }
+}
 
 <div class="row gx-md-8 gx-xl-12 gy-8">
 
@@ -42,24 +62,41 @@
             </div>
         </div>
 
-
     </div>
 
     <div class="col-lg-6">
         <div class="post-header mb-5">
             <h2 class="post-title display-5">
-                <a href="@Url.Action("Details", "Products", new { id = Model.Product.Id })" class="link-dark">
+                @*  <a href="@Url.Action("Details", "Products", new { id = Model.Product.Id })" class="link-dark">
                     @Model.Product.Title
-                </a>
+                </a> *@
                 <p class="price fs-20 mb-2">
-                    <span class="amount">@Model.Product.Price &#8381;</span>
+                    <p class="price">
+
+                        @if (Model.Product.HasCurrentDiscount)
+                        {
+                            <del>
+                                <span class="amount">@Model.Product.Price.GetDisplayValue()</span>
+                            </del>
+                            <ins>
+                                <span class="amount">@Model.Product.DiscountPrice.GetDisplayValue()</span>
+                            </ins>
+                        }
+                        else
+                        {
+                            <p class="price">
+                                <span class="amount">@Model.Product.Price.GetDisplayValue()</span>
+                            </p>
+                        }
+
+                    </p>
                 </p>
-                <a href="#" class="link-body ratings-wrapper">
+                @*  <a href="#" class="link-body ratings-wrapper">
                     <span class="ratings four"></span><span>(3 Reviews)</span>
-                </a>
+                </a> *@
             </h2>
         </div>
-
+       
         @if (Model.IsAbleToPurchase)
         {
             <div class="row">
@@ -89,11 +126,33 @@
                 </div>
             </div>
         }
+        
+        <div class="card  bg-soft-primary mt-3">
+            <div class="card-body shadow-lg">
+                
+                
+                <div class="row gx-md-8 gy-8">
+                    <div class="col-lg-12">
+                        <div class="icon btn btn-block btn-lg btn-soft-leaf pe-none mb-5"> <i class="uil uil-shopping-cart"></i> </div>
+                        <h4>@Model.Product.Supplier.Name</h4>
+                        <p class="mb-3">Nulla vitae elit libero, a pharetra augue. Donec id elit non mi porta gravida at eget metus. Cras justo.</p>
+                        <a target="_blank" class="btn btn-primary rounded-pill w-100 mt-3" href="@Url.Action("Details", "Suppliers", new { id = Model.Product.Supplier.Id })">@localizer["ProductDetailsSupplierPage"]</a>
+                    </div>
+  
+                @* <div class="row">
+                    <div class="col-lg-12">
+                        <a target="_blank" class="btn btn-primary rounded-pill w-100 mt-3" href="@Url.Action("Details", "Suppliers", new { id = Model.Product.Supplier.Id })">@localizer["ProductDetailsSupplierPage"]</a>
+                        <b>@(Model.Product.Supplier.Stats?.TotalOrders ?? 0) @localizer["ProductDetailsSupplierTotalOrders"]</b>
+                    </div>
+                </div> *@
+
+            </div>
+        </div>
 
     </div>
 
 </div>
-
+</div>
 <div class="card mt-3 mb-3">
     <div class="card-body">
         <ul class="nav nav-tabs nav-tabs-basic">
@@ -103,9 +162,9 @@
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#tab3-2">@localizer["ProductDetailsSpec"]</a>
             </li>
-            <li class="nav-item">
+            @* <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#tab3-3">@localizer["ProductDetailsFeedback"]</a>
-            </li>
+            </li> *@
         </ul>
         <!-- /.nav-tabs -->
         <div class="tab-content mt-0 mt-md-5">
@@ -138,10 +197,10 @@
                 <p class="mb-0">Maecenas faucibus mollis interdum. Sed posuere consectetur est at lobortis. Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta gravida at eget metus. Curabitur blandit tempus porttitor. Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus.</p>
             </div>
             <!--/.tab-pane -->
-            <div class="tab-pane fade" id="tab3-3">
-                @*                 <p>Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+            @*  <div class="tab-pane fade" id="tab3-3">
+                               <p>Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
                 <p class="mb-0">Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam id dolor id nibh ultricies vehicula ut id elit. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
- *@
+ 
                 @if (Model.CurrentUserOrder != null)
                 {
                     @if (Model.CurrentUserReview != null)
@@ -155,7 +214,7 @@
                                     </ol>
                                 </div>
 
-                                <a id="addReviewBtn" class="btn btn-primary" href="javascript:;">@localizer["ProductDetailsEditReview"]</a>
+
                             </div>
 
                         </div>
@@ -164,7 +223,7 @@
                     {
                         <div class="mt-3">
                             <h2>@localizer["ProductDetailsLeaveReview"]</h2>
-                            <a id="addReviewBtn" class="btn btn-primary" href="javascript:;">@localizer["ProductDetailsAddReview"]</a>
+
                         </div>
                     }
                 }
@@ -173,10 +232,8 @@
                     <h2>NO ORDER NO REVIEW LOL</h2>
                 }
 
-                
 
-
-            </div>
+            </div>*@
             <!--/.tab-pane -->
         </div>
         <!-- /.tab-content -->
@@ -418,122 +475,149 @@
 </section>
 
 <section class="wrapper bg-light">
-<div class="container py-14 py-md-16">
-<div class="row gx-md-8 gx-xl-12 gy-10">
-<aside class="col-lg-4 sidebar">
-    <div class="widget mt-1">
-        <h4 class="widget-title mb-3">Ratings Distribution</h4>
-        <div class="mb-5">
-            <span class="ratings four"></span><span>0 out of 5</span>
+    <div class="container py-14 py-md-16">
+        <div class="row gx-md-8 gx-xl-12 gy-10">
+            <aside class="col-lg-4 sidebar">
+                <div class="widget mt-1">
+                    <h4 class="widget-title mb-3">Ratings Distribution</h4>
+                    <div class="mb-5">
+                        <span class="ratings four" itemprop="ratingValue"></span><span>0 out of 5</span>
+                    </div>
+                    <ul class="progress-list">
+                        <li>
+                            <p>5 Stars</p>
+                            <div class="progressbar line blue" data-value="@r5Percent"></div>
+                        </li>
+                        <li>
+                            <p>4 Stars</p>
+                            <div class="progressbar line blue" data-value="@r4Percent"></div>
+                        </li>
+                        <li>
+                            <p>3 Stars</p>
+                            <div class="progressbar line blue" data-value="@r3Percent"></div>
+                        </li>
+                        <li>
+                            <p>2 Stars</p>
+                            <div class="progressbar line blue" data-value="@r2Percent"></div>
+                        </li>
+                        <li>
+                            <p>1 Star</p>
+                            <div class="progressbar line blue" data-value="@r1Percent"></div>
+                        </li>
+                    </ul>
+                    <!-- /.progress-list -->
+                </div>
+                <!-- /.widget -->
+                <div class="widget mt-10">
+                    <h4 class="widget-title mb-3">Review this product</h4>
+                    <p class="mb-5">Aenean eu leo quam ornare sem lacinia quam.</p>
+
+                    @if (Model.IsAbleToPurchase)
+                    {
+                        if (Model.CurrentUserReview != null)
+                        {
+                            <a id="addReviewBtn" class="btn btn-primary w-100" href="javascript:;">@localizer["ProductDetailsEditReview"]</a>
+                        }
+                        else
+                        {
+                            <a id="addReviewBtn" class="btn btn-primary w-100" href="javascript:;">@localizer["ProductDetailsAddReview"]</a>
+                        }
+                    }
+
+
+                </div>
+                <!-- /.widget -->
+            </aside>
+            <!-- /column .sidebar -->
+            <div class="col-lg-8">
+                <div class="row align-items-center mb-10 position-relative zindex-1">
+                    <div class="col-md-7 col-xl-8 pe-xl-20">
+                        <h2 class="display-6 mb-0">Ratings & Reviews</h2>
+                    </div>
+                    <!--/column -->
+                    <div class="col-md-5 col-xl-4 ms-md-auto text-md-end mt-5 mt-md-0">
+                        <div class="form-select-wrapper">
+                            <select class="form-select">
+                                <option value="newest">Sort by newest</option>
+                                <option value="oldest">Sort by oldest</option>
+                                <option value="popular">Sort by popularity</option>
+                                <option value="high-rating">Sort by high rating</option>
+                                <option value="low-rating">Sort by low rating</option>
+                            </select>
+                        </div>
+                        <!--/.form-select-wrapper -->
+                    </div>
+                    <!--/column -->
+                </div>
+                <!--/.row -->
+                @if (Model.RecentReviews.Count > 0)
+                {
+                    <div id="comments" class="mt-3">
+                        <ol id="singlecomments" class="commentlist">
+                            @if (Model.CurrentUserReview != null)
+                            {
+                                <div class="card shadow-lg card-border-start border-soft-blue">
+                                    <div class="card-body review-card">
+
+                                        <div id="comments" class="mt-3">
+                                            <ol id="singlecomments" class="commentlist">
+                                                <partial name="ProductReviewItem" model="@Model.CurrentUserReview"/>
+                                            </ol>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            }
+                            @foreach (var review in Model.RecentReviews)
+                            {
+                                <partial name="ProductReviewItem" model="@review"/>
+                            }
+
+                        </ol>
+                    </div>
+                }
+                else
+                {
+                    <h2>@localizer["ProductDetailsNoReviews"]</h2>
+                }
+
+                <nav class="d-flex mt-10" aria-label="pagination">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">
+                                    <i class="uil uil-arrow-left"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">
+                                    <i class="uil uil-arrow-right"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.pagination -->
+                </nav>
+                <!-- /nav -->
+            </div>
+            <!-- /column -->
         </div>
-        <ul class="progress-list">
-            <li>
-                <p>5 Stars</p>
-                <div class="progressbar line blue" data-value="82"></div>
-            </li>
-            <li>
-                <p>4 Stars</p>
-                <div class="progressbar line blue" data-value="8"></div>
-            </li>
-            <li>
-                <p>3 Stars</p>
-                <div class="progressbar line blue" data-value="5"></div>
-            </li>
-            <li>
-                <p>2 Stars</p>
-                <div class="progressbar line blue" data-value="3"></div>
-            </li>
-            <li>
-                <p>1 Star</p>
-                <div class="progressbar line blue" data-value="2"></div>
-            </li>
-        </ul>
-        <!-- /.progress-list -->
+        <!-- /.row -->
     </div>
-    <!-- /.widget -->
-    <div class="widget mt-10">
-        <h4 class="widget-title mb-3">Review this product</h4>
-        <p class="mb-5">Aenean eu leo quam ornare sem lacinia quam.</p>
-        <a href="#" class="btn btn-primary rounded w-100">Write a Review</a>
-    </div>
-    <!-- /.widget -->
-</aside>
-<!-- /column .sidebar -->
-<div class="col-lg-8">
-<div class="row align-items-center mb-10 position-relative zindex-1">
-    <div class="col-md-7 col-xl-8 pe-xl-20">
-        <h2 class="display-6 mb-0">Ratings & Reviews</h2>
-    </div>
-    <!--/column -->
-    <div class="col-md-5 col-xl-4 ms-md-auto text-md-end mt-5 mt-md-0">
-        <div class="form-select-wrapper">
-            <select class="form-select">
-                <option value="newest">Sort by newest</option>
-                <option value="oldest">Sort by oldest</option>
-                <option value="popular">Sort by popularity</option>
-                <option value="high-rating">Sort by high rating</option>
-                <option value="low-rating">Sort by low rating</option>
-            </select>
-        </div>
-        <!--/.form-select-wrapper -->
-    </div>
-    <!--/column -->
-</div>
-<!--/.row -->
-
-@if (Model.RecentReviews.Count > 0)
-{
-    <div id="comments" class="mt-3">
-        <ol id="singlecomments" class="commentlist">
-
-            @foreach (var review in Model.RecentReviews)
-            {
-                <partial name="ProductReviewItem" model="@review"/>
-            }
-
-        </ol>
-    </div>
-}
-else
-{
-    <h2>@localizer["ProductDetailsNoReviews"]</h2>
-}
-
-<nav class="d-flex mt-10" aria-label="pagination">
-    <ul class="pagination">
-        <li class="page-item disabled">
-            <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">
-                    <i class="uil uil-arrow-left"></i>
-                </span>
-            </a>
-        </li>
-        <li class="page-item active">
-            <a class="page-link" href="#">1</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#">2</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#">3</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">
-                    <i class="uil uil-arrow-right"></i>
-                </span>
-            </a>
-        </li>
-    </ul>
-    <!-- /.pagination -->
-</nav>
-<!-- /nav -->
-</div>
-<!-- /column -->
-</div>
-<!-- /.row -->
-</div>
-<!-- /.container -->
+    <!-- /.container -->
 </section>
 
 @* <div class="row gx-md-5 gy-5 mt-n19 mb-14 mb-md-17">
@@ -605,17 +689,33 @@ else
         <!--/.modal-content -->
     </div>
     <!--/.modal-dialog -->
-</div> 
+</div>
 
 @section Styles
 {
     <link rel="stylesheet" href="~/Pages/Styles/ProductReviewForm.css"/>
     <link rel="stylesheet" href="~/Pages/Styles/ProductDetails.css"/>
+
+    <!script type="application/ld+json">
+        {
+        "@@context": "https://schema.org/",
+        "@@type": "Product",
+        "name": "@Model.Product.Title",
+        "description": "@Model.Product.ShortDescription"
+        "productID": "@Model.Product.Id",
+        "aggregateRating": {
+        "@@type": "AggregateRating",
+        "ratingValue": @(Model.Product.ReviewStats?.AverageRatingOverall ?? 0),
+        "reviewCount": @(Model.Product.ReviewStats?.TotalRates ?? 0)
+        }
+        }
+    </!script>
 }
 
 @section Scripts
 {
     <script src="~/js/Vendor/swiper-bundle.min.js"></script>
+    <script src="~/lib/waypoints/noframework.waypoints.js"></script>
     <script src="~/Pages/Scripts/ProductReviewForm.js"></script>
     <script src="~/Pages/Scripts/ProductDetails.js"></script>
 

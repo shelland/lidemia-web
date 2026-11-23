@@ -2,6 +2,7 @@
 
 using Lidemia.Core.Enums;
 using Lidemia.Core.Models.Base;
+using Lidemia.Core.Models.Misc;
 using System.Text.Json.Serialization;
 
 namespace Lidemia.Core.Models.Domain;
@@ -10,8 +11,8 @@ public class ProductModel : AbstractEntity<long>
 {
     public string? Title { get; set; }
 
-    [JsonIgnore]
-    public long SupplierId { get; set; }
+    //[JsonIgnore]
+    //public long SupplierId { get; set; }
 
     public long? ParentId { get; set; }
 
@@ -27,7 +28,7 @@ public class ProductModel : AbstractEntity<long>
 
     //public double? AverageRecentRate { get; set; }
 
-    public decimal Price { get; set; }
+    public Price? Price { get; set; }
 
     public ProductPriceUnit? PriceUnit { get; set; }
 
@@ -39,7 +40,7 @@ public class ProductModel : AbstractEntity<long>
 
     public string? Sku { get; set; }
 
-    public decimal? DiscountPrice { get; set; }
+    public Price? DiscountPrice { get; set; }
 
     public bool HasCurrentDiscount { get; set; }
 
@@ -47,6 +48,7 @@ public class ProductModel : AbstractEntity<long>
 
     public DateTimeOffset? DiscountEndDate { get; set; }
 
+    [JsonIgnore]
     public SupplierModel Supplier { get; set; } = null!;
 
     public ProductCategoryModel? Category { get; set; }
@@ -56,4 +58,6 @@ public class ProductModel : AbstractEntity<long>
     public string? Slug { get; set; }
 
     public DeliveryType[]? DeliveryTypes { get; set; }
+
+    public ProductReviewStatsModel? ReviewStats { get; set; }
 }

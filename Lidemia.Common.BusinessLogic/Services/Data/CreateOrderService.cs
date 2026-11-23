@@ -3,6 +3,7 @@
 using FluentResults;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.Metrics;
+using Lidemia.Core.Enums;
 using Lidemia.Core.Errors;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Bus;
@@ -98,29 +99,40 @@ public class CreateOrderService : ICreateOrderService
 
             var groupedAddresses = model.Items.ToDictionary(x => x.SupplierId, x => (x.SupplierAddressId, x.PromoCode));
 
+            var products = (await this.productService.GetProducts(quantities.Keys, cancellationToken)).ToList();
+            var productsDict = products.ToDictionary(x => x.Id, x => (x.Price, DiscountPrice: x.HasCurrentDiscount ? x.DiscountPrice : null));
+
+            var totalSum = quantities.Keys.Sum(x => productsDict[x].Price.NotNull().Value * quantities[x]);
+            var totalSumDiscount = quantities.Keys.Sum(x => (productsDict[x].DiscountPrice?.Value ?? productsDict[x].Price.NotNull().Value) * quantities[x]);
+
             var createOrderResult = await this.orderService.Create(customerId, new CreateOrderModel(
                 Comment: model.Comment,
                 CustomerAddressId: model.CustomerAddressId,
+                TotalSum: totalSum,
+                TotalSumDiscount: totalSumDiscount,
                 Items: shoppingCartItems.Select(x => new CreateOrderItemModel(
                     ProductId: x.Product.Id,
                     PromoCode: null,
-                    SupplierAddressId: groupedAddresses.TryGetValue(x.Product.SupplierId, out var addressItem)
+                    SupplierAddressId: groupedAddresses.TryGetValue(x.Product.Supplier.Id, out var addressItem)
                         ? addressItem.SupplierAddressId
                         : null,
-                    Qty: quantities[x.Product.Id]
+                    Qty: quantities[x.Product.Id],
+                    PricePerItem: productsDict[x.Product.Id].Price.NotNull(),
+                    PricePerItemDiscount: productsDict[x.Product.Id].DiscountPrice,
+                    DiscountSource: DiscountSource.Supplier
                 ))), cancellationToken);
 
-            var products = await this.productService.GetProducts(quantities.Keys, cancellationToken);
-            var groupedProducts = products.GroupBy(x => x.SupplierId, x => x);
+
+            var groupedProducts = products.GroupBy(x => x.Supplier.Id, x => x);
 
             foreach (var grouped in groupedProducts)
             {
                 await this.supplierOrderService.Create(grouped.Key,
                     groupedAddresses.TryGetValue(grouped.Key, out var addressItem) ? addressItem.SupplierAddressId : null, model.CustomerAddressId,
                     grouped.Select(x => (
-                        ProductId: x.Id, 
-                        Quantity: quantities[x.Id], 
-                        Price: x.Price,
+                        ProductId: x.Id,
+                        Quantity: quantities[x.Id],
+                        Price: x.Price.NotNull(),
                         DiscountPrice: x.HasCurrentDiscount ? x.DiscountPrice : null)), createOrderResult.Value,
                     cancellationToken);
             }

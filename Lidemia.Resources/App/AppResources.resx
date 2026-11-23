@@ -214,4 +214,7 @@
   <data name="ProductDetailsFeedback" xml:space="preserve">
     <value>Reviews</value>
   </data>
+  <data name="CurrencyRussianRoubleSign" xml:space="preserve">
+    <value>₽</value>
+  </data>
 </root>

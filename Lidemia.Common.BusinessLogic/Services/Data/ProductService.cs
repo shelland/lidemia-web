@@ -12,7 +12,6 @@ using Lidemia.Core.Models.Domain;
 using Lidemia.Core.Models.Dto;
 using Lidemia.Core.Models.Misc;
 using Lidemia.Core.Models.Service;
-using Lidemia.DataAccess.Entities;
 using Lidemia.DataAccess.Repository.Abstract;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;

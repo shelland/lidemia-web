@@ -31,8 +31,11 @@ public class ProductRepository : IProductRepository
     public Task<ProductEntity?> GetById(long key, CancellationToken cancellationToken)
     {
         return this.context.Products
+            .Include(x => x.Supplier)
+            .ThenInclude(x => x.User)
             .Include(x => x.PrimaryPhoto)
             .Include(x => x.Category)
+            .Include(x => x.ReviewStats)
             .AsActive()
             .FirstOrDefaultAsync(x => x.Id == key, cancellationToken: cancellationToken);
     }
@@ -68,7 +71,8 @@ public class ProductRepository : IProductRepository
                         .SetProperty(e => e.DiscountStartDate, model.DiscountStartDate)
                         .SetProperty(e => e.DiscountEndDate, model.DiscountEndDate)
                         .SetProperty(e => e.Tags, model.Tags ?? [])
-                        .SetProperty(e => e.DeliveryTypes, model.DeliveryTypes),
+                        .SetProperty(e => e.DeliveryTypes, model.DeliveryTypes)
+                        .SetProperty(e => e.Slug, model.Slug),
                     cancellationToken: cancellationToken);
 
             if (affectedRows == 0)
@@ -98,7 +102,8 @@ public class ProductRepository : IProductRepository
                 DiscountStartDate = model.DiscountStartDate,
                 DiscountEndDate = model.DiscountEndDate,
                 Tags = model.Tags ?? [],
-                DeliveryTypes = model.DeliveryTypes
+                DeliveryTypes = model.DeliveryTypes,
+                Slug = model.Slug
             };
 
             this.context.Products.Add(product);
@@ -168,6 +173,8 @@ public class ProductRepository : IProductRepository
             .Products
             .AsActive()
             .Include(x => x.PrimaryPhoto)
+            .Include(x => x.Supplier)
+            .ThenInclude(x => x.User)
             .Where(x => ids.Contains(x.Id))
             .ToListAsync(cancellationToken: cancellationToken);
 
@@ -241,6 +248,7 @@ public class ProductRepository : IProductRepository
         IQueryable<ProductEntity> query = this.context
             .Products
             .Include(x => x.Supplier)
+            .ThenInclude(x => x.User)
             .Include(x => x.Category)
             .Include(x => x.PrimaryPhoto)
             .AsActive()

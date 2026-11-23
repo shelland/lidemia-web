@@ -10,6 +10,19 @@ public class SupplierStatsEntityConfiguration : IEntityTypeConfiguration<Supplie
 {
     public void Configure(EntityTypeBuilder<SupplierStatsEntity> builder)
     {
-        builder.HasNoKey();
+        builder.HasKey(x => x.SupplierId);
+
+        builder.HasOne(x => x.Supplier)
+            .WithOne(x => x.Stats)
+            .HasForeignKey<SupplierStatsEntity>(e => e.SupplierId);
+
+        builder.Property(e => e.RowVersion).HasDefaultValue(1);
+
+        builder.Property(e => e.IsActive).IsRequired();
+
+        builder.Property(e => e.CreateDate).HasDefaultValueSql("now()");
+        builder.Property(e => e.UpdateDate);
+
+        builder.HasIndex(x => x.IsActive);
     }
 }

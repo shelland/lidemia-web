@@ -46,7 +46,7 @@ public class ProductsController : BaseController
         return View(viewModel);
     }
 
-    [HttpGet("Details/{id:long}")]
+    [HttpGet("Details/{id:long}/{slug?}")]
     public async Task<IActionResult> Details([FromRoute] long id, CancellationToken cancellationToken)
     {
         var product = await this.productService.GetById(id, cancellationToken);

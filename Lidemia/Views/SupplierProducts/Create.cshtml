@@ -56,7 +56,7 @@
 
         <div class="col-12 col-md-8">
             <label class="form-label" for="price">@localizer["CreateProductPrice"]</label>
-            <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" value="@Model.Product?.Price.ToString(CultureInfo.InvariantCulture)"/>
+            <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" value="@Model.Product?.Price.NotNull().Value.ToString(CultureInfo.InvariantCulture)"/>
         </div>
 
         <div class="col-12 col-md-4">

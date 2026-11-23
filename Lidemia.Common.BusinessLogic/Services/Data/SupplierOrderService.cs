@@ -25,7 +25,7 @@ public class SupplierOrderService : ISupplierOrderService
         this.supplierOrderMapper = supplierOrderMapper;
     }
 
-    public Task<Result<long>> Create(long supplierId, long? supplierAddressId, long? customerAddressId, IEnumerable<(long ProductId, int Quantity, decimal PriceForSingle, decimal? DiscountPriceForSingle)> items,
+    public Task<Result<long>> Create(long supplierId, long? supplierAddressId, long? customerAddressId, IEnumerable<(long ProductId, int Quantity, Price PriceForSingle, Price? DiscountPriceForSingle)> items,
         long orderId, CancellationToken cancellationToken)
     {
         return this.supplierOrderRepository.Create(supplierId, supplierAddressId, customerAddressId, items, orderId, cancellationToken);

@@ -55,10 +55,15 @@ public class OrderRepository : IOrderRepository
             Comment = model.Comment,
             Number = number,
             Metadata = OrderMetadata.Default,
+            TotalSum = model.TotalSum,
+            TotalSumDiscount = model.TotalSumDiscount,
             Items = model.Items.Select(item => new OrderItemEntity
             {
                 ProductId = item.ProductId,
-                Quantity = item.Qty
+                Quantity = item.Qty,
+                PricePerItem = item.PricePerItem.Value,
+                PricePerItemDiscount = item.PricePerItemDiscount?.Value,
+                DiscountSource = item.DiscountSource,
             }).ToList(),
         };
 
@@ -81,12 +86,27 @@ public class OrderRepository : IOrderRepository
         return order;
     }
 
-    public Task<OrderEntity?> GetCustomerOrder(long orderId, long customerId, CancellationToken cancellationToken)
+    public async Task<OrderEntity?> GetCustomerOrder(long orderId, long customerId, CancellationToken cancellationToken)
     {
-        return this.context.Orders
+        var items = await this.context.OrderItems
+            .Where(x => x.OrderId == orderId)
+            .Include(x => x.Product)
+            .ThenInclude(x => x.Supplier)
+            .ThenInclude(x => x.User)
+            .ToListAsync(cancellationToken);
+
+        var order = await this.context.Orders
             .AsActive()
             .Include(x => x.Customer)
             .ThenInclude(x => x.User)
             .FirstOrDefaultAsync(x => x.Id == orderId && x.CustomerId == customerId, cancellationToken);
+
+        if (order == null)
+        {
+            return null;
+        }
+
+        order.Items = items;
+        return order;
     }
 }

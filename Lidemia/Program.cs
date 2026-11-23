@@ -40,8 +40,7 @@ public class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews()
             .AddJson()
-            .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-            .AddRazorRuntimeCompilation();
+            .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
 
         builder.Services.RegisterLogging(builder.Configuration);
         builder.Services.RegisterAuth(builder.Configuration);
@@ -94,7 +93,7 @@ public class Program
 
         app.MapDefaultEndpoints();
         app.UseStaticFiles();
-        //app.UseWhen(x => !x.Request.Path.StartsWithSegments("/metrics"), x => x.UseMiddleware<CorrelationIdMiddleware>());
+        // app.UseWhen(x => !x.Request.Path.StartsWithSegments("/metrics"), x => x.UseMiddleware<CorrelationIdMiddleware>());
         app.UseRateLimiter();
         app.MapControllers();
         app.UseRouting();
@@ -102,7 +101,7 @@ public class Program
         app.UseAuthorization();
         app.UseRequestLocalization();
 
-        app.MapStaticAssets();
+        app.MapStaticAssets().DisableHttpMetrics();
         app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")

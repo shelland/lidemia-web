@@ -49,6 +49,10 @@ public class SupplierEntity : IDbEntity, IHasId<long>, IHasMetadata<SupplierMeta
 
     public SupplierMetadata Metadata { get; set; } = null!;
 
+    public long? StatsId { get; set; }
+
+    public SupplierStatsEntity? Stats { get; set; }
+
     public int RowVersion { get; set; }
 
     public bool IsActive { get; set; }

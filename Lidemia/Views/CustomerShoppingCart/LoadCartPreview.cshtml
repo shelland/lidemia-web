@@ -16,7 +16,7 @@
             <div class="d-flex flex-row">
                 <figure class="rounded w-17">
                     <a href="@Url.Action("Details", "Products", new { id = item.Product.Id })">
-                        <img src="./assets/img/photos/sth1.jpg" srcset="./assets/img/photos/sth1@2x.jpg 2x" alt=""/>
+                        <img src="@item.Product.PrimaryPhoto.OriginalFilePath" srcset="./assets/img/photos/sth1@2x.jpg 2x" alt=""/>
                     </a>
                 </figure>
                 <div class="w-100 ms-4">

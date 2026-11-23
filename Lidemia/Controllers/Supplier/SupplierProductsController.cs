@@ -62,7 +62,7 @@ public class SupplierProductsController : BaseController
     {
         var product = await this.productService.GetById(id, cancellationToken);
 
-        if (product == null || product.SupplierId != RequireEntityId)
+        if (product == null || product.Supplier.Id != RequireEntityId)
         {
             return RedirectToAction("Index");
         }

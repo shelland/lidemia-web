@@ -14,10 +14,12 @@ public interface ISupplierMapper : IMapper<SupplierEntity, SupplierModel>;
 public class SupplierMapper : ISupplierMapper
 {
     private readonly IUserMapper userMapper;
+    private readonly ISupplierStatsMapper supplierStatsMapper;
 
-    public SupplierMapper(IUserMapper userMapper)
+    public SupplierMapper(IUserMapper userMapper, ISupplierStatsMapper supplierStatsMapper)
     {
         this.userMapper = userMapper;
+        this.supplierStatsMapper = supplierStatsMapper;
     }
 
     public SupplierModel Map(SupplierEntity source)
@@ -27,7 +29,8 @@ public class SupplierMapper : ISupplierMapper
             Id = source.Id,
             Name = source.Name,
             CreateDate = source.CreateDate,
-            User = this.userMapper.Map(source.User)
+            User = this.userMapper.Map(source.User),
+            Stats = source.Stats != null ? this.supplierStatsMapper.Map(source.Stats) : null
         };
     }
 }

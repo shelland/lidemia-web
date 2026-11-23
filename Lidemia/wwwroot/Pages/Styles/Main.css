@@ -6,12 +6,6 @@
   font-style: normal;
   font-display: swap;
 }
-/*!
-Theme Name: Sandbox - Modern & Multipurpose Bootstrap 5 Template
-Theme URI:	https://sandbox.elemisthemes.com/
-Version:	3.4.1
-Author:		elemis
-*/
 :root,
 [data-bs-theme=light] {
   --bs-gray-100: #fefefe;

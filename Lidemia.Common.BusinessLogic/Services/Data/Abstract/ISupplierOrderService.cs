@@ -10,7 +10,7 @@ namespace Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 public interface ISupplierOrderService
 {
     Task<Result<long>> Create(long supplierId, long? supplierAddressId, long? customerAddressId,
-        IEnumerable<(long ProductId, int Quantity, decimal PriceForSingle, decimal? DiscountPriceForSingle)> items,
+        IEnumerable<(long ProductId, int Quantity, Price PriceForSingle, Price? DiscountPriceForSingle)> items,
         long orderId, CancellationToken cancellationToken);
 
     Task<BasePagedListModel<SupplierOrderModel>> GetSupplierOrders(long supplierId, SupplierOrdersFilterModel filter, CancellationToken cancellationToken);

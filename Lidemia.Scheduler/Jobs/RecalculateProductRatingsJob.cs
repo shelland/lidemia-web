@@ -1,6 +1,5 @@
 ﻿// Created on 30/10/2026 20:37 by Laserson
 
-using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Core;
 using Lidemia.DataAccess.Repository.Abstract;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,10 +25,13 @@ public class RecalculateProductRatingsJob : BackgroundService
 
         while (await timer.WaitForNextTickAsync(stoppingToken))
         {
+            this.logger.LogInformation("Starting a recalculation job");
+
             await using var scope = this.serviceScopeFactory.CreateAsyncScope();
             var reviewRepository = scope.ServiceProvider.GetRequiredService<IProductReviewStatsRepository>();
 
             await reviewRepository.Recalculate(stoppingToken);
+            this.logger.LogInformation("Recalculation job finished");
         }
     }
 }

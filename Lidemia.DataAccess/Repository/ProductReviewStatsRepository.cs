@@ -49,7 +49,8 @@ public class ProductReviewStatsRepository : IProductReviewStatsRepository
                 AverageRatingOverall = average,
                 AverageRatingRecent = recentAverage,
                 TotalRates = group.Count(),
-                Distribution = new ProductReviewRateDistributionDbModel(Distribution: distributions)
+                Distribution = new ProductReviewRateDistributionDbModel(Distribution: distributions),
+                CreateDate = DateTimeOffset.UtcNow
             });
         }
 

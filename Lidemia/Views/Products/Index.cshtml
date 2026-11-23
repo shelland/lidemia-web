@@ -1,4 +1,5 @@
-﻿@using Lidemia.Resources.App
+﻿@using Lidemia.Core.Extensions
+@using Lidemia.Resources.App
 @using Microsoft.Extensions.Localization
 
 @model Lidemia.ViewModels.ProductsListViewModel
@@ -87,16 +88,16 @@
                                 @if (product.HasCurrentDiscount)
                                 {
                                     <del>
-                                        <span class="amount">@product.Price &#8381;</span>
+                                        <span class="amount">@product.Price.GetDisplayValue()</span>
                                     </del>
                                     <ins>
-                                        <span class="amount">@product.DiscountPrice &#8381;</span>
+                                        <span class="amount">@product.DiscountPrice.GetDisplayValue()</span>
                                     </ins>
                                 }
                                 else
                                 {
                                     <p class="price">
-                                        <span class="amount">@product.Price &#8381;</span>
+                                        <span class="amount">@product.Price.GetDisplayValue()</span>
                                     </p>
                                 }
 

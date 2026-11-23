@@ -1,5 +1,4 @@
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
-using Lidemia.Core.Models.Dto;
 using Lidemia.Search.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 

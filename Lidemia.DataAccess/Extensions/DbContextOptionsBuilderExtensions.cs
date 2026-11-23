@@ -2,14 +2,16 @@
 
 using System.Reflection;
 using Lidemia.DataAccess.Context;
+using Lidemia.DataAccess.Logic.Interceptors;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 
 namespace Lidemia.DataAccess.Extensions;
 
 public static class DbContextOptionsBuilderExtensions
 {
-    public static void ConfigureDbContext(this DbContextOptionsBuilder builder, string connectionString)
+    public static void ConfigureDbContext(this DbContextOptionsBuilder builder, string connectionString, IServiceProvider? sp)
     {
         builder.EnableSensitiveDataLogging();
         builder.EnableDetailedErrors();
@@ -19,7 +21,7 @@ public static class DbContextOptionsBuilderExtensions
         dataBuilder.EnableParameterLogging();
         var dataSource = dataBuilder.Build();
 
-        builder.UseNpgsql(dataSource, db =>
+        var optionsBuilder = builder.UseNpgsql(dataSource, db =>
             {
                 db.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
                 db.UseNetTopologySuite(geographyAsDefault: true);
@@ -28,5 +30,13 @@ public static class DbContextOptionsBuilderExtensions
             .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
             .UseSnakeCaseNamingConvention()
             .UseLoggerFactory(LidemiaDbContext.Logger);
+
+        if (sp == null)
+        {
+            return;
+        }
+
+        var slowQueryInterceptor = sp.GetRequiredService<SlowQueriesInterceptor>();
+        optionsBuilder.AddInterceptors(slowQueryInterceptor);
     }
 }
