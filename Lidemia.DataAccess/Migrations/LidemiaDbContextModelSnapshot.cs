@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using Lidemia.Core.Models.Misc;
+using Lidemia.Core.Models.Misc.Meta;
 using Lidemia.DataAccess.Context;
-using Lidemia.DataAccess.Entities.Meta;
 using Lidemia.DataAccess.Entities.Misc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -20,7 +20,7 @@ partial class LidemiaDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261123153630_m8";
+    public override string LastMigrationId => "20261127064228_m9";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -1871,53 +1871,6 @@ partial class LidemiaDbContextModelSnapshot : ModelSnapshot
                 b.ToTable("users");
             });
 
-        modelBuilder.Entity("Lidemia.DataAccess.Entities.WishListEntity", b =>
-            {
-                var id = b.Property<long>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("bigint")
-                    .HasColumnName("id");
-
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
-
-                b.Property<DateTimeOffset>("CreateDate")
-                    .HasColumnType("timestamp with time zone")
-                    .HasColumnName("create_date");
-
-                b.Property<long>("CustomerId")
-                    .HasColumnType("bigint")
-                    .HasColumnName("customer_id");
-
-                b.Property<bool>("IsActive")
-                    .HasColumnType("boolean")
-                    .HasColumnName("is_active");
-
-                b.Property<int>("ItemsCount")
-                    .HasColumnType("integer")
-                    .HasColumnName("items_count");
-
-                b.Property<string>("Name")
-                    .HasMaxLength(500)
-                    .HasColumnType("character varying(500)")
-                    .HasColumnName("name");
-
-                b.Property<int>("RowVersion")
-                    .HasColumnType("integer")
-                    .HasColumnName("row_version");
-
-                b.Property<DateTimeOffset?>("UpdateDate")
-                    .HasColumnType("timestamp with time zone")
-                    .HasColumnName("update_date");
-
-                b.HasKey("Id")
-                    .HasName("pk_wish_lists");
-
-                b.HasIndex("CustomerId", "IsActive")
-                    .HasDatabaseName("ix_wish_lists_customer_id_is_active");
-
-                b.ToTable("wish_lists");
-            });
-
         modelBuilder.Entity("Lidemia.DataAccess.Entities.WishListItemEntity", b =>
             {
                 var id = b.Property<long>("Id")
@@ -1932,6 +1885,10 @@ partial class LidemiaDbContextModelSnapshot : ModelSnapshot
                     .HasColumnType("timestamp with time zone")
                     .HasColumnName("create_date")
                     .HasDefaultValueSql("now()");
+
+                b.Property<long>("CustomerId")
+                    .HasColumnType("bigint")
+                    .HasColumnName("customer_id");
 
                 b.Property<bool>("IsActive")
                     .HasColumnType("boolean")
@@ -1951,10 +1908,6 @@ partial class LidemiaDbContextModelSnapshot : ModelSnapshot
                     .HasColumnType("timestamp with time zone")
                     .HasColumnName("update_date");
 
-                b.Property<long>("WishListId")
-                    .HasColumnType("bigint")
-                    .HasColumnName("wish_list_id");
-
                 b.HasKey("Id")
                     .HasName("pk_wish_list_items");
 
@@ -1964,12 +1917,8 @@ partial class LidemiaDbContextModelSnapshot : ModelSnapshot
                 b.HasIndex("ProductId")
                     .HasDatabaseName("ix_wish_list_items_product_id");
 
-                b.HasIndex("WishListId", "IsActive")
-                    .HasDatabaseName("ix_wish_list_items_wish_list_id_is_active");
-
-                b.HasIndex("WishListId", "ProductId")
-                    .IsUnique()
-                    .HasDatabaseName("ix_wish_list_items_wish_list_id_product_id");
+                b.HasIndex("CustomerId", "IsActive")
+                    .HasDatabaseName("ix_wish_list_items_customer_id_is_active");
 
                 b.ToTable("wish_list_items");
             });
@@ -2373,20 +2322,15 @@ partial class LidemiaDbContextModelSnapshot : ModelSnapshot
                 b.Navigation("Supplier");
             });
 
-        modelBuilder.Entity("Lidemia.DataAccess.Entities.WishListEntity", b =>
+        modelBuilder.Entity("Lidemia.DataAccess.Entities.WishListItemEntity", b =>
             {
                 b.HasOne("Lidemia.DataAccess.Entities.CustomerEntity", "Customer")
                     .WithMany()
                     .HasForeignKey("CustomerId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired()
-                    .HasConstraintName("fk_wish_lists_customers_customer_id");
+                    .HasConstraintName("fk_wish_list_items_customers_customer_id");
 
-                b.Navigation("Customer");
-            });
-
-        modelBuilder.Entity("Lidemia.DataAccess.Entities.WishListItemEntity", b =>
-            {
                 b.HasOne("Lidemia.DataAccess.Entities.ProductEntity", "Product")
                     .WithMany()
                     .HasForeignKey("ProductId")
@@ -2394,16 +2338,9 @@ partial class LidemiaDbContextModelSnapshot : ModelSnapshot
                     .IsRequired()
                     .HasConstraintName("fk_wish_list_items_products_product_id");
 
-                b.HasOne("Lidemia.DataAccess.Entities.WishListEntity", "WishList")
-                    .WithMany()
-                    .HasForeignKey("WishListId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired()
-                    .HasConstraintName("fk_wish_list_items_wish_lists_wish_list_id");
+                b.Navigation("Customer");
 
                 b.Navigation("Product");
-
-                b.Navigation("WishList");
             });
 
         modelBuilder.Entity("Lidemia.DataAccess.Entities.ChatEntity", b =>

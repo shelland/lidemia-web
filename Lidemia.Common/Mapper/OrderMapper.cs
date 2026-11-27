@@ -22,8 +22,13 @@ public class OrderMapper : IOrderMapper
         this.orderItemMapper = orderItemMapper;
     }
 
-    public OrderModel Map(OrderEntity source)
+    public OrderModel? Map(OrderEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
+
         return new OrderModel
         {
             Id = source.Id,
@@ -32,7 +37,7 @@ public class OrderMapper : IOrderMapper
             Customer = this.customerMapper.Map(source.Customer),
             TotalSum = source.TotalSum.ToPrice(),
             TotalSumDiscount = source.TotalSumDiscount?.ToPrice(),
-            Items = source.Items != null ? this.orderItemMapper.MapList(source.Items) : []
+            Items = this.orderItemMapper.MapList(source.Items)
         };
     }
 }

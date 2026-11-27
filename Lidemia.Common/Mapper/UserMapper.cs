@@ -13,8 +13,13 @@ public interface IUserMapper : IMapper<UserEntity, UserModel>;
 [ServiceDescriptor<IUserMapper>(ServiceLifetime.Scoped)]
 public class UserMapper : IUserMapper
 {
-    public UserModel Map(UserEntity source)
+    public UserModel? Map(UserEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
+
         return new UserModel
         {
             Id = source.Id,

@@ -19,10 +19,17 @@ public class CustomerWishListController : BaseController
         this.wishListService = wishListService;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Index([FromQuery] CustomerWishListFilterModel filter, CancellationToken cancellationToken)
+    {
+        var items = await this.wishListService.GetCustomerWishList(RequireEntityId, filter, cancellationToken);
+        return View(items);
+    }
+
     [HttpPost]
     public async Task<ResultInfo> Post([FromBody] AddToWishListRequestDto request, CancellationToken cancellationToken)
     {
-        var result = await this.wishListService.AddToWishList(RequireEntityId, request, cancellationToken);
-        return result ? ResultInfo.Ok : ErrorResultInfo.Error;
+        await this.wishListService.AddToWishList(RequireEntityId, request, cancellationToken);
+        return ResultInfo.Ok;
     }
 }

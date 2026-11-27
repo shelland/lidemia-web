@@ -10,5 +10,5 @@ public class CustomerModel : AbstractEntity<long>
 
     public string LastName { get; set; } = string.Empty;
 
-    public UserModel User { get; set; } = null!;
+    public UserModel? User { get; set; }
 }

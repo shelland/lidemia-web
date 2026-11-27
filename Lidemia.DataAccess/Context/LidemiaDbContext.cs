@@ -30,8 +30,6 @@ public partial class LidemiaDbContext : DbContext
 
     public DbSet<OrderItemEntity> OrderItems => Set<OrderItemEntity>();
 
-    public DbSet<WishListEntity> WishLists => Set<WishListEntity>();
-
     public DbSet<WishListItemEntity> WishListItems => Set<WishListItemEntity>();
 
     public DbSet<ShoppingCartEntity> ShoppingCarts => Set<ShoppingCartEntity>();

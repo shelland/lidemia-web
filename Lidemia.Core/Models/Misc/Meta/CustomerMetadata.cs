@@ -1,6 +1,6 @@
 ﻿// Created on 07/12/2021 21:44 by Andrey Laserson
 
-namespace Lidemia.DataAccess.Entities.Meta;
+namespace Lidemia.Core.Models.Misc.Meta;
 
 public class CustomerMetadata
 {

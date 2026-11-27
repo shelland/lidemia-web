@@ -9,9 +9,9 @@ public class WishListItemEntity : IHasId<long>, IDbEntity
 {
     public long Id { get; set; }
 
-    public long WishListId { get; set; }
+    public long CustomerId { get; set; }
 
-    public WishListEntity WishList { get; set; } = null!;
+    public CustomerEntity Customer { get; set; } = null!;
 
     public long ProductId { get; set; }
 

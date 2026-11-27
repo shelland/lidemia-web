@@ -13,6 +13,9 @@
     "errors.supplier.signup.innEmpty": "INN is required",
     "errors.supplier.signup.ogrnEmpty": "OGRN is required",
     "errors.supplier.signup.orgTypeEmpty": "Organization type is required",
+    "errors.supplier.logo.fileEmpty": "Select a logo file",
+    "errors.supplier.logo.fileTooLarge": "The file is too large. Maximum size is 5 MB",
+    "errors.supplier.logo.unsupportedFormat": "Unsupported file format",
     "errors.signin.invalidCredentials": "Invalid credentials"
 };
 

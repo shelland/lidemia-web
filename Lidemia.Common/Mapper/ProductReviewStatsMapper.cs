@@ -13,8 +13,13 @@ public interface IProductReviewStatsMapper : IMapper<ProductReviewStatsEntity, P
 [ServiceDescriptor<IProductReviewStatsMapper>(ServiceLifetime.Scoped)]
 public class ProductReviewStatsMapper : IProductReviewStatsMapper
 {
-    public ProductReviewStatsModel Map(ProductReviewStatsEntity source)
+    public ProductReviewStatsModel? Map(ProductReviewStatsEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
+
         return new ProductReviewStatsModel(
             AverageRatingRecent: source.AverageRatingRecent,
             AverageRatingOverall: source.AverageRatingOverall,

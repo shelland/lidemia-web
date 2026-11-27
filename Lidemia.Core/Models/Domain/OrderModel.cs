@@ -8,7 +8,7 @@ namespace Lidemia.Core.Models.Domain;
 
 public class OrderModel : AbstractEntity<long>, IHasId<long>
 {
-    public CustomerModel Customer { get; set; } = null!;
+    public CustomerModel? Customer { get; set; }
 
     public string Number { get; set; } = string.Empty;
 
@@ -16,12 +16,12 @@ public class OrderModel : AbstractEntity<long>, IHasId<long>
 
     public Price? TotalSumDiscount { get; set; }
 
-    public IEnumerable<OrderItemModel> Items { get; set; } = [];
+    public IEnumerable<OrderItemModel>? Items { get; set; } = [];
 }
 
 public record OrderItemModel
 (
-    ProductModel Product,
+    ProductModel? Product,
     int Quantity,
     decimal PricePerItem,
     decimal? PricePerItemDiscount,

@@ -32,7 +32,14 @@ public class SuppliersController : BaseController
             return NotFoundView;
         }
 
-        var viewModel = new SupplierDetailsViewModel(Supplier: supplier);
+        var viewModel = new SupplierDetailsViewModel(
+            TotalOrders: supplier.Stats?.TotalOrders ?? 0,
+            TotalProducts: supplier.Stats?.TotalProducts ?? 0,
+            AverageRate: supplier.Stats?.AverageRating ?? 0,
+            Flags: supplier.Metadata.Flags,
+            Supplier: supplier
+        );
+
         return View(viewModel);
     }
 }

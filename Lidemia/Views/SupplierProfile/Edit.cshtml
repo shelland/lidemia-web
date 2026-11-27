@@ -10,5 +10,90 @@
     ViewData.SetBigTitle(localizer["EditSupplierProfilePageTitle"]);
 }
 
-<label for="name" class="form-label">@localizer["EditSupplierProfileName"]</label>
-<input type="text" class="form-control form-control-lg fw-bold" value="@Model.Name" disabled="disabled" id="name"/>
+<div class="mb-3">
+
+    <label class="form-label d-block">@localizer["EditSupplierProfileLogo"]</label>
+
+    <div class="d-flex flex-wrap align-items-center gap-3">
+
+        <div id="currentLogo" class="@(Model.LogoUrl != null ? null : "d-none")">
+            @if (Model.LogoUrl != null)
+            {
+                <img src="@Model.LogoUrl" alt="@Model.Name" class="rounded border bg-white p-1" style="height: 96px; width: 96px; object-fit: contain;"/>
+            }
+        </div>
+
+        <div id="currentLogoPlaceholder" class="@(Model.LogoUrl != null ? "d-none" : null) text-muted">
+            @localizer["EditSupplierProfileLogoEmpty"]
+        </div>
+
+        <button type="button" class="btn btn-primary" id="uploadLogoBtn">@localizer["EditSupplierProfileLogoUpload"]</button>
+
+    </div>
+
+    <div class="alert alert-info d-none mt-3 mb-0" id="logoProcessingAlert"></div>
+
+</div>
+
+<div class="mb-3">
+    <label for="name" class="form-label">@localizer["EditSupplierProfileName"]</label>
+    <input type="text" class="form-control form-control-lg fw-bold" value="@Model.Name" disabled="disabled" id="name"/>
+</div>
+
+<div class="modal fade" id="logoUploadModal" tabindex="-1" aria-labelledby="logoUploadModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="logoUploadModalTitle">@localizer["EditSupplierProfileLogoUpload"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@localizer["CreateProductImagePreviewClose"]"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="mb-3">
+                    <label class="form-label" for="logoFile">@localizer["EditSupplierProfileLogoFile"]</label>
+                    <input type="file" class="form-control" id="logoFile" accept="image/*"/>
+                    <div class="form-text">@localizer["EditSupplierProfileLogoFileHint"]</div>
+                </div>
+
+                <div class="text-center bg-light border rounded p-3">
+
+                    <img id="logoPreview" class="d-none img-fluid" style="max-height: 200px; object-fit: contain;" alt=""/>
+
+                    <div id="logoPreviewPlaceholder" class="text-muted">@localizer["EditSupplierProfileLogoPreviewEmpty"]</div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@localizer["EditSupplierProfileLogoCancel"]</button>
+                <button type="button" class="btn btn-primary" id="logoUploadBtn" disabled="disabled">@localizer["EditSupplierProfileLogoSave"]</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Pages/Scripts/SupplierProfileLogo.js"></script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            SupplierProfileLogo.init({
+                urls: {
+                    uploadLogoUrl: '@Url.Action("UploadLogo", "SupplierProfile")'
+                },
+                labels: {
+                    processing: '@localizer["EditSupplierProfileLogoProcessing"]'
+                }
+            });
+
+        });
+
+    </script>
+}

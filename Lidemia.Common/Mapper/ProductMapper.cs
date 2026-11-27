@@ -34,8 +34,13 @@ public class ProductMapper : IProductMapper
         this.supplierMapper = supplierMapper;
     }
 
-    public ProductModel Map(ProductEntity entity)
+    public ProductModel? Map(ProductEntity? entity)
     {
+        if (entity == null)
+        {
+            return null;
+        }
+
         return new ProductModel
         {
             Id = entity.Id,
@@ -69,8 +74,13 @@ public class ProductMapper : IProductMapper
 [ServiceDescriptor<IProductMainInfoMapper>(ServiceLifetime.Scoped)]
 public class ProductMainInfoMapper : IProductMainInfoMapper
 {
-    public ProductMainInfoModel Map(ProductEntity source)
+    public ProductMainInfoModel? Map(ProductEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
+
         return new ProductMainInfoModel(
             Id: source.Id,
             Title: source.Title,

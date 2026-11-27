@@ -49,11 +49,11 @@ public class ProductModel : AbstractEntity<long>
     public DateTimeOffset? DiscountEndDate { get; set; }
 
     [JsonIgnore]
-    public SupplierModel Supplier { get; set; } = null!;
+    public SupplierModel? Supplier { get; set; }
 
     public ProductCategoryModel? Category { get; set; }
 
-    public PhotoModel PrimaryPhoto { get; set; } = null!;
+    public PhotoModel? PrimaryPhoto { get; set; }
 
     public string? Slug { get; set; }
 

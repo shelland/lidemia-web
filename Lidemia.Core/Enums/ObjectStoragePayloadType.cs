@@ -4,8 +4,9 @@ namespace Lidemia.Core.Enums;
 
 public enum ObjectStoragePayloadType
 {
-    ProductPhoto, 
-    SupplierPhoto, 
-    CustomerPhoto, 
-    Document
+    ProductPhoto,
+    SupplierPhoto,
+    CustomerPhoto,
+    Document,
+    SupplierLogo
 }

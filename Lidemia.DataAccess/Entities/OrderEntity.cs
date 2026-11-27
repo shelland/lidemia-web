@@ -1,8 +1,8 @@
 ﻿// Created on 20/11/2021 12:43 by Andrey Laserson
 
 using Lidemia.Core.Models.Base;
+using Lidemia.Core.Models.Misc.Meta;
 using Lidemia.DataAccess.Abstract;
-using Lidemia.DataAccess.Entities.Meta;
 
 namespace Lidemia.DataAccess.Entities;
 
@@ -22,7 +22,7 @@ public class OrderEntity : IDbEntity, IHasId<long>, IHasMetadata<OrderMetadata>
     
     public OrderMetadata Metadata { get; set; } = null!;
     
-    public ICollection<OrderItemEntity> Items { get; set; } = null!;
+    public ICollection<OrderItemEntity>? Items { get; set; }
 
     public CustomerAddressEntity? CustomerAddress { get; set; }
 

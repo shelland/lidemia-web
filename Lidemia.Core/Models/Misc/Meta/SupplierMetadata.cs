@@ -2,7 +2,7 @@
 
 using Lidemia.Core.Enums;
 
-namespace Lidemia.DataAccess.Entities.Meta;
+namespace Lidemia.Core.Models.Misc.Meta;
 
 public class SupplierMetadata
 {

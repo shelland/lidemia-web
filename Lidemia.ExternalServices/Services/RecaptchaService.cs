@@ -8,7 +8,6 @@ using Lidemia.ExternalServices.Services.Abstract;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Scrutor;
-using System.Net.Http.Json;
 
 namespace Lidemia.ExternalServices.Services;
 

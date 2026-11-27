@@ -15,8 +15,13 @@ public interface IProductCategoryMapper : IMapper<ProductCategoryEntity, Product
 [ServiceDescriptor<IProductCategoryMapper>(ServiceLifetime.Scoped)]
 public class ProductCategoryMapper : IProductCategoryMapper
 {
-    public ProductCategoryModel Map(ProductCategoryEntity source)
+    public ProductCategoryModel? Map(ProductCategoryEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
+
         var manager = new ResourceManager(typeof(AppResources));
 
         return new ProductCategoryModel

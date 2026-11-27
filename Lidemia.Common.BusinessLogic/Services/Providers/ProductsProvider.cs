@@ -33,6 +33,11 @@ public class ProductsProvider : IProductsProvider
         var searchResults = await this.searchService.Search(filter, cancellationToken);
         var ids = searchResults.Select(x => x.Id).ToArray();
 
+        if (ids.Length == 0)
+        {
+            return new BasePagedListModel<ProductModel>();
+        }
+
         return await this.productService.GetPublicList(filter, ids, cancellationToken);
     }
 }

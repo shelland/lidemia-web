@@ -1,4 +1,4 @@
-﻿using Lidemia.DataAccess.Entities.Meta;
+﻿using Lidemia.Core.Models.Misc.Meta;
 using Lidemia.DataAccess.Entities.Misc;
 using Microsoft.EntityFrameworkCore.Migrations;
 

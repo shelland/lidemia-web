@@ -2,10 +2,10 @@
 
 using FluentResults;
 using Lidemia.Core.Enums;
+using Lidemia.Core.Models.Misc.Meta;
 using Lidemia.Core.Models.Service;
 using Lidemia.DataAccess.Context;
 using Lidemia.DataAccess.Entities;
-using Lidemia.DataAccess.Entities.Meta;
 using Lidemia.DataAccess.Extensions;
 using Lidemia.DataAccess.Repository.Abstract;
 using Microsoft.EntityFrameworkCore;

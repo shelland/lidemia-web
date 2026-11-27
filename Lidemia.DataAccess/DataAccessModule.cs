@@ -23,9 +23,9 @@ public static class DataAccessModule
                 .AddClasses().UsingAttributes();
         });
 
-        var slowQueryTimeout = TimeSpan.FromMilliseconds(1000);
+        var slowQueryTimeout = TimeSpan.FromMilliseconds(500);
 
-        services.AddSingleton<SlowQueriesInterceptor>((sp) =>
+        services.AddSingleton<SlowQueriesInterceptor>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<SlowQueriesInterceptor>>();
             return new SlowQueriesInterceptor(logger, slowQueryTimeout);

@@ -2,8 +2,8 @@
 
 using Lidemia.Core.Enums;
 using Lidemia.Core.Models.Base;
+using Lidemia.Core.Models.Misc.Meta;
 using Lidemia.DataAccess.Abstract;
-using Lidemia.DataAccess.Entities.Meta;
 using Lidemia.DataAccess.Entities.Misc;
 
 namespace Lidemia.DataAccess.Entities;

@@ -20,8 +20,13 @@ public class ProductReviewsMapper : IProductReviewsMapper
         this.lightCustomerMapper = lightCustomerMapper;
     }
 
-    public ProductReviewModel Map(ProductReviewEntity source)
+    public ProductReviewModel? Map(ProductReviewEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
+
         return new ProductReviewModel
         {
             Id = source.Id,

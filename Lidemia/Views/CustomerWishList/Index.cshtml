@@ -1,0 +1,77 @@
+@using Lidemia.Logic.Extensions
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
+@model Lidemia.Core.Models.Misc.BasePagedListModel<Lidemia.Core.Models.Domain.WishListItemModel>
+
+@inject IStringLocalizer<AppResources> localizer
+
+@{
+    ViewData.SetBigTitle(localizer["CustomerWishListPageTitle"]);
+}
+
+
+@if (Model.Items.Any())
+{
+    <div class="grid grid-view projects-masonry shop mb-13">
+        <div class="row gx-md-8 gy-10 gy-md-13 isotope">
+            @foreach (var item in Model.Items)
+            {
+                <div class="project item col-md-6 col-xl-3">
+                    <figure class="rounded mb-6">
+                        <img src="@item.Product.PrimaryPhoto?.OriginalFilePath"/>
+                        <a class="item-like" href="#" data-bs-toggle="white-tooltip" title="Add to wishlist">
+                            <i class="uil uil-heart"></i>
+                        </a>
+                        <a class="item-view" href="#" data-bs-toggle="white-tooltip" title="Quick view">
+                            <i class="uil uil-eye"></i>
+                        </a>
+                        <a href="#" class="item-cart"><i class="uil uil-shopping-bag"></i> Add to Cart</a>
+                        <span class="avatar bg-pink text-white w-10 h-10 position-absolute text-uppercase fs-13" style="top: 1rem; left: 1rem;">
+                            <span>Sale!</span>
+                        </span>
+                    </figure>
+                    <div class="post-header">
+                        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+                            <div class="post-category text-ash mb-0">Shoes</div>
+                            <span class="ratings five"></span>
+                        </div>
+                        <h2 class="post-title h3 fs-22">
+                            <a href="@Url.Action("Details", "Products", new { id = item.Product.Id })" class="link-dark">@item.Product.Title</a>
+                        </h2>
+                        @* <p class="price">
+                            <del>
+                                <span class="amount">$55.00</span>
+                            </del>
+                            <ins>
+                                <span class="amount">$45.00</span>
+                            </ins>
+                        </p> *@
+                    </div>
+                    <!-- /.post-header -->
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="container pt-12 pt-md-14 pb-14 pb-md-16">
+        <div class="row">
+            <div class="col-lg-9 col-xl-8 mx-auto">
+                <figure class="mb-10 text-center">
+                    @* <img class="img-fluid" src="./assets/img/illustrations/404.png" srcset="./assets/img/illustrations/404@2x.png 2x" alt=""> *@
+                    <i class="uil uil-heart-break fs-110"></i>
+                </figure>
+            </div>
+            <!-- /column -->
+            <div class="col-lg-8 col-xl-7 col-xxl-6 mx-auto text-center">
+                <h1 class="mb-3">@localizer["WishListNotItemsTitle"]</h1>
+                <p class="lead mb-7 px-md-12 px-lg-5 px-xl-7">@localizer["WishListNoItemsText"]</p>
+                <a href="@Url.Action("Index", "Products")" class="btn btn-primary rounded-pill">@localizer["WishListNoItemsButton"]</a>
+            </div>
+            <!-- /column -->
+        </div>
+        <!-- /.row -->
+    </div>
+}

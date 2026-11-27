@@ -58,4 +58,9 @@ public class SupplierService : ISupplierService
         var suppliers = await this.supplierRepository.GetSuppliers(ids, cancellationToken);
         return this.supplierMapper.MapList(suppliers);
     }
+
+    public Task<bool> UpdateLogoUrl(long supplierId, string logoUrl, CancellationToken cancellationToken)
+    {
+        return this.supplierRepository.UpdateLogoUrl(supplierId, logoUrl, cancellationToken);
+    }
 }

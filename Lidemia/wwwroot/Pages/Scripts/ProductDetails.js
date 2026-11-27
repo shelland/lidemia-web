@@ -38,13 +38,28 @@
 
         },
 
-        addToWishList: function () {
+        addToWishList: async function () {
+            var payload = {
+                productId: ProductDetails.values.id
+            };
 
+            const response = await window.appFetch(ProductDetails.urls.addToWishListUrl, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+
+            }
         },
 
         initPlugins: function () {
             this.initSwiperSlider();
             this.initProgressBars();
+                       
+
+            const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+            const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
         },
 
         initProgressBars: function () {

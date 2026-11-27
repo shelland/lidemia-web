@@ -13,6 +13,9 @@
     "errors.supplier.signup.innEmpty": "Укажите ИНН",
     "errors.supplier.signup.ogrnEmpty": "Укажите ОГРН",
     "errors.supplier.signup.orgTypeEmpty": "Укажите тип организации",
+    "errors.supplier.logo.fileEmpty": "Выберите файл логотипа",
+    "errors.supplier.logo.fileTooLarge": "Файл слишком большой. Максимальный размер — 5 МБ",
+    "errors.supplier.logo.unsupportedFormat": "Неподдерживаемый формат файла",
     "errors.signin.invalidCredentials": "Неверные учетные данные"
 };
 

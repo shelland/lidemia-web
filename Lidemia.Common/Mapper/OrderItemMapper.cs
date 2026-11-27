@@ -6,29 +6,33 @@ using Lidemia.DataAccess.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
 
-namespace Lidemia.Common.Mapper
+namespace Lidemia.Common.Mapper;
+
+public interface IOrderItemMapper : IMapper<OrderItemEntity, OrderItemModel>;
+
+[ServiceDescriptor<IOrderItemMapper>(ServiceLifetime.Scoped)]
+public class OrderItemMapper : IOrderItemMapper
 {
-    public interface IOrderItemMapper : IMapper<OrderItemEntity, OrderItemModel>;
+    private readonly IProductMapper productMapper;
 
-    [ServiceDescriptor<IOrderItemMapper>(ServiceLifetime.Scoped)]
-    public class OrderItemMapper : IOrderItemMapper
+    public OrderItemMapper(IProductMapper productMapper)
     {
-        private readonly IProductMapper productMapper;
+        this.productMapper = productMapper;
+    }
 
-        public OrderItemMapper(IProductMapper productMapper)
+    public OrderItemModel? Map(OrderItemEntity? source)
+    {
+        if (source == null)
         {
-            this.productMapper = productMapper;
+            return null;
         }
 
-        public OrderItemModel Map(OrderItemEntity source)
-        {
-            return new OrderItemModel(
-                Product: this.productMapper.Map(source.Product),
-                Quantity: source.Quantity,
-                PricePerItem: source.PricePerItem,
-                PricePerItemDiscount: source.PricePerItemDiscount,
-                DiscountSource: source.DiscountSource
-            );
-        }
+        return new OrderItemModel(
+            Product: this.productMapper.Map(source.Product),
+            Quantity: source.Quantity,
+            PricePerItem: source.PricePerItem,
+            PricePerItemDiscount: source.PricePerItemDiscount,
+            DiscountSource: source.DiscountSource
+        );
     }
 }

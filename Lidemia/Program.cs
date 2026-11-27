@@ -5,6 +5,7 @@ using Lidemia.Common.Logic.Logging;
 using Lidemia.Core;
 using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Configuration;
+using Lidemia.Hubs;
 using Lidemia.Logic;
 using Lidemia.Logic.Extensions;
 using Lidemia.ServiceDefaults;
@@ -85,6 +86,14 @@ public class Program
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddRateLimiting();
 
+        var appId = builder.Configuration.GetSection("AppId").Get<AppIdSettings>().NotNull();
+        
+        builder.Services.AddStackExchangeRedisCache(opts =>
+        {
+            opts.InstanceName = appId.ToString();
+            opts.Configuration = builder.Configuration["LocalServices:Redis:ConnectionString"];
+        });
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -92,6 +101,8 @@ public class Program
         {
             // app.UseExceptionHandler("/Home/Error");
         }
+
+        app.UseMiniProfiler();
 
         app.MapDefaultEndpoints();
         app.UseStaticFiles();
@@ -109,13 +120,14 @@ public class Program
                 pattern: "{controller=Home}/{action=Index}/{id?}")
             .WithStaticAssets();
 
-        app.MapHub<Lidemia.Hubs.DirectChatHub>("/hubs/direct");
+        app.MapHub<DirectChatHub>("/hubs/direct");
 
         app.MapPrometheusScrapingEndpoint().DisableHttpMetrics();
         app.MapHealthChecks("/healthz").DisableHttpMetrics();
 
         app.AddBundles();
-        
+
+
         await app.RunMigrations();
         await app.RunAsync();
     }

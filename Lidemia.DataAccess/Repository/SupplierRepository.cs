@@ -2,10 +2,10 @@
 
 using FluentResults;
 using Lidemia.Core.Enums;
+using Lidemia.Core.Models.Misc.Meta;
 using Lidemia.Core.Models.Service;
 using Lidemia.DataAccess.Context;
 using Lidemia.DataAccess.Entities;
-using Lidemia.DataAccess.Entities.Meta;
 using Lidemia.DataAccess.Extensions;
 using Lidemia.DataAccess.Repository.Abstract;
 using Microsoft.EntityFrameworkCore;
@@ -75,5 +75,19 @@ public class SupplierRepository : ISupplierRepository
     public async Task<IEnumerable<SupplierEntity>> GetSuppliers(IEnumerable<long> ids, CancellationToken cancellationToken)
     {
         return await this.context.Suppliers.Include(x => x.User).AsActive().Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
+    }
+
+    public async Task<bool> UpdateLogoUrl(long supplierId, string logoUrl, CancellationToken cancellationToken)
+    {
+        var updatedCount = await this.context.Suppliers
+            .AsActive()
+            .Where(x => x.Id == supplierId)
+            .ExecuteUpdateAsync(x => x
+                    .SetProperty(e => e.LogoUrl, logoUrl)
+                    .SetProperty(e => e.UpdateDate, DateTimeOffset.UtcNow)
+                    .SetProperty(e => e.RowVersion, e => e.RowVersion + 1),
+                cancellationToken: cancellationToken);
+
+        return updatedCount > 0;
     }
 }

@@ -13,8 +13,13 @@ public interface IChatMessageMapper : IMapper<ChatMessageEntity, ChatMessageMode
 [ServiceDescriptor<IChatMessageMapper>(ServiceLifetime.Scoped)]
 public class ChatMessageMapper : IChatMessageMapper
 {
-    public ChatMessageModel Map(ChatMessageEntity source)
+    public ChatMessageModel? Map(ChatMessageEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
+
         return new ChatMessageModel
         {
             Id = source.Id,

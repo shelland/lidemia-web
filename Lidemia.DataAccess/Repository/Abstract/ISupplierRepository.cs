@@ -14,4 +14,6 @@ public interface ISupplierRepository : IRepository<SupplierEntity, long>
     Task<SupplierEntity?> FindSupplierByUserId(long userId, CancellationToken cancellationToken);
 
     Task<IEnumerable<SupplierEntity>> GetSuppliers(IEnumerable<long> ids, CancellationToken cancellationToken);
+
+    Task<bool> UpdateLogoUrl(long supplierId, string logoUrl, CancellationToken cancellationToken);
 }

@@ -9,10 +9,20 @@
 @{
     var currentEntity = await currentUserService.GetUser();
 
-    var showCartIcon = currentEntity?.Role == EntityType.Customer;
+    var isCustomer = currentEntity?.Role == EntityType.Customer;
 }
 
 <header class="wrapper bg-light">
+    <div class="alert bg-primary text-white alert-dismissible fade show rounded-0 mb-1 text-lg-center" role="alert">
+        <div class="container">
+            <div class="alert-inner d-flex justify-content-center align-items-center p-0">
+                <span class="badge badge-lg bg-white text-primary text-uppercase rounded me-2">Update</span> New version of our product is finally <a href="#" class="alert-link link-white hover ms-1">here</a>!
+            </div>
+            <!-- /.alert-inner -->
+        </div>
+        <!-- /.container -->
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <nav class="navbar navbar-expand-lg center-nav navbar-light navbar-bg-light">
         <div class="container flex-lg-row flex-nowrap align-items-center">
             <div class="navbar-brand w-100">
@@ -839,7 +849,7 @@
                             <i class="uil uil-search"></i>
                         </a>
                     </li>
-                    
+
                     @if (currentEntity is { Role: EntityType.Customer or EntityType.Supplier })
                     {
                         <li class="nav-item">
@@ -847,16 +857,27 @@
                                 <i class="uil uil-comment-dots"></i>
                             </a>
                         </li>
+
+                        <li class="nav-item dropdown dropdown-mega">
+                            <a class="nav-link" href="@(currentEntity.Role == EntityType.Customer ? Url.Action("Index", "CustomerDashboard") : Url.Action("Index", "SupplierDashboard"))" title="Messages">
+                                <i class="uil uil-user-circle"></i>
+                            </a>
+                        </li>
                     }
 
-                    @if (showCartIcon)
+                    @if (isCustomer)
                     {
                         <li class="nav-item">
-                        <a class="nav-link position-relative d-flex flex-row align-items-center" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-cart">
-                            <i class="uil uil-shopping-cart"></i>
-                            <span class="badge badge-cart bg-primary">3</span>
-                        </a>
-                    </li>
+                            <a class="nav-link" href="@Url.Action("Index", "CustomerWishList")">
+                                <i class="uil uil-heart"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link position-relative d-flex flex-row align-items-center" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-cart">
+                                <i class="uil uil-shopping-cart"></i>
+                                <span class="badge badge-cart bg-primary">3</span>
+                            </a>
+                        </li>
                     }
 
                     <li class="nav-item d-lg-none">
@@ -878,7 +899,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body d-flex flex-column" id="cartContainer">
-            
+
             <!-- /.offcanvas-footer-->
         </div>
         <!-- /.offcanvas-body -->
@@ -911,7 +932,7 @@
 
 <script>
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
 
         ProductsSearch.init({
             urls: {
@@ -920,7 +941,7 @@
                 productsListUrl: '@Url.Action("Index", "Products")',
                 cartPreviewUrl: '@Url.Action("LoadCartPreview", "CustomerShoppingCart")'
             }
-        });        
+        });
 
     });
 

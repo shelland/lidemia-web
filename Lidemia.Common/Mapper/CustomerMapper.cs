@@ -23,8 +23,13 @@ public class CustomerMapper : ICustomerMapper
         this.userMapper = userMapper;
     }
 
-    public CustomerModel Map(CustomerEntity source)
+    public CustomerModel? Map(CustomerEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
+
         return new CustomerModel
         {
             Id = source.Id,
@@ -40,7 +45,7 @@ public class CustomerMapper : ICustomerMapper
 [ServiceDescriptor<ILightCustomerMapper>(ServiceLifetime.Scoped)]
 public class LightCustomerMapper : ILightCustomerMapper
 {
-    public LightCustomerModel Map(CustomerEntity source)
+    public LightCustomerModel? Map(CustomerEntity? source)
     {
         return new LightCustomerModel(Id: source.Id, FirstName: source.FirstName, LastName: source.LastName);
     }

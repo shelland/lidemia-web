@@ -3,11 +3,10 @@
 using Lidemia.Resources.App;
 using System.ComponentModel.DataAnnotations;
 
-namespace Lidemia.Core.Enums
+namespace Lidemia.Core.Enums;
+
+public enum Currency
 {
-    public enum Currency
-    {
-        [Display(Name = "CurrencyRussianRoubleSign", ResourceType = typeof(AppResources))]
-        RussianRouble
-    }
+    [Display(Name = "CurrencyRussianRoubleSign", ResourceType = typeof(AppResources))]
+    RussianRouble
 }

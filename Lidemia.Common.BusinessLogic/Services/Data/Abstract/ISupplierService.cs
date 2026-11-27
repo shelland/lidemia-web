@@ -16,4 +16,6 @@ public interface ISupplierService
     Task<SupplierModel?> FindById(long id, CancellationToken cancellationToken);
 
     Task<IEnumerable<SupplierModel>> GetSuppliers(IEnumerable<long> ids, CancellationToken cancellationToken);
+
+    Task<bool> UpdateLogoUrl(long supplierId, string logoUrl, CancellationToken cancellationToken);
 }

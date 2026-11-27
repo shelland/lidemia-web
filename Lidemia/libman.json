@@ -1,54 +1,62 @@
 {
   "version": "3.0",
   "defaultProvider": "cdnjs",
-  "libraries": [
-    {
-      "library": "bootstrap@5.3.8",
-      "destination": "wwwroot/lib/bootstrap/",
-      "files": [
-        "js/bootstrap.bundle.js",
-        "css/bootstrap.css"
-      ]
-    },
-    {
-      "library": "microsoft-signalr@10.0.11",
-      "destination": "wwwroot/lib/microsoft-signalr/",
-      "files": [
-        "signalr.js"
-      ]
-    },
-    {
-      "library": "tagify@4.39.0",
-      "destination": "wwwroot/lib/tagify/"
-    },
-    {
-      "library": "lodash.js@4.17.21",
-      "destination": "wwwroot/lib/lodash.js/",
-      "files": [
-        "lodash.js"
-      ]
-    },
-    {
-      "provider": "jsdelivr",
-      "library": "@algolia/autocomplete-js@1.19.12",
-      "destination": "wwwroot/lib/algolia/autocomplete-js/",
-      "files": [
-        "dist/umd/index.production.js"
-      ]
-    },
-    {
-      "library": "progressbar.js@1.1.1",
-      "destination": "wwwroot/lib/progressbar.js/",
-      "files": [
-        "progressbar.js"
-      ]
-    },
-    {
-      "library": "waypoints@4.0.1",
-      "destination": "wwwroot/lib/waypoints/",
-      "files": [
-        "noframework.waypoints.js"
-      ]
-    }
-  ]
+    "libraries": [
+        {
+            "library": "bootstrap@5.3.8",
+            "destination": "wwwroot/lib/bootstrap/",
+            "files": [
+                "js/bootstrap.bundle.js",
+                "css/bootstrap.css"
+            ]
+        },
+        {
+            "library": "microsoft-signalr@10.0.11",
+            "destination": "wwwroot/lib/microsoft-signalr/",
+            "files": [
+                "signalr.js"
+            ]
+        },
+        {
+            "library": "tagify@4.39.0",
+            "destination": "wwwroot/lib/tagify/"
+        },
+        {
+            "library": "lodash.js@4.17.21",
+            "destination": "wwwroot/lib/lodash.js/",
+            "files": [
+                "lodash.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "@algolia/autocomplete-js@1.19.12",
+            "destination": "wwwroot/lib/algolia/autocomplete-js/",
+            "files": [
+                "dist/umd/index.production.js"
+            ]
+        },
+        {
+            "library": "progressbar.js@1.1.1",
+            "destination": "wwwroot/lib/progressbar.js/",
+            "files": [
+                "progressbar.js"
+            ]
+        },
+        {
+            "library": "waypoints@4.0.1",
+            "destination": "wwwroot/lib/waypoints/",
+            "files": [
+                "noframework.waypoints.js"
+            ]
+        },
+        {
+            "provider": "cdnjs",
+            "library": "URI.js@1.19.11",
+            "destination": "wwwroot/lib/URI.js/",
+            "files": [
+                "URI.js"
+            ]
+        }
+    ]
 }

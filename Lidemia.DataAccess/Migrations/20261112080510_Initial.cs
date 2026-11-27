@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Lidemia.Core.Models.Misc;
-using Lidemia.DataAccess.Entities.Meta;
+using Lidemia.Core.Models.Misc.Meta;
 using Lidemia.DataAccess.Entities.Misc;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;

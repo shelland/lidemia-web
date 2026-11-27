@@ -1,13 +1,16 @@
-using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
-using Lidemia.Search.Services.Abstract;
+using Lidemia.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lidemia.Controllers;
 
 public class HomeController : BaseController
 {
+    public HomeController()
+    {
+    }
+
     [HttpGet]
-    public IActionResult Index([FromServices] ISearchService searchService, [FromServices] IProductService productService, [FromServices] ILogger<HomeController> logger)
+    public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         /*var products = new List<ProductMainInfoModel>
         {
@@ -37,7 +40,9 @@ public class HomeController : BaseController
         //{
         //    Title = "шоко"
         //}).Result;
+        
+        var viewModel = new HomePageViewModel();
 
-        return View();
+        return View(viewModel);
     }
 }

@@ -15,14 +15,8 @@ public class WishListItemEntityConfiguration : IEntityTypeConfiguration<WishList
 
         builder.HasIndex(x => new
         {
-            x.WishListId,
+            x.CustomerId,
             x.IsActive
         });
-
-        builder.HasIndex(x => new
-        {
-            x.WishListId,
-            x.ProductId
-        }).IsUnique();
     }
 }

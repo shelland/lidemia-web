@@ -16,6 +16,10 @@ public static class ProfilerExtensions
             opts.IgnorePath("/img");
             opts.IgnorePath("/hubs");
             opts.IgnorePath("/fonts");
+
+            opts.EnableMvcFilterProfiling = true;
+            opts.EnableMvcViewProfiling = true;
+
         }).AddEntityFramework();
 
         return serviceCollection;

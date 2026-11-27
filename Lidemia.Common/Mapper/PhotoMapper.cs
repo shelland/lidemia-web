@@ -25,8 +25,13 @@ public class PhotoMapper : IPhotoMapper
         this.storageSettings = storageSettings;
     }
 
-    public PhotoModel Map(PhotoEntity source)
+    public PhotoModel? Map(PhotoEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
+
         return new PhotoModel
         {
             Id = source.Id,

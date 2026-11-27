@@ -217,4 +217,37 @@
   <data name="CurrencyRussianRoubleSign" xml:space="preserve">
     <value>₽</value>
   </data>
+  <data name="EditSupplierProfilePageTitle" xml:space="preserve">
+    <value>Edit supplier profile</value>
+  </data>
+  <data name="EditSupplierProfileName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="EditSupplierProfileLogo" xml:space="preserve">
+    <value>Logo</value>
+  </data>
+  <data name="EditSupplierProfileLogoEmpty" xml:space="preserve">
+    <value>No logo uploaded yet</value>
+  </data>
+  <data name="EditSupplierProfileLogoUpload" xml:space="preserve">
+    <value>Upload logo</value>
+  </data>
+  <data name="EditSupplierProfileLogoFile" xml:space="preserve">
+    <value>Logo file</value>
+  </data>
+  <data name="EditSupplierProfileLogoFileHint" xml:space="preserve">
+    <value>Supported formats: JPG, PNG, GIF, WEBP, BMP. Maximum size is 5 MB.</value>
+  </data>
+  <data name="EditSupplierProfileLogoPreviewEmpty" xml:space="preserve">
+    <value>Select a file to see the preview</value>
+  </data>
+  <data name="EditSupplierProfileLogoSave" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="EditSupplierProfileLogoCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="EditSupplierProfileLogoProcessing" xml:space="preserve">
+    <value>The logo has been uploaded and is being processed. Refresh the page in a moment to see it.</value>
+  </data>
 </root>

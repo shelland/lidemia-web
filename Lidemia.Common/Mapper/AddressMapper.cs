@@ -1,6 +1,7 @@
 ﻿// Created on 26/10/2026 19:43 by Laserson
 
 using Lidemia.Common.Mapper.Abstract;
+using Lidemia.Core.Extensions;
 using Lidemia.Core.Models.Domain;
 using Lidemia.DataAccess.Entities;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,15 +35,20 @@ public class AddressMapper : IAddressMapper
         this.cityMapper = cityMapper;
     }
 
-    public AddressModel Map(AddressEntity source)
+    public AddressModel? Map(AddressEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
+
         return new AddressModel
         {
-            Id = source.Id,
+            Id = source.NotNull().Id,
             CreateDate = source.CreateDate,
-            Region = this.regionMapper.Map(source.Region),
-            City = this.cityMapper.Map(source.City),
-            Country = this.countryMapper.Map(source.Country),
+            Region = this.regionMapper.Map(source.Region).NotNull(),
+            City = this.cityMapper.Map(source.City).NotNull(),
+            Country = this.countryMapper.Map(source.Country).NotNull(),
             StreetName = source.StreetName,
             HouseNumber = source.HouseNumber,
             HouseAdd1 = source.HouseAdd1,
@@ -63,9 +69,14 @@ public class CustomerAddressMapper : ICustomerAddressMapper
         this.addressMapper = addressMapper;
     }
 
-    public CustomerAddressModel Map(CustomerAddressEntity source)
+    public CustomerAddressModel? Map(CustomerAddressEntity? source)
     {
-        var address = this.addressMapper.Map(source.Address);
+        if (source == null)
+        {
+            return null;
+        }
+
+        var address = this.addressMapper.Map(source.Address).NotNull();
 
         return new CustomerAddressModel
         {
@@ -95,9 +106,14 @@ public class SupplierAddressMapper : ISupplierAddressMapper
         this.addressMapper = addressMapper;
     }
 
-    public SupplierAddressModel Map(SupplierAddressEntity source)
+    public SupplierAddressModel? Map(SupplierAddressEntity? source)
     {
-        var address = this.addressMapper.Map(source.Address);
+        if (source == null)
+        {
+            return null;
+        }
+
+        var address = this.addressMapper.Map(source.Address).NotNull();
 
         return new SupplierAddressModel
         {
@@ -120,7 +136,7 @@ public class SupplierAddressMapper : ISupplierAddressMapper
 [ServiceDescriptor<ICountryMapper>(ServiceLifetime.Scoped)]
 public class CountryMapper : ICountryMapper
 {
-    public CountryModel Map(CountryEntity source)
+    public CountryModel? Map(CountryEntity? source)
     {
         return new CountryModel
         {
@@ -133,7 +149,7 @@ public class CountryMapper : ICountryMapper
 [ServiceDescriptor<IRegionMapper>(ServiceLifetime.Scoped)]
 public class RegionMapper : IRegionMapper
 {
-    public RegionModel Map(RegionEntity source)
+    public RegionModel? Map(RegionEntity? source)
     {
         return new RegionModel
         {
@@ -147,7 +163,7 @@ public class RegionMapper : IRegionMapper
 [ServiceDescriptor<ICityMapper>(ServiceLifetime.Scoped)]
 public class CityMapper : ICityMapper
 {
-    public CityModel Map(CityEntity source)
+    public CityModel? Map(CityEntity? source)
     {
         return new CityModel
         {

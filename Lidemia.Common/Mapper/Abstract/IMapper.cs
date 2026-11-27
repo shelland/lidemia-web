@@ -4,15 +4,15 @@ namespace Lidemia.Common.Mapper.Abstract;
 
 public interface IMapper<in TFrom, out TTo>
 {
-    TTo Map(TFrom source);
+    TTo? Map(TFrom? source);
 }
 
 public static class MapperExtensions
 {
-    public static List<TTo> MapList<TFrom, TTo>(
+    public static List<TTo>? MapList<TFrom, TTo>(
         this IMapper<TFrom, TTo> mapper,
-        IEnumerable<TFrom> source)
-        => source.Select(mapper.Map).ToList();
+        IEnumerable<TFrom>? source)
+        => source?.Select(mapper.Map)?.ToList();
 
     public static TTo[] MapArray<TFrom, TTo>(
         this IMapper<TFrom, TTo> mapper,

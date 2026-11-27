@@ -32,7 +32,6 @@ public class ProductRepository : IProductRepository
     {
         return this.context.Products
             .Include(x => x.Supplier)
-            .ThenInclude(x => x.User)
             .Include(x => x.PrimaryPhoto)
             .Include(x => x.Category)
             .Include(x => x.ReviewStats)
@@ -174,7 +173,6 @@ public class ProductRepository : IProductRepository
             .AsActive()
             .Include(x => x.PrimaryPhoto)
             .Include(x => x.Supplier)
-            .ThenInclude(x => x.User)
             .Where(x => ids.Contains(x.Id))
             .ToListAsync(cancellationToken: cancellationToken);
 
@@ -247,10 +245,10 @@ public class ProductRepository : IProductRepository
     {
         IQueryable<ProductEntity> query = this.context
             .Products
-            .Include(x => x.Supplier)
-            .ThenInclude(x => x.User)
+            // .Include(x => x.Supplier)
             .Include(x => x.Category)
             .Include(x => x.PrimaryPhoto)
+            .Include(x => x.ReviewStats)
             .AsActive()
             .Where(x => x.IsVisible && x.Supplier.IsActive && x.Supplier.Status == SupplierStatus.Active)
             .OrderByDescending(x => x.Id);
@@ -268,7 +266,6 @@ public class ProductRepository : IProductRepository
         return await this.context.Products
             .AsActive()
             .Include(x => x.Supplier)
-            .ThenInclude(x => x.User)
             .Include(x => x.PrimaryPhoto)
             .Include(x => x.Category)
             .Where(x => x.SupplierId == supplierId && x.IsVisible)
@@ -280,8 +277,11 @@ public class ProductRepository : IProductRepository
     public async Task<IPagedList<ProductEntity>> GetSupplierProducts(long id, PagingInfoModel? pagingInfoModel = null,
         CancellationToken cancellationToken = default)
     {
-        var products = await this.context.Products
-            .AsActive().Where(x => x.SupplierId == id)
+        var products = await this.context
+            .Products
+            .Include(x => x.Supplier)
+            .AsActive()
+            .Where(x => x.SupplierId == id)
             .OrderByDescending(x => x.Id)
             .ToPagedListEx(pagingInfoModel, cancellationToken);
 

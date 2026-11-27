@@ -1,8 +1,8 @@
 ﻿// Created on 22/11/2021 22:49 by Andrey Laserson
 
 using Lidemia.Core.Models.Base;
+using Lidemia.Core.Models.Misc.Meta;
 using Lidemia.DataAccess.Abstract;
-using Lidemia.DataAccess.Entities.Meta;
 
 namespace Lidemia.DataAccess.Entities;
 

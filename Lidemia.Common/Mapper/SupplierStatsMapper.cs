@@ -12,8 +12,13 @@ public interface ISupplierStatsMapper : IMapper<SupplierStatsEntity, SupplierSta
 [ServiceDescriptor<ISupplierStatsMapper>]
 public class SupplierStatsMapper : ISupplierStatsMapper
 {
-    public SupplierStatsModel Map(SupplierStatsEntity source)
+    public SupplierStatsModel? Map(SupplierStatsEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
+
         return new SupplierStatsModel(
             TotalOrders: source.TotalOrders,
             AverageRating: source.AverageRating,

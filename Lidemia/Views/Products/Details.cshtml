@@ -12,8 +12,20 @@
     ViewData.SetBigTitle(Model.Product.Title);
 
     var totalRates = Model.Product.ReviewStats?.TotalRates ?? 0;
+    var averageRate = Model.Product.ReviewStats?.AverageRatingOverall ?? 0;
 
     double r1Percent = 0, r2Percent = 0, r3Percent = 0, r4Percent = 0, r5Percent = 0;
+
+    // bg-pale-green text-green
+    // bg-pale-yellow text-yellow
+    // bg-pale-red text-red
+
+    string ratingClass = averageRate switch
+    {
+        > 4 => "bg-pale-green text-green",
+        > 3 and <= 4 => "bg-pale-yellow text-yellow",
+        _ => "bg-pale-red text-red"
+    };
 
     if (Model.Product.ReviewStats != null)
     {
@@ -133,7 +145,16 @@
                 
                 <div class="row gx-md-8 gy-8">
                     <div class="col-lg-12">
-                        <div class="icon btn btn-block btn-lg btn-soft-leaf pe-none mb-5"> <i class="uil uil-shopping-cart"></i> </div>
+                        
+                        @if (Model.Product.Supplier.LogoUrl != null)
+                        {
+                            <img src="@Model.Product.Supplier.LogoUrl" alt="@Model.Product.Supplier.Name" class="mb-5" />
+                        }
+                        else
+                        {
+                            <div class="icon btn btn-block btn-lg btn-soft-leaf pe-none mb-5"> <i class="uil uil-shopping-cart"></i> </div>
+                        }
+
                         <h4>@Model.Product.Supplier.Name</h4>
                         <p class="mb-3">Nulla vitae elit libero, a pharetra augue. Donec id elit non mi porta gravida at eget metus. Cras justo.</p>
                         <a target="_blank" class="btn btn-primary rounded-pill w-100 mt-3" href="@Url.Action("Details", "Suppliers", new { id = Model.Product.Supplier.Id })">@localizer["ProductDetailsSupplierPage"]</a>
@@ -169,14 +190,16 @@
         <!-- /.nav-tabs -->
         <div class="tab-content mt-0 mt-md-5">
             <div class="tab-pane fade show active" id="tab3-1">
-                <p>Aenean lacinia bibendum nulla sed consectetur. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Vestibulum id ligula porta felis euismod semper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
-                <p>Donec sed odio dui. Donec sed odio dui. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Maecenas faucibus mollis interdum.</p>
-                <ul class="icon-list bullet-bg bullet-soft-primary mb-0">
+                
+                @Html.Raw(Model.Product.Description)
+                
+
+                @*  <ul class="icon-list bullet-bg bullet-soft-primary mb-0">
                     <li><i class="uil uil-check"></i>Aenean eu leo quam. Pellentesque ornare.</li>
                     <li><i class="uil uil-check"></i>Nullam quis risus eget urna mollis ornare.</li>
                     <li><i class="uil uil-check"></i>Donec id elit non mi porta gravida at eget.</li>
                     <li><i class="uil uil-check"></i>Fusce dapibus, tellus ac cursus commodo.</li>
-                </ul>
+                </ul> *@
 
                 @if (Model.Product.Tags.Length > 0)
                 {
@@ -479,9 +502,20 @@
         <div class="row gx-md-8 gx-xl-12 gy-10">
             <aside class="col-lg-4 sidebar">
                 <div class="widget mt-1">
-                    <h4 class="widget-title mb-3">Ratings Distribution</h4>
+                    <h4 class="widget-title mb-5">Ratings Distribution</h4>
                     <div class="mb-5">
-                        <span class="ratings four" itemprop="ratingValue"></span><span>0 out of 5</span>
+                        
+                        @if (totalRates > 0)
+                        {
+                            <a href="javascript:;" data-bs-html="true" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top" data-bs-title="Popover title" data-bs-content="And <b>here’s some amazing content</b>. It’s very engaging. Right? <p>Total rates: <b>@totalRates</b></p>">
+                                <span class="badge badge-rating @ratingClass">@averageRate</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <b>@localizer["ProductDetailsNoRates"]</b>
+                        }
+                        
                     </div>
                     <ul class="progress-list">
                         <li>
@@ -698,15 +732,15 @@
 
     <!script type="application/ld+json">
         {
-        "@@context": "https://schema.org/",
-        "@@type": "Product",
-        "name": "@Model.Product.Title",
-        "description": "@Model.Product.ShortDescription"
-        "productID": "@Model.Product.Id",
-        "aggregateRating": {
-        "@@type": "AggregateRating",
-        "ratingValue": @(Model.Product.ReviewStats?.AverageRatingOverall ?? 0),
-        "reviewCount": @(Model.Product.ReviewStats?.TotalRates ?? 0)
+            "@@context": "https://schema.org/",
+            "@@type": "Product",
+            "name": "@Model.Product.Title",
+            "description": "@Model.Product.ShortDescription"
+            "productID": "@Model.Product.Id",
+            "aggregateRating": {
+            "@@type": "AggregateRating",
+            "ratingValue": @(Model.Product.ReviewStats?.AverageRatingOverall ?? 0),
+            "reviewCount": @(Model.Product.ReviewStats?.TotalRates ?? 0)
         }
         }
     </!script>

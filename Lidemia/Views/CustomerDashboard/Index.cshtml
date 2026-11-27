@@ -1,2 +1,11 @@
+@using Lidemia.Logic.Extensions
+@using Lidemia.Resources.App
+@using Microsoft.Extensions.Localization
+
+@model Lidemia.ViewModels.CustomerDashboardViewModel
+
+@inject IStringLocalizer<AppResources> localizer
+
 @{
+    ViewData.SetBigTitle(localizer["CustomerDashboardPageTitle"]);
 }

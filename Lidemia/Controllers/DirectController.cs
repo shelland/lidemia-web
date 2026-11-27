@@ -13,7 +13,6 @@ using Lidemia.Hubs;
 using Lidemia.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Logging;
 
 namespace Lidemia.Controllers;
 
@@ -252,7 +251,7 @@ public class DirectController : BaseController
         CancellationToken cancellationToken)
     {
         var productIds = messages
-            .Where(x => x.Type == ChatMessageType.Product && x.ProductId.HasValue)
+            .Where(x => x is { Type: ChatMessageType.Product, ProductId: not null })
             .Select(x => x.ProductId.GetValueOrDefault())
             .Distinct()
             .ToArray();
@@ -271,7 +270,7 @@ public class DirectController : BaseController
         ChatModel chat, EntityType role, CancellationToken cancellationToken)
     {
         var orderIds = messages
-            .Where(x => x.Type == ChatMessageType.Order && x.OrderId.HasValue)
+            .Where(x => x is { Type: ChatMessageType.Order, OrderId: not null })
             .Select(x => x.OrderId.GetValueOrDefault())
             .Distinct()
             .ToArray();

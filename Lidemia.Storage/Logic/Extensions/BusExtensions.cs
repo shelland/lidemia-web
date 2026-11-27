@@ -19,6 +19,7 @@ public static class BusExtensions
         services.AddMassTransit(busConfig =>
         {
             busConfig.AddConsumer<ProductPhotosUploadedEventConsumer>();
+            busConfig.AddConsumer<SupplierLogoUploadedEventConsumer>();
 
             busConfig.UsingRabbitMq((ctx, rabbitConf) =>
             {
@@ -30,6 +31,7 @@ public static class BusExtensions
 
                 rabbitConf.UseJsonSerializer();
                 rabbitConf.ReceiveEndpoint("product-photos-uploaded", x => x.ConfigureConsumer<ProductPhotosUploadedEventConsumer>(ctx));
+                rabbitConf.ReceiveEndpoint("supplier-logo-uploaded", x => x.ConfigureConsumer<SupplierLogoUploadedEventConsumer>(ctx));
 
                 rabbitConf.ConfigureEndpoints(ctx);
             });

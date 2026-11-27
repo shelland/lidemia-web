@@ -1,5 +1,6 @@
 ﻿using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.BusinessLogic.Services.Providers.Abstract;
+using Lidemia.Common.Logic.Abstract;
 using Lidemia.Core.Enums;
 using Lidemia.Core.Models.Domain;
 using Lidemia.Core.Models.Dto;
@@ -18,6 +19,7 @@ public class ProductsController : BaseController
     private readonly IProductReviewService productReviewService;
     private readonly IOrderService orderService;
     private readonly IProductsProvider productsProvider;
+    private readonly IRedisService redisService;
 
     public ProductsController(
         IProductService productService,
@@ -26,7 +28,8 @@ public class ProductsController : BaseController
         IProductCategoryService productCategoryService,
         IProductReviewService productReviewService,
         IOrderService orderService,
-        IProductsProvider productsProvider)
+        IProductsProvider productsProvider,
+        IRedisService redisService)
     {
         this.productService = productService;
         this.productPhotoService = productPhotoService;
@@ -35,6 +38,7 @@ public class ProductsController : BaseController
         this.productReviewService = productReviewService;
         this.orderService = orderService;
         this.productsProvider = productsProvider;
+        this.redisService = redisService;
     }
 
     [HttpGet]
@@ -54,6 +58,11 @@ public class ProductsController : BaseController
         if (product == null)
         {
             return NotFoundView;
+        }
+
+        if (UserId != null && EntityType == EntityType.Customer)
+        {
+            await this.redisService.AddCustomerViewedProduct(RequireEntityId, id, cancellationToken);
         }
 
         var viewModel = await GetDetailsViewModel(product, cancellationToken);

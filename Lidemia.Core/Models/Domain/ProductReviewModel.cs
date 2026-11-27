@@ -7,7 +7,7 @@ namespace Lidemia.Core.Models.Domain;
 
 public class ProductReviewModel : AbstractEntity<long>
 {
-    public LightCustomerModel Customer { get; set; } = null!;
+    public LightCustomerModel? Customer { get; set; }
 
     public string Review { get; set; } = string.Empty;
 

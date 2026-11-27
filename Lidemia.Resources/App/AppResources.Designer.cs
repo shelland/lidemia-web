@@ -269,6 +269,105 @@ namespace Lidemia.Resources.App {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logo.
+        /// </summary>
+        public static string EditSupplierProfileLogo {
+            get {
+                return ResourceManager.GetString("EditSupplierProfileLogo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string EditSupplierProfileLogoCancel {
+            get {
+                return ResourceManager.GetString("EditSupplierProfileLogoCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No logo uploaded yet.
+        /// </summary>
+        public static string EditSupplierProfileLogoEmpty {
+            get {
+                return ResourceManager.GetString("EditSupplierProfileLogoEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logo file.
+        /// </summary>
+        public static string EditSupplierProfileLogoFile {
+            get {
+                return ResourceManager.GetString("EditSupplierProfileLogoFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supported formats: JPG, PNG, GIF, WEBP, BMP. Maximum size is 5 MB..
+        /// </summary>
+        public static string EditSupplierProfileLogoFileHint {
+            get {
+                return ResourceManager.GetString("EditSupplierProfileLogoFileHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a file to see the preview.
+        /// </summary>
+        public static string EditSupplierProfileLogoPreviewEmpty {
+            get {
+                return ResourceManager.GetString("EditSupplierProfileLogoPreviewEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The logo has been uploaded and is being processed. Refresh the page in a moment to see it..
+        /// </summary>
+        public static string EditSupplierProfileLogoProcessing {
+            get {
+                return ResourceManager.GetString("EditSupplierProfileLogoProcessing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload.
+        /// </summary>
+        public static string EditSupplierProfileLogoSave {
+            get {
+                return ResourceManager.GetString("EditSupplierProfileLogoSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload logo.
+        /// </summary>
+        public static string EditSupplierProfileLogoUpload {
+            get {
+                return ResourceManager.GetString("EditSupplierProfileLogoUpload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string EditSupplierProfileName {
+            get {
+                return ResourceManager.GetString("EditSupplierProfileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit supplier profile.
+        /// </summary>
+        public static string EditSupplierProfilePageTitle {
+            get {
+                return ResourceManager.GetString("EditSupplierProfilePageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In stock.
         /// </summary>
         public static string EnumsProductAvailabilityTypeInStock {

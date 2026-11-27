@@ -4,6 +4,7 @@ using FluentResults;
 using Lidemia.Common.BusinessLogic.Services.App.Abstract;
 using Lidemia.Common.BusinessLogic.Services.Data.Abstract;
 using Lidemia.Common.Logic;
+using Lidemia.Common.Logic.Abstract;
 using Lidemia.Common.Mapper;
 using Lidemia.Common.Mapper.Abstract;
 using Lidemia.Core.Extensions;

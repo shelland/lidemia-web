@@ -126,4 +126,37 @@
   <data name="ProductDetailsFeedback" xml:space="preserve">
     <value>Отзывы</value>
   </data>
+  <data name="EditSupplierProfilePageTitle" xml:space="preserve">
+    <value>Редактирование профиля поставщика</value>
+  </data>
+  <data name="EditSupplierProfileName" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="EditSupplierProfileLogo" xml:space="preserve">
+    <value>Логотип</value>
+  </data>
+  <data name="EditSupplierProfileLogoEmpty" xml:space="preserve">
+    <value>Логотип еще не загружен</value>
+  </data>
+  <data name="EditSupplierProfileLogoUpload" xml:space="preserve">
+    <value>Загрузить логотип</value>
+  </data>
+  <data name="EditSupplierProfileLogoFile" xml:space="preserve">
+    <value>Файл логотипа</value>
+  </data>
+  <data name="EditSupplierProfileLogoFileHint" xml:space="preserve">
+    <value>Поддерживаемые форматы: JPG, PNG, GIF, WEBP, BMP. Максимальный размер — 5 МБ.</value>
+  </data>
+  <data name="EditSupplierProfileLogoPreviewEmpty" xml:space="preserve">
+    <value>Выберите файл, чтобы увидеть превью</value>
+  </data>
+  <data name="EditSupplierProfileLogoSave" xml:space="preserve">
+    <value>Загрузить</value>
+  </data>
+  <data name="EditSupplierProfileLogoCancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="EditSupplierProfileLogoProcessing" xml:space="preserve">
+    <value>Логотип загружен и обрабатывается. Обновите страницу через некоторое время, чтобы увидеть его.</value>
+  </data>
 </root>
